@@ -68,6 +68,7 @@ module.exports = {
       filename: 'index.html',
       favicon: './src/assets/favicon.ico',
       inject: 'body',
+      base: { href: '/' }
     }),
     // new CopyWebpackPlugin({
     //   patterns: [
