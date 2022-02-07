@@ -66,7 +66,7 @@ module.exports = {
       minify: false,
       template: path.resolve(__dirname, './index.html'),
       filename: 'index.html',
-      // favicon: './src/assets/car.ico',
+      favicon: './src/assets/favicon.ico',
       inject: 'body',
     }),
     // new CopyWebpackPlugin({
