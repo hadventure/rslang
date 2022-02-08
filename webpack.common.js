@@ -2,6 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: {
@@ -70,6 +71,9 @@ module.exports = {
       inject: 'body',
       base: { href: '/' }
     }),
+    new Dotenv({
+      safe: true,
+    })
     // new CopyWebpackPlugin({
     //   patterns: [
     //     { from: 'src/assets', to: 'src/assets' },

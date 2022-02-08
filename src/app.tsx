@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
 } from 'react-router-dom';
+import Auth from './components/auth/auth';
 import Navigation from './components/navigation/navigation';
 import WordGroupList from './components/word-group-list/word-group-list';
 import WordList from './components/word-list/word-list';
@@ -19,7 +20,7 @@ function App() {
         </Route>
 
         <Route path="/statistics" element={<div>Statistics</div>} />
-        <Route path="/auth" element={<div>Auth</div>} />
+        <Route path="/auth" element={<Auth />} />
 
       </Routes>
     </BrowserRouter>

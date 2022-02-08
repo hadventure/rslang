@@ -3,18 +3,12 @@ import { TWord } from './types';
 
 export const getWords = createAsyncThunk(
   'words/getWords',
-  async (page: number, thunkApi) => fetch('https://rslearnwords.herokuapp.com/words?page=2&group=0')
+  async (page: number, thunkApi) => fetch(`${process.env.API_URL}/words?page=2&group=0`)
     .then(
-      (res) => {
+      (res) =>
         // console.log(page, thunkApi.getState());
-        return res.json();
-      },
-    )
-    .then(
-      (res) => {
-        // console.log(res, thunkApi.getState());
-        return res;
-      },
+        res.json()
+      ,
     ),
 );
 

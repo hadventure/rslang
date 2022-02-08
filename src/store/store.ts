@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import wordsSlice from '@/features/words/words-slice';
+import userSlice from '@/features/user/user-slice';
 
 const store = configureStore({
   reducer: {
     words: wordsSlice,
+    user: userSlice,
   },
 });
 
