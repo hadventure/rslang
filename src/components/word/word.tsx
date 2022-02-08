@@ -7,7 +7,7 @@ type WordProps = {
 
 export default function Word({ item }: WordProps) {
   return (
-    <div>
+    <div className={cls.word1}>
       <div className={cls.word}>{item.word}</div>
       {' '}
       <div className={cls.translation}>{item.wordTranslate}</div>
