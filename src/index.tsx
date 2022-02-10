@@ -1,9 +1,9 @@
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import App from './app';
+import App from './layout/app/app';
 import store from './store/store';
-import './global.scss';
+import './app.scss';
 
 ReactDOM.render(
   <Provider store={store}>
