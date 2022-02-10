@@ -7,13 +7,13 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import Auth from '../../components/auth/auth';
-import Navigation from '../../components/navigation/navigation';
 import WordGroupList from '../../components/word-group-list/word-group-list';
 import WordList from '../../components/word-list/word-list';
 import userSelector from '../../features/user/user-selector';
 import { checkUserData, resetStatus } from '../../features/user/user-slice';
 import Stat from '../stat/stat';
 import cls from './app.module.scss';
+import Home from './home';
 
 function App() {
   const dispatch = useDispatch();
@@ -36,21 +36,18 @@ function App() {
     <>
       <Header />
       <div className={cls.container}>
-        <Navigation />
-        <main className={cls.main}>
-          <Routes>
-            <Route path="/" element={<div>Main</div>} />
-            <Route path="dictionary/*">
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route path="dictionary">
               <Route index element={<WordGroupList />} />
               <Route path=":tutorial" element={<WordList />} />
             </Route>
 
             <Route path="/statistics" element={<Stat />} />
-            <Route path="/auth" element={<Auth />} />
+          </Route>
 
-          </Routes>
-
-        </main>
+          <Route path="/auth" element={<Auth />} />
+        </Routes>
       </div>
     </>
   );

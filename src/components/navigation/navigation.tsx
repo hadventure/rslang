@@ -99,7 +99,7 @@ export default function Navigation() {
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>
-        <span className={cls.navLabel}>Savannah</span>
+        <span className={cls.navLabel}>Sprint</span>
       </NavLink>
       <NavLink to="/dictionary/8" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
