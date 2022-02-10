@@ -11,7 +11,7 @@ import Navigation from '../../components/navigation/navigation';
 import WordGroupList from '../../components/word-group-list/word-group-list';
 import WordList from '../../components/word-list/word-list';
 import userSelector from '../../features/user/user-selector';
-import { resetStatus } from '../../features/user/user-slice';
+import { checkUserData, resetStatus } from '../../features/user/user-slice';
 import Stat from '../stat/stat';
 import cls from './app.module.scss';
 
@@ -19,6 +19,11 @@ function App() {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log('----')
+    dispatch(checkUserData({}));
+  }, []);
 
   useEffect(() => {
     if (user.responseStatus === 401) {
@@ -36,7 +41,7 @@ function App() {
         <main className={cls.main}>
           <Routes>
             <Route path="/" element={<div>Main</div>} />
-            <Route path="dictionary">
+            <Route path="dictionary/*">
               <Route index element={<WordGroupList />} />
               <Route path=":tutorial" element={<WordList />} />
             </Route>

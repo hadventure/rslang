@@ -56,6 +56,7 @@ export const authUser = createAsyncThunk(
 
 // Define a type for the slice state
 interface UserState {
+  isAuth: boolean | null,
   user: Partial<TUser>,
   auth: Partial<TAuth>,
   status: string | null,
@@ -64,6 +65,7 @@ interface UserState {
 
 // Define the initial state using that type
 const userState: UserState = {
+  isAuth: null,
   user: {},
   auth: {},
   status: null,
@@ -76,19 +78,14 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     // console.log('-----', builder, getWords);
     builder.addCase(createUser.pending, (state, action) => {
-      console.log(state, action);
       const local = state;
       local.status = 'loading';
     });
     builder.addCase(createUser.fulfilled, (state, action) => {
-      console.log(state, action);
-
       const local = state;
       local.status = 'success';
     });
     builder.addCase(createUser.rejected, (state, action) => {
-      console.log(state, action);
-
       const local = state;
       local.status = 'failed';
     });
@@ -112,10 +109,23 @@ const userSlice = createSlice({
 
       console.log(state, action);
     },
-
+    checkUserData(state, action) {
+      const local = state;
+      local.auth = action.payload;
+    },
+    setUserData(state, action) {
+      const local = state;
+      local.auth = action.payload;
+    },
+    setUserIsAuth(state, action) {
+      const local = state;
+      local.isAuth = action.payload;
+    },
   },
 });
 
-export const { set401, resetStatus } = userSlice.actions;
+export const {
+  set401, resetStatus, checkUserData, setUserData, setUserIsAuth,
+} = userSlice.actions;
 
 export default userSlice.reducer;

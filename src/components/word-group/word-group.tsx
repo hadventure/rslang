@@ -1,14 +1,18 @@
+import { setGroup } from '@/features/words/words-slice';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import cls from './word-group.module.scss';
 
 type WordGroupProps = {
-  group: { id: number, name: string, clsName: string };
+  group: { id: string, name: string, clsName: string };
 };
 
 export default function WordGroup({ group }: WordGroupProps) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onChangeGroup = () => {
+    dispatch(setGroup(group.id));
     navigate(`/dictionary/${group.id}`);
   };
 
