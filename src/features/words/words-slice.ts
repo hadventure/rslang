@@ -20,10 +20,9 @@ export const getUserWords = createAsyncThunk<number, unknown, {
 }>(
   'words/getUserWords',
   async (_, thunkAPI) => {
-    const { group } = thunkAPI.getState().words;
-    const page = '1';
+    const { group, page } = thunkAPI.getState().words;
 
-    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams({ group, page }).toString()}`, {
+    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams({ group, page, wordsPerPage: '20' }).toString()}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${thunkAPI.extra.token}`,
@@ -37,14 +36,20 @@ export const getUserWords = createAsyncThunk<number, unknown, {
 // Define a type for the slice state
 interface WordsState {
   list: TWord[],
+  page: string,
   group: string,
+  limit: string,
+  count: number,
   status: string | null
 }
 
 // Define the initial state using that type
 const wordsState: WordsState = {
   list: [],
+  page: '1',
   group: '',
+  limit: '20',
+  count: 0,
   status: null,
 };
 
@@ -76,6 +81,7 @@ const wordsSlice = createSlice({
       const local = state;
       local.status = 'success';
       local.list = action.payload[0].paginatedResults;
+      local.count = action.payload[0].totalCount[0].count;
     });
     builder.addCase(getUserWords.rejected, (state, action) => {
       const local = state;
@@ -84,15 +90,18 @@ const wordsSlice = createSlice({
   },
   reducers: {
     setGroup(state, action) {
-      console.log('set401', state, action);
       const local = state;
       local.group = action.payload;
+    },
+    setPageWords(state, action) {
+      const local = state;
+      local.page = action.payload;
     },
   },
 });
 
 export const {
-  setGroup,
+  setGroup, setPageWords,
 } = wordsSlice.actions;
 
 export default wordsSlice.reducer;

@@ -1,6 +1,6 @@
 // https://dev.to/gabrlcj/react-router-v6-some-of-the-new-changes-181m
 // https://github.com/remix-run/react-router/pull/7326
-import { setGroup } from '@/features/words/words-slice';
+import { setGroup, setPageWords } from '@/features/words/words-slice';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -21,6 +21,7 @@ export default function Navigation() {
   useEffect(() => {
     if (location.state) {
       dispatch(setGroup(state.dictionary));
+      dispatch(setPageWords(1));
     }
   }, [location]);
 
