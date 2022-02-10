@@ -1,0 +1,29 @@
+@import 'src/app.scss';
+
+.header {
+  border-bottom: $base-border;
+  padding: 1.6rem $base-indent;
+  font-size: 1.6rem;
+  color: $color-grey;
+  background: #223b66;
+  box-shadow: $base-shadow;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+}
+
+.auth {
+  display: flex;
+}
+
+.auth-item {
+  color: $color-grey;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.auth-line {
+  padding: 0 2rem;
+}

@@ -1,25 +1,20 @@
 import { useNavigate } from 'react-router-dom';
-import classes from './word-group.module.scss';
+import cls from './word-group.module.scss';
 
 type WordGroupProps = {
-  group: { id: number };
+  group: { id: number, name: string, clsName: string };
 };
 
 export default function WordGroup({ group }: WordGroupProps) {
   const navigate = useNavigate();
 
   const onChangeGroup = () => {
-    navigate(`/tutorials/${group.id}`);
+    navigate(`/dictionary/${group.id}`);
   };
 
   return (
-    <button
-      key={group.id}
-      type="button"
-      data-tutorial={group.id}
-      onClick={onChangeGroup}
-    >
-      {group.id}
-    </button>
+    <div className={`${cls.wordGroupItem} ${cls[group.clsName]}`} onClick={onChangeGroup}>
+    {group.name}
+  </div>
   );
 }
