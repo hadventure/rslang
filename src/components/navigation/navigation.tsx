@@ -1,6 +1,6 @@
 // https://dev.to/gabrlcj/react-router-v6-some-of-the-new-changes-181m
 // https://github.com/remix-run/react-router/pull/7326
-import { setGroup, setPageWords } from '@/features/words/words-slice';
+import { resetCurrentWord, setGroup, setPageWords } from '@/features/words/words-slice';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -22,6 +22,7 @@ export default function Navigation() {
     if (location.state) {
       dispatch(setGroup(state.dictionary));
       dispatch(setPageWords(1));
+      dispatch(resetCurrentWord({}));
     }
   }, [location]);
 
@@ -114,12 +115,12 @@ export default function Navigation() {
         <span className={cls.navLabel}>Statictics</span>
       </NavLink>
 
-      <NavLink to="/settings" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
+      {/* <NavLink to="/settings" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>
         <span className={cls.navLabel}>Settings</span>
-      </NavLink>
+      </NavLink> */}
     </nav>
 
   );

@@ -34,13 +34,14 @@ export const getUserWords = createAsyncThunk<number, unknown, {
 );
 
 // Define a type for the slice state
-interface WordsState {
+export interface WordsState {
   list: TWord[],
   page: string,
   group: string,
   limit: string,
   count: number,
-  status: string | null
+  status: string | null,
+  currentWord: TWord | null,
 }
 
 // Define the initial state using that type
@@ -51,6 +52,7 @@ const wordsState: WordsState = {
   limit: '20',
   count: 0,
   status: null,
+  currentWord: null,
 };
 
 const wordsSlice = createSlice({
@@ -97,11 +99,19 @@ const wordsSlice = createSlice({
       const local = state;
       local.page = action.payload;
     },
+    setCurrentWord(state, action) {
+      const local = state;
+      local.currentWord = local.list[action.payload];
+    },
+    resetCurrentWord(state, action) {
+      const local = state;
+      local.currentWord = null;
+    },
   },
 });
 
 export const {
-  setGroup, setPageWords,
+  setGroup, setPageWords, setCurrentWord, resetCurrentWord,
 } = wordsSlice.actions;
 
 export default wordsSlice.reducer;

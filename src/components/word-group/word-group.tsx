@@ -1,4 +1,4 @@
-import { setGroup, setPageWords } from '@/features/words/words-slice';
+import { resetCurrentWord, setGroup, setPageWords } from '@/features/words/words-slice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import cls from './word-group.module.scss';
@@ -14,6 +14,7 @@ export default function WordGroup({ group }: WordGroupProps) {
   const onChangeGroup = () => {
     dispatch(setGroup(group.id));
     dispatch(setPageWords(1));
+    dispatch(resetCurrentWord({}));
     navigate(`/dictionary/${group.id}`);
   };
 

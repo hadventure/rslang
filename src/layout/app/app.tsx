@@ -21,7 +21,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('----')
+    console.log('----');
     dispatch(checkUserData({}));
   }, []);
 
@@ -36,7 +36,6 @@ function App() {
     <>
       <Header />
       <div className={cls.container}>
-
         <Navigation />
         <main className={cls.main}>
           <Routes>

@@ -1,6 +1,6 @@
 import userSelector from '@/features/user/user-selector';
 import wordsSelector from '@/features/words/words-selector';
-import { getUserWords, getWords, setPageWords } from '@/features/words/words-slice';
+import { getUserWords, getWords, resetCurrentWord, setPageWords } from '@/features/words/words-slice';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Pagination from '../pagination/pagination';
@@ -32,13 +32,14 @@ export default function WordList() {
   }
 
   const onChangePage = (page: number) => {
+    dispatch(resetCurrentWord({}));
     dispatch(setPageWords(page));
   };
 
   return (
     <div className={cls.wordsContainer}>
       <div className={cls.wordCardContainer}>
-        <WordCard />
+        <WordCard words={words} />
       </div>
       <div className={cls.wordListContainer}>
         <Pagination
@@ -50,7 +51,7 @@ export default function WordList() {
 
         <div className={cls.wordListContainer1}>
           {
-        words.list.map((item) => <Word key={item.id || item._id} item={item} />)
+        words.list.map((item, i) => <Word key={item.id || item._id} index={i} item={item} />)
       }
 
         </div>

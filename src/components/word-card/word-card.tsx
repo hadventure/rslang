@@ -1,37 +1,19 @@
-import userSelector from '@/features/user/user-selector';
-import wordsSelector from '@/features/words/words-selector';
-import { getUserWords, getWords } from '@/features/words/words-slice';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Word from '../word/word';
-import cls from './word-card.module.scss';
+import { WordsState } from '@/features/words/words-slice';
 
-export default function WordCard() {
-  const dispatch = useDispatch();
-  // const words = useSelector(wordsSelector);
-  // const user = useSelector(userSelector);
+type WordCardProps = {
+  words: WordsState
+};
 
-  // useEffect(() => {
-  //   if (user.isAuth === true && words.group) {
-  //     dispatch(getUserWords(1));
-  //   }
+export default function WordCard({ words }: WordCardProps) {
+  // const dispatch = useDispatch();
 
-  //   if (user.isAuth === false && words.group) {
-  //     dispatch(getWords(1));
-  //   }
-  // }, [words.group]);
-
-  // if (words.status === 'loading') {
-  //   return <div>Loading</div>;
-  // }
-
-  // if (words.list.length === 0) {
-  //   return <div>No Items</div>;
-  // }
+  if (words.currentWord === null) {
+    return <div>No Word selected</div>;
+  }
 
   return (
     <div>
-      
+      {words.currentWord?.word}
     </div>
   );
 }
