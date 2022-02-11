@@ -95,13 +95,13 @@ export default function Navigation() {
         </div>
         <span className={cls.navLabel}>Games</span>
       </NavLink>
-      <NavLink to="/dictionary/7" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      <NavLink to="/games/sprint" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>
         <span className={cls.navLabel}>Sprint</span>
       </NavLink>
-      <NavLink to="/dictionary/8" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      <NavLink to="/games/audiocall" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>

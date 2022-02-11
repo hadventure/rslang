@@ -11,11 +11,19 @@
 
   flex-direction: column;
 
-
   // grid-template-columns: repeat(3, 1fr);
   // grid-gap: $base-indent;
 }
 
+.nav-games {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+}
+
+.game-img {
+  height: 12rem;
+}
 
 .word-list-container1 {
   display: grid;
@@ -25,7 +33,9 @@
 
 
 .word-card-container {
-  background-color: $color-white;
-  border: $base-border;
-  border-radius: $base-border-radius;
+  display: flex;
+  flex-direction: column;
+  // background-color: $color-white;
+  // border: $base-border;
+  // border-radius: $base-border-radius;
 }

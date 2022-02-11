@@ -41,6 +41,17 @@ function App() {
             <Route path="dictionary">
               <Route index element={<WordGroupList />} />
               <Route path=":tutorial" element={<WordList />} />
+              <Route path=":tutorial/audiocall" element={<div>audiocall</div>} />
+              <Route path=":tutorial/sprint" element={<div>sprint</div>} />
+
+
+            </Route>
+
+            <Route path="games">
+              <Route index element={<div>games</div>} />
+              <Route path="audiocall" element={<div>audiocall</div>} />
+              <Route path="sprint" element={<div>sprint</div>} />
+
             </Route>
 
             <Route path="/statistics" element={<Stat />} />
