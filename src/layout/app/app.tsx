@@ -7,18 +7,23 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import Auth from '../../components/auth/auth';
-import Navigation from '../../components/navigation/navigation';
 import WordGroupList from '../../components/word-group-list/word-group-list';
 import WordList from '../../components/word-list/word-list';
 import userSelector from '../../features/user/user-selector';
-import { resetStatus } from '../../features/user/user-slice';
+import { checkUserData, resetStatus } from '../../features/user/user-slice';
 import Stat from '../stat/stat';
 import cls from './app.module.scss';
+import Home from './home';
 
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log('----');
+    dispatch(checkUserData({}));
+  }, []);
 
   useEffect(() => {
     if (user.responseStatus === 401) {
@@ -31,22 +36,29 @@ function App() {
     <>
       <Header />
       <div className={cls.container}>
-
-        <Navigation />
-        <main className={cls.main}>
-          <Routes>
-            <Route path="/" element={<div>Main</div>} />
+        <Routes>
+          <Route path="/" element={<Home />}>
             <Route path="dictionary">
               <Route index element={<WordGroupList />} />
               <Route path=":tutorial" element={<WordList />} />
+              <Route path=":tutorial/audiocall" element={<div>audiocall</div>} />
+              <Route path=":tutorial/sprint" element={<div>sprint</div>} />
+
+
+            </Route>
+
+            <Route path="games">
+              <Route index element={<div>games</div>} />
+              <Route path="audiocall" element={<div>audiocall</div>} />
+              <Route path="sprint" element={<div>sprint</div>} />
+
             </Route>
 
             <Route path="/statistics" element={<Stat />} />
-            <Route path="/auth" element={<Auth />} />
+          </Route>
 
-          </Routes>
-
-        </main>
+          <Route path="/auth" element={<Auth />} />
+        </Routes>
       </div>
     </>
   );

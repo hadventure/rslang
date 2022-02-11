@@ -3,7 +3,7 @@
 .translation {
   font-style: italic;
   font-weight: 100;
-  margin-bottom: 28px;
+  // margin-bottom: 28px;
 }
 
 .word {
@@ -15,6 +15,4 @@
   border: $base-border;
   border-radius: $base-border-radius;
   padding: 10px;
-  margin: 10px;
-  width: 18%;
 }

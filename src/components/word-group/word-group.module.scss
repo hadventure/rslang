@@ -8,6 +8,7 @@
   padding: 3rem $base-indent;
   border-radius: 1rem;
   box-shadow: $base-shadow;
+  text-decoration: none;
   justify-content: center;
   font-size: 1.8rem;
   cursor: pointer;
@@ -34,5 +35,10 @@
 
   &.p6 {
     background: $color-p6;
+  }
+
+  &.p7 {
+    background: $color-p7;
+    color: $color-black;
   }
 }

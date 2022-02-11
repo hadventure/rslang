@@ -1,8 +1,31 @@
 // https://dev.to/gabrlcj/react-router-v6-some-of-the-new-changes-181m
-import { NavLink } from 'react-router-dom';
+// https://github.com/remix-run/react-router/pull/7326
+import { resetCurrentWord, setGroup, setPageWords } from '@/features/words/words-slice';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import {
+  NavLink, useLocation,
+} from 'react-router-dom';
 import cls from './navigation.module.scss';
 
+interface DictionaryState {
+  dictionary: string;
+}
+
 export default function Navigation() {
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  const state = location.state as DictionaryState;
+
+  useEffect(() => {
+    if (location.state) {
+      dispatch(setGroup(state.dictionary));
+      dispatch(setPageWords(1));
+      dispatch(resetCurrentWord({}));
+    }
+  }, [location]);
+
   const isNavActive = (navData: { isActive: boolean }, extra: string) => {
     // console.log(navData)
 
@@ -29,37 +52,37 @@ export default function Navigation() {
         </div>
         <span className={cls.navLabel}>Dictionary</span>
       </NavLink>
-      <NavLink to="/dictionary/1" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      <NavLink to="/dictionary/0" state={{ dictionary: '0' }} className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>
         <span className={cls.navLabel}>Part I</span>
       </NavLink>
-      <NavLink to="/dictionary/2" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      <NavLink to="/dictionary/1" state={{ dictionary: '1' }} className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>
         <span className={cls.navLabel}>Part II</span>
       </NavLink>
-      <NavLink to="/dictionary/3" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      <NavLink to="/dictionary/2" state={{ dictionary: '2' }} className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>
         <span className={cls.navLabel}>Part III</span>
       </NavLink>
-      <NavLink to="/dictionary/4" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      <NavLink to="/dictionary/3" state={{ dictionary: '3' }} className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>
         <span className={cls.navLabel}>Part VI</span>
       </NavLink>
-      <NavLink to="/dictionary/5" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      <NavLink to="/dictionary/4" state={{ dictionary: '4' }} className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>
         <span className={cls.navLabel}>Part V</span>
       </NavLink>
-      <NavLink to="/dictionary/6" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      <NavLink to="/dictionary/5" state={{ dictionary: '5' }} className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>
@@ -72,13 +95,13 @@ export default function Navigation() {
         </div>
         <span className={cls.navLabel}>Games</span>
       </NavLink>
-      <NavLink to="/dictionary/7" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      <NavLink to="/games/sprint" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>
-        <span className={cls.navLabel}>Savannah</span>
+        <span className={cls.navLabel}>Sprint</span>
       </NavLink>
-      <NavLink to="/dictionary/8" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      <NavLink to="/games/audiocall" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>
@@ -92,12 +115,12 @@ export default function Navigation() {
         <span className={cls.navLabel}>Statictics</span>
       </NavLink>
 
-      <NavLink to="/settings" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
+      {/* <NavLink to="/settings" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
           <i>i</i>
         </div>
         <span className={cls.navLabel}>Settings</span>
-      </NavLink>
+      </NavLink> */}
     </nav>
 
   );
