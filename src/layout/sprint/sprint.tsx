@@ -20,10 +20,8 @@ export default function Sprint() {
 
   useEffect(() => {
     dispatch(setGroup(location.pathname.split('/')[2]));
-    console.log(location.pathname.split('/')[2])
     const param = {
       page: words.page,
-      // filter: JSON.stringify({ $or: [{ 'userWord.difficulty': 'easy' }, { userWord: null }] }),
       filter: JSON.stringify({ $or: [{ 'userWord.difficulty': 'studied' }, { userWord: null }] }),
       group: location.pathname.split('/')[2],
       wordsPerPage: '4',
@@ -54,7 +52,15 @@ export default function Sprint() {
       }
 
       <Modal title="My Modal" onClose={() => setModal(false)} show={modal}>
-        <p>This is modal body</p>
+        {
+          words.result.map((el) => (
+            <p>
+              {el.word}
+              {' '}
+              {el.state}
+            </p>
+          ))
+        }
       </Modal>
 
     </>

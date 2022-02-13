@@ -23,9 +23,9 @@ export default function SprintGame({ list }: SprintGameProps) {
 
   const onApprove = () => {
     if (isShowAnswer) {
-      dispatch(getUserWord({ id: shuffled[current]._id, right: 1 }));
+      dispatch(getUserWord({ id: shuffled[current]._id, word: shuffled[current].word, right: 1 }));
     } else {
-      dispatch(getUserWord({ id: shuffled[current]._id, right: 0 }));
+      dispatch(getUserWord({ id: shuffled[current]._id, word: shuffled[current].word, right: 0 }));
     }
 
     setCurrent(current + 1);
@@ -35,9 +35,13 @@ export default function SprintGame({ list }: SprintGameProps) {
 
   const onAbort = () => {
     if (isShowAnswer) {
-      dispatch(getUserWord({ id: shuffled[current]._id, right: 0 }));
+      dispatch(getUserWord({
+        id: shuffled[current]._id,
+        word: shuffled[current].word,
+        right: 0,
+      }));
     } else {
-      dispatch(getUserWord({ id: shuffled[current]._id, right: 1 }));
+      dispatch(getUserWord({ id: shuffled[current]._id, word: shuffled[current].word, right: 1 }));
     }
 
     setCurrent(current + 1);

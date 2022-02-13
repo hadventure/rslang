@@ -35,5 +35,13 @@ export type TOptional = Partial<{
 
 export type TUserAnswer = {
   right: number,
-  id: string
+  id: string,
+  word?: string,
+};
+
+export type TResult = {
+  id: string,
+  word: string,
+  state: string,
+  right: number,
 };

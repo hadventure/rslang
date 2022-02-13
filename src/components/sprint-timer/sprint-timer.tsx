@@ -11,7 +11,7 @@ export default function SprintTimer({
   onFinishTimer,
   showModal,
 }: SprintTimerProps) {
-  const [time, setTime] = useState(120);
+  const [time, setTime] = useState(20);
 
   useEffect(() => {
     let timerID: NodeJS.Timeout;
@@ -28,7 +28,7 @@ export default function SprintTimer({
   useEffect(() => {
     if (time === 0) {
       onFinishTimer();
-      setTime(120);
+      setTime(20);
       showModal();
     }
   }, [time]);
