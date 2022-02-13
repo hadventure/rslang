@@ -10,8 +10,8 @@ import Pagination from '../pagination/pagination';
 import WordCard from '../word-card/word-card';
 import Word from '../word/word';
 import cls from './word-list.module.scss';
-import sprint from '../../assets/ILLUSTRATION_OFFICE_13.svg'
-import audiocall from '../../assets/ILLUSTRATION_OFFICE_08.svg'
+import sprint from '../../assets/ILLUSTRATION_OFFICE_13.svg';
+import audiocall from '../../assets/ILLUSTRATION_OFFICE_08.svg';
 
 export default function WordList() {
   const dispatch = useDispatch();
@@ -27,11 +27,11 @@ export default function WordList() {
 
   useEffect(() => {
     if (user.isAuth === true && words.group) {
-      dispatch(getUserWords(1));
+      dispatch(getUserWords({ page: words.page }));
     }
 
     if (user.isAuth === false && words.group) {
-      dispatch(getWords(1));
+      dispatch(getWords({ page: words.page }));
     }
   }, [words.group, words.page]);
 

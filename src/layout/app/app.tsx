@@ -11,6 +11,7 @@ import WordGroupList from '../../components/word-group-list/word-group-list';
 import WordList from '../../components/word-list/word-list';
 import userSelector from '../../features/user/user-selector';
 import { checkUserData, resetStatus } from '../../features/user/user-slice';
+import Sprint from '../sprint/sprint';
 import Stat from '../stat/stat';
 import cls from './app.module.scss';
 import Home from './home';
@@ -21,7 +22,6 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('----');
     dispatch(checkUserData({}));
   }, []);
 
@@ -42,7 +42,7 @@ function App() {
               <Route index element={<WordGroupList />} />
               <Route path=":tutorial" element={<WordList />} />
               <Route path=":tutorial/audiocall" element={<div>audiocall</div>} />
-              <Route path=":tutorial/sprint" element={<div>sprint</div>} />
+              <Route path=":tutorial/sprint" element={<Sprint />} />
 
 
             </Route>
@@ -50,7 +50,7 @@ function App() {
             <Route path="games">
               <Route index element={<div>games</div>} />
               <Route path="audiocall" element={<div>audiocall</div>} />
-              <Route path="sprint" element={<div>sprint</div>} />
+              <Route path="sprint" element={<Sprint />} />
 
             </Route>
 
