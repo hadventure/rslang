@@ -1,8 +1,9 @@
 import { RootState } from '@/store/types';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TAuth } from '../user/types';
+import { set401 } from '../user/user-slice';
 import {
-  Difficulty, TOptional, TParam, TResult, TUserAnswer, TWord,
+  Difficulty, TParam, TResult, TUserAnswer, TWord,
 } from './types';
 import * as wordsAPI from './words-API';
 
@@ -30,6 +31,10 @@ export const getUserWords = createAsyncThunk<number, Partial<TParam>, {
       },
     });
 
+    if (resp.status === 401) {
+      thunkAPI.dispatch(set401(401));
+    }
+
     return resp.json();
   },
 );
@@ -46,7 +51,7 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
       const params = {
         difficulty: Difficulty.studied,
         optional: {
-          sprint: {
+          [param.game]: {
             right: param.right ? 1 : 0,
             wrong: param.right ? 0 : 1,
           },
@@ -63,12 +68,16 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
       const params = {
         difficulty: Difficulty.studied,
         optional: {
-          sprint: {
-            right: param.right ? data.optional.sprint.right + 1 : data.optional.sprint.right,
-            wrong: param.right ? data.optional.sprint.wrong : data.optional.sprint.wrong + 1,
+          [param.game]: {
+            right: param.right
+              ? data.optional[param.game].right + 1 : data.optional[param.game].right,
+            wrong: param.right
+              ? data.optional[param.game].wrong : data.optional[param.game].wrong + 1,
           },
         },
       };
+
+      console.log(params);
 
       await wordsAPI.updateUserWord(param, params, thunkAPI.extra);
 

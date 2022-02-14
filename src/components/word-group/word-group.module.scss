@@ -38,20 +38,23 @@
   }
 
   &.p7 {
-    background: transparent;
-    border: 1px solid $color-p7;
+    background: #eee;
+    border: 1px solid #eee;
     color: #24292f;
+    box-shadow: unset;
   }
 
   &.p8 {
-    background: transparent;
-    border: 1px solid $color-p7;
+    background: #eee;
+    border: 1px solid #eee;
     color: #24292f;
+    box-shadow: unset;
   }
 
   &.p9 {
-    background: transparent;
-    border: 1px solid $color-p7;
+    background: #eee;
+    border: 1px solid #eee;
     color: #24292f;
+    box-shadow: unset;
   }
 }
