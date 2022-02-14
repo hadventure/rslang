@@ -19,6 +19,8 @@ export default function Navigation() {
   const state = location.state as DictionaryState;
 
   useEffect(() => {
+    console.log(location.state);
+
     if (location.state) {
       dispatch(setGroup(state.dictionary));
       dispatch(setPageWords(1));

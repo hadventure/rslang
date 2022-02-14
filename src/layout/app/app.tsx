@@ -1,4 +1,5 @@
 import Header from '@/components/header/header';
+import Levels from '@/components/levels/levels';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -44,14 +45,14 @@ function App() {
               <Route path=":tutorial/audiocall" element={<div>audiocall</div>} />
               <Route path=":tutorial/sprint" element={<Sprint />} />
 
-
             </Route>
 
             <Route path="games">
               <Route index element={<div>games</div>} />
-              <Route path="audiocall" element={<div>audiocall</div>} />
-              <Route path="sprint" element={<Sprint />} />
-
+              <Route path="audiocall" element={<Levels />} />
+              <Route path="audiocall/:tutorial" element={<div>audiocall</div>} />
+              <Route path="sprint" element={<Levels />} />
+              <Route path="sprint/:tutorial" element={<Sprint />} />
             </Route>
 
             <Route path="/statistics" element={<Stat />} />

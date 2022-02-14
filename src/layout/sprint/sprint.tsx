@@ -8,24 +8,38 @@ import {
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  useLocation,
+  useLocation, useSearchParams,
 } from 'react-router-dom';
 
 export default function Sprint() {
   const dispatch = useDispatch();
   const [timer, setTimer] = useState(false);
   const [modal, setModal] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const location = useLocation();
   const words = useSelector(wordsSelector);
 
   useEffect(() => {
-    dispatch(setGroup(location.pathname.split('/')[2]));
-    const param = {
-      page: words.page,
-      filter: JSON.stringify({ $or: [{ 'userWord.difficulty': 'studied' }, { userWord: null }] }),
-      group: location.pathname.split('/')[2],
-      wordsPerPage: '4',
-    };
+    let param;
+    console.log(location);
+    if (location.pathname.indexOf('games') > -1) {
+      dispatch(setGroup(location.pathname.split('/')[3]));
+      param = {
+        page: '1',
+        filter: JSON.stringify({ $or: [{ 'userWord.difficulty': 'studied' }, { userWord: null }] }),
+        group: location.pathname.split('/')[3],
+        wordsPerPage: '4',
+      };
+    } else {
+      dispatch(setGroup(location.pathname.split('/')[2]));
+      param = {
+        page: searchParams.get('page')!,
+        filter: JSON.stringify({ $or: [{ 'userWord.difficulty': 'studied' }, { userWord: null }] }),
+        group: location.pathname.split('/')[2],
+        wordsPerPage: '4',
+      };
+    }
 
     dispatch(getUserWords(param));
   }, []);
@@ -37,6 +51,10 @@ export default function Sprint() {
   const onFinishTimer = () => {
     setTimer(false);
   };
+
+  if (words.status === 'loading') {
+    return <div>loading</div>;
+  }
 
   return (
     <>
@@ -54,7 +72,7 @@ export default function Sprint() {
       <Modal title="My Modal" onClose={() => setModal(false)} show={modal}>
         {
           words.result.map((el) => (
-            <p>
+            <p key={el.id}>
               {el.word}
               {' '}
               {el.state}
