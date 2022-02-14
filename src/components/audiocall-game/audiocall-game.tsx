@@ -69,6 +69,8 @@ export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps
   return (
     <div>
       <div>{shuffled[current]?.word.audioExample}</div>
+      <div>{shuffled[current]?.word.word}</div>
+      <div>{shuffled[current]?.word.wordTranslate}</div>
       <button type="button" onClick={play}>Play</button>
       <div>
         {
@@ -82,8 +84,8 @@ export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps
           </button>
         ))
         }
+        <div><button type="button" onClick={onNext}>Next</button></div>
 
-        <button type="button" onClick={onNext}>Next</button>
       </div>
     </div>
   );

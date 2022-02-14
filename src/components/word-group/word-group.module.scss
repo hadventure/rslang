@@ -38,23 +38,32 @@
   }
 
   &.p7 {
-    background: #eee;
-    border: 1px solid #eee;
-    color: #24292f;
+    background: transparent;
+    border: 2px solid #eee;
+    color: $color-black;
     box-shadow: unset;
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 1rem;
   }
 
   &.p8 {
-    background: #eee;
-    border: 1px solid #eee;
-    color: #24292f;
+    background: transparent;
+    border: 2px solid #eee;
+    color: $color-black;
     box-shadow: unset;
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 1rem;
   }
 
   &.p9 {
-    background: #eee;
-    border: 1px solid #eee;
-    color: #24292f;
+    background: transparent;
+    border: 2px solid #eee;
+    color: $color-black;
     box-shadow: unset;
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 1rem;
   }
 }

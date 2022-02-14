@@ -36,7 +36,8 @@ export type TParam = {
 
 export type TGamesAnswer = {
   wrong: number,
-  right: number
+  right: number,
+  chain: number
 };
 
 export type TGames = {

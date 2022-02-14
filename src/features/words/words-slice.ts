@@ -54,6 +54,7 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
           [param.game]: {
             right: param.right ? 1 : 0,
             wrong: param.right ? 0 : 1,
+            chain: param.right ? 1 : 0,
           },
         },
       };
@@ -65,14 +66,15 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
     if (resp.status === 200) {
       const data = await resp.json();
 
+      const { right, wrong, chain } = data.optional[param.game];
+
       const params = {
-        difficulty: Difficulty.studied,
+        difficulty: param.right && chain > 2 ? Difficulty.learned : Difficulty.studied,
         optional: {
           [param.game]: {
-            right: param.right
-              ? data.optional[param.game].right + 1 : data.optional[param.game].right,
-            wrong: param.right
-              ? data.optional[param.game].wrong : data.optional[param.game].wrong + 1,
+            right: param.right ? right + 1 : right,
+            wrong: param.right ? wrong : wrong + 1,
+            chain: param.right ? chain + 1 : chain,
           },
         },
       };

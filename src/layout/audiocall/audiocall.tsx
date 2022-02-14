@@ -20,8 +20,12 @@ export default function Audiocall() {
   const words = useSelector(wordsSelector);
 
   useEffect(() => {
+    getWords();
+  }, []);
+
+  function getWords() {
     let param;
-    console.log(location);
+
     if (location.pathname.indexOf('games') > -1) {
       dispatch(setGroup(location.pathname.split('/')[3]));
       param = {
@@ -41,10 +45,16 @@ export default function Audiocall() {
     }
 
     dispatch(getUserWords(param));
-  }, []);
+  }
 
   const onStart = () => {
     setStart(true);
+  };
+
+  const onPlayAgain = () => {
+    setStart(true);
+    setModal(false);
+    getWords();
   };
 
   const onFinishGame = () => {
@@ -56,6 +66,8 @@ export default function Audiocall() {
     return <div>loading</div>;
   }
 
+  console.log('---', words.list);
+
   return (
     <>
       {
@@ -64,7 +76,12 @@ export default function Audiocall() {
         : <button type="button" onClick={onStart}>Start</button>
       }
 
-      <Modal title="My Modal" onClose={() => setModal(false)} show={modal}>
+      <Modal
+        title="My Modal"
+        onClose={() => setModal(false)}
+        show={modal}
+        onPlayAgain={onPlayAgain}
+      >
         {
           words.result.map((el) => (
             <p key={el.id}>

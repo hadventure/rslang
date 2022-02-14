@@ -51,7 +51,7 @@ function App() {
             <Route path="games">
               <Route index element={<div>games</div>} />
               <Route path="audiocall" element={<Levels />} />
-              <Route path="audiocall/:tutorial" element={<div>audiocall</div>} />
+              <Route path="audiocall/:tutorial" element={<Audiocall />} />
               <Route path="sprint" element={<Levels />} />
               <Route path="sprint/:tutorial" element={<Sprint />} />
             </Route>

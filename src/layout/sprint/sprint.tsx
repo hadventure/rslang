@@ -21,6 +21,10 @@ export default function Sprint() {
   const words = useSelector(wordsSelector);
 
   useEffect(() => {
+    getWords();
+  }, []);
+
+  function getWords() {
     let param;
     console.log(location);
     if (location.pathname.indexOf('games') > -1) {
@@ -42,7 +46,7 @@ export default function Sprint() {
     }
 
     dispatch(getUserWords(param));
-  }, []);
+  }
 
   const onStart = () => {
     setTimer(true);
@@ -50,6 +54,12 @@ export default function Sprint() {
 
   const onFinishTimer = () => {
     setTimer(false);
+  };
+
+  const onPlayAgain = () => {
+    setTimer(true);
+    setModal(false);
+    getWords();
   };
 
   if (words.status === 'loading') {
@@ -69,7 +79,12 @@ export default function Sprint() {
         : <button type="button" onClick={onStart}>Start</button>
       }
 
-      <Modal title="My Modal" onClose={() => setModal(false)} show={modal}>
+      <Modal
+        title="My Modal"
+        onClose={() => setModal(false)}
+        show={modal}
+        onPlayAgain={onPlayAgain}
+      >
         {
           words.result.map((el) => (
             <p key={el.id}>
@@ -80,7 +95,6 @@ export default function Sprint() {
           ))
         }
       </Modal>
-      #bd10e0
     </>
   );
 }

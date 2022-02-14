@@ -40,7 +40,9 @@ export default function Navigation() {
 
   return (
     <nav className={cls.nav}>
-      <div className={cls.navBorder} />
+      <div className={cls.navBorder}>
+        <button></button>
+      </div>
 
       <NavLink to="/" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>

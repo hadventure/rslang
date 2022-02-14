@@ -1,4 +1,4 @@
-import { IoIosCloud, IoIosPartlySunny, IoIosSunny } from 'react-icons/io';
+import { AiFillFire, AiFillPushpin, AiOutlineCheck, AiFillHourglass } from 'react-icons/ai';
 import WordGroup from '../word-group/word-group';
 import cls from './word-group-list.module.scss';
 
@@ -27,18 +27,12 @@ export default function WordGroupList() {
 
       </div>
 
-      {/* <div className={cls.wordGroupName}>
-        Tutorial
-        <hr />
-      </div> */}
-
       <div className={cls.wordGroupState}>
         <WordGroup group={{
           id: '6',
           name: <>
-            <IoIosCloud color="#6269cd" size="1.5em" />
+            <div><AiFillFire color="#ff9800" size="1.5em" /></div>
             {'  Difficult'}
-
           </>,
           clsName: 'p7',
         }}
@@ -46,7 +40,7 @@ export default function WordGroupList() {
         <WordGroup group={{
           id: '7',
           name: <>
-            <IoIosPartlySunny color="#50006e" size="1.5em" />
+            <AiFillPushpin color="#607d8b" size="1.5em" />
             {'  '}
             New
           </>,
@@ -56,11 +50,13 @@ export default function WordGroupList() {
         <WordGroup group={{
           id: '8',
           name: <>
-           
+            <div>
+              {' '}
+              <AiOutlineCheck color="#7cb305" size="1.5em" />
+            </div>
             {'  '}
             <div>Learned</div>
-            <br />
-            <div> <IoIosSunny color="#fadb14" size="1.5em" /></div>
+
                 </>,
           clsName: 'p9',
         }}
