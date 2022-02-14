@@ -33,7 +33,10 @@ export default function WordGroupList() {
 
       <div className={cls.wordGroupList}>
         <WordGroup group={{ id: '6', name: 'Difficult', clsName: 'p7' }} />
+        <WordGroup group={{ id: '7', name: 'New', clsName: 'p8' }} />
+        <WordGroup group={{ id: '8', name: 'Learned', clsName: 'p9' }} />
       </div>
+
     </>
 
   );
