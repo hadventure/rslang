@@ -38,7 +38,20 @@
   }
 
   &.p7 {
-    background: $color-p7;
-    color: $color-black;
+    background: transparent;
+    border: 1px solid $color-p7;
+    color: #24292f;
+  }
+
+  &.p8 {
+    background: transparent;
+    border: 1px solid $color-p7;
+    color: #24292f;
+  }
+
+  &.p9 {
+    background: transparent;
+    border: 1px solid $color-p7;
+    color: #24292f;
   }
 }

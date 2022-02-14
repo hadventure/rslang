@@ -5,13 +5,13 @@ import {
 } from '@/features/words/words-slice';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useLocation, useMatch } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import Pagination from '../pagination/pagination';
 import WordCard from '../word-card/word-card';
 import Word from '../word/word';
 import cls from './word-list.module.scss';
-import sprint from '../../assets/ILLUSTRATION_OFFICE_13.svg'
-import audiocall from '../../assets/ILLUSTRATION_OFFICE_08.svg'
+import sprint from '../../assets/ILLUSTRATION_OFFICE_13.svg';
+import audiocall from '../../assets/ILLUSTRATION_OFFICE_08.svg';
 
 export default function WordList() {
   const dispatch = useDispatch();
@@ -27,11 +27,18 @@ export default function WordList() {
 
   useEffect(() => {
     if (user.isAuth === true && words.group) {
-      dispatch(getUserWords(1));
+      dispatch(getUserWords({
+        page: words.page,
+        group: words.group,
+        wordsPerPage: '20',
+      }));
     }
 
     if (user.isAuth === false && words.group) {
-      dispatch(getWords(1));
+      dispatch(getWords({
+        page: words.page,
+        group: words.group,
+      }));
     }
   }, [words.group, words.page]);
 
@@ -52,10 +59,10 @@ export default function WordList() {
     <div className={cls.wordsContainer}>
       <div className={cls.wordCardContainer}>
         <div className={cls.navGames}>
-          <NavLink to={`${location.pathname}/audiocall`}>
+          <NavLink to={`${location.pathname}/audiocall?page=${words.page}`}>
             <img className={cls.gameImg} src={audiocall} alt="" />
           </NavLink>
-          <NavLink to={`${location.pathname}/sprint`}>
+          <NavLink to={`${location.pathname}/sprint?page=${words.page}`}>
             <img className={cls.gameImg} src={sprint} alt="" />
           </NavLink>
         </div>

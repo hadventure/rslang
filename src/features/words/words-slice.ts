@@ -1,11 +1,14 @@
 import { RootState } from '@/store/types';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TAuth } from '../user/types';
-import { TWord } from './types';
+import {
+  Difficulty, TOptional, TParam, TResult, TUserAnswer, TWord,
+} from './types';
+import * as wordsAPI from './words-API';
 
 export const getWords = createAsyncThunk(
   'words/getWords',
-  async (page: number, thunkAPI) => fetch(`${process.env.API_URL}/words?page=2&group=0`)
+  async (param: Partial<TParam>, thunkAPI) => fetch(`${process.env.API_URL}/words?${new URLSearchParams(param).toString()}`)
     .then(
       (res) =>
         // console.log(page, thunkAPI.getState());
@@ -14,20 +17,63 @@ export const getWords = createAsyncThunk(
     ),
 );
 
-export const getUserWords = createAsyncThunk<number, unknown, {
+export const getUserWords = createAsyncThunk<number, Partial<TParam>, {
   extra: TAuth
   state: RootState
 }>(
   'words/getUserWords',
-  async (_, thunkAPI) => {
-    const { group, page } = thunkAPI.getState().words;
-
-    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams({ group, page, wordsPerPage: '20' }).toString()}`, {
+  async (param, thunkAPI) => {
+    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(param).toString()}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${thunkAPI.extra.token}`,
       },
     });
+
+    return resp.json();
+  },
+);
+
+export const getUserWord = createAsyncThunk<string, TUserAnswer, {
+  extra: TAuth
+  state: RootState
+}>(
+  'words/getUserWord',
+  async (param, thunkAPI) => {
+    const resp = await wordsAPI.getUserWord(param, thunkAPI.extra);
+
+    if (resp.status === 404) {
+      const params = {
+        difficulty: Difficulty.studied,
+        optional: {
+          sprint: {
+            right: param.right ? 1 : 0,
+            wrong: param.right ? 0 : 1,
+          },
+        },
+      };
+
+      await wordsAPI.createUserWord(param, params, thunkAPI.extra);
+      thunkAPI.dispatch(setResult({ ...param, state: params.difficulty }));
+    }
+
+    if (resp.status === 200) {
+      const data = await resp.json();
+
+      const params = {
+        difficulty: Difficulty.studied,
+        optional: {
+          sprint: {
+            right: param.right ? data.optional.sprint.right + 1 : data.optional.sprint.right,
+            wrong: param.right ? data.optional.sprint.wrong : data.optional.sprint.wrong + 1,
+          },
+        },
+      };
+
+      await wordsAPI.updateUserWord(param, params, thunkAPI.extra);
+
+      thunkAPI.dispatch(setResult({ ...param, state: params.difficulty }));
+    }
 
     return resp.json();
   },
@@ -42,6 +88,7 @@ export interface WordsState {
   count: number,
   status: string | null,
   currentWord: TWord | null,
+  result: TResult[],
 }
 
 // Define the initial state using that type
@@ -53,6 +100,7 @@ const wordsState: WordsState = {
   count: 0,
   status: null,
   currentWord: null,
+  result: [],
 };
 
 const wordsSlice = createSlice({
@@ -60,7 +108,7 @@ const wordsSlice = createSlice({
   initialState: wordsState,
   extraReducers: (builder) => {
     // console.log('-----', builder, getWords);
-    builder.addCase(getWords.pending, (state, action) => {
+    builder.addCase(getWords.pending, (state) => {
       // console.log(state, action)
       const local = state;
       local.status = 'loading';
@@ -70,11 +118,11 @@ const wordsSlice = createSlice({
       local.status = 'success';
       local.list = action.payload;
     });
-    builder.addCase(getWords.rejected, (state, action) => {
+    builder.addCase(getWords.rejected, (state) => {
       const local = state;
       local.status = 'failed';
     });
-    builder.addCase(getUserWords.pending, (state, action) => {
+    builder.addCase(getUserWords.pending, (state) => {
       // console.log(state, action)
       const local = state;
       local.status = 'loading';
@@ -82,10 +130,12 @@ const wordsSlice = createSlice({
     builder.addCase(getUserWords.fulfilled, (state, action) => {
       const local = state;
       local.status = 'success';
+      // @ts-ignore
       local.list = action.payload[0].paginatedResults;
+      // @ts-ignore
       local.count = action.payload[0].totalCount[0].count;
     });
-    builder.addCase(getUserWords.rejected, (state, action) => {
+    builder.addCase(getUserWords.rejected, (state) => {
       const local = state;
       local.status = 'failed';
     });
@@ -107,11 +157,19 @@ const wordsSlice = createSlice({
       const local = state;
       local.currentWord = null;
     },
+    setResult(state, action) {
+      const local = state;
+      local.result.push(action.payload);
+    },
   },
 });
 
 export const {
-  setGroup, setPageWords, setCurrentWord, resetCurrentWord,
+  setGroup,
+  setPageWords,
+  setCurrentWord,
+  resetCurrentWord,
+  setResult,
 } = wordsSlice.actions;
 
 export default wordsSlice.reducer;
