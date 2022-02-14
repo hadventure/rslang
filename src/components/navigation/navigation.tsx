@@ -1,11 +1,13 @@
 // https://dev.to/gabrlcj/react-router-v6-some-of-the-new-changes-181m
 // https://github.com/remix-run/react-router/pull/7326
 import { resetCurrentWord, setGroup, setPageWords } from '@/features/words/words-slice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   NavLink, useLocation,
 } from 'react-router-dom';
+import { AiOutlineLeft } from 'react-icons/ai';
+
 import cls from './navigation.module.scss';
 
 interface DictionaryState {
@@ -13,14 +15,14 @@ interface DictionaryState {
 }
 
 export default function Navigation() {
+  const [collapsed, setCollapsed] = useState(true);
+
   const dispatch = useDispatch();
   const location = useLocation();
 
   const state = location.state as DictionaryState;
 
   useEffect(() => {
-    console.log(location.state);
-
     if (location.state) {
       dispatch(setGroup(state.dictionary));
       dispatch(setPageWords(1));
@@ -38,10 +40,16 @@ export default function Navigation() {
     return `${cls.navLink} ${extra}`;
   };
 
+  const toggleNav = () => {
+    setCollapsed(!collapsed);
+  };
+
   return (
-    <nav className={cls.nav}>
+    <nav className={`${cls.nav} ${collapsed ? cls.navCollapsed : ''}`}>
       <div className={cls.navBorder}>
-        <button></button>
+        <button type="button" className={cls.navToggle} onClick={toggleNav}>
+          <AiOutlineLeft style={{verticalAlign: 'middle'}} color="#eee" size="1.5em" />
+        </button>
       </div>
 
       <NavLink to="/" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
