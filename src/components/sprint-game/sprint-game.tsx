@@ -23,9 +23,13 @@ export default function SprintGame({ list }: SprintGameProps) {
 
   const onApprove = () => {
     if (isShowAnswer) {
-      dispatch(getUserWord({ id: shuffled[current]._id, word: shuffled[current].word, right: 1 }));
+      dispatch(getUserWord({
+        id: shuffled[current]._id, word: shuffled[current].word, right: 1, game: 'sprint',
+      }));
     } else {
-      dispatch(getUserWord({ id: shuffled[current]._id, word: shuffled[current].word, right: 0 }));
+      dispatch(getUserWord({
+        id: shuffled[current]._id, word: shuffled[current].word, right: 0, game: 'sprint',
+      }));
     }
 
     setCurrent(current + 1);
@@ -39,17 +43,18 @@ export default function SprintGame({ list }: SprintGameProps) {
         id: shuffled[current]._id,
         word: shuffled[current].word,
         right: 0,
+        game: 'sprint',
       }));
     } else {
-      dispatch(getUserWord({ id: shuffled[current]._id, word: shuffled[current].word, right: 1 }));
+      dispatch(getUserWord({
+        id: shuffled[current]._id, word: shuffled[current].word, right: 1, game: 'sprint',
+      }));
     }
 
     setCurrent(current + 1);
     setVariant(variant - 1);
     setIsShowAnswer(Boolean(getRandomInt(0, 1)));
   };
-
-  console.log(isShowAnswer);
 
   return (
     <>

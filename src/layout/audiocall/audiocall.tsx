@@ -1,6 +1,5 @@
+import AudiocallGame from '@/components/audiocall-game/audiocall-game';
 import Modal from '@/components/modal/modal';
-import SprintGame from '@/components/sprint-game/sprint-game';
-import SprintTimer from '@/components/sprint-timer/sprint-timer';
 import wordsSelector from '@/features/words/words-selector';
 import {
   getUserWords, setGroup,
@@ -11,11 +10,11 @@ import {
   useLocation, useSearchParams,
 } from 'react-router-dom';
 
-export default function Sprint() {
+export default function Audiocall() {
   const dispatch = useDispatch();
-  const [timer, setTimer] = useState(false);
+  const [isStart, setStart] = useState(false);
   const [modal, setModal] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const location = useLocation();
   const words = useSelector(wordsSelector);
@@ -26,14 +25,14 @@ export default function Sprint() {
 
   function getWords() {
     let param;
-    console.log(location);
+
     if (location.pathname.indexOf('games') > -1) {
       dispatch(setGroup(location.pathname.split('/')[3]));
       param = {
         page: '1',
         filter: JSON.stringify({ $or: [{ 'userWord.difficulty': 'studied' }, { userWord: null }] }),
         group: location.pathname.split('/')[3],
-        wordsPerPage: '4',
+        wordsPerPage: '20',
       };
     } else {
       dispatch(setGroup(location.pathname.split('/')[2]));
@@ -41,7 +40,7 @@ export default function Sprint() {
         page: searchParams.get('page')!,
         filter: JSON.stringify({ $or: [{ 'userWord.difficulty': 'studied' }, { userWord: null }] }),
         group: location.pathname.split('/')[2],
-        wordsPerPage: '4',
+        wordsPerPage: '20',
       };
     }
 
@@ -49,33 +48,31 @@ export default function Sprint() {
   }
 
   const onStart = () => {
-    setTimer(true);
-  };
-
-  const onFinishTimer = () => {
-    setTimer(false);
+    setStart(true);
   };
 
   const onPlayAgain = () => {
-    setTimer(true);
+    setStart(true);
     setModal(false);
     getWords();
+  };
+
+  const onFinishGame = () => {
+    setModal(true);
+    setStart(false);
   };
 
   if (words.status === 'loading') {
     return <div>loading</div>;
   }
 
+  console.log('---', words.list);
+
   return (
     <>
-      <SprintTimer
-        timer={timer}
-        onFinishTimer={onFinishTimer}
-        showModal={() => setModal(true)}
-      />
       {
-      timer
-        ? <SprintGame list={words.list} />
+      isStart
+        ? <AudiocallGame list={words.list} onFinishGame={onFinishGame} />
         : <button type="button" onClick={onStart}>Start</button>
       }
 
@@ -95,6 +92,7 @@ export default function Sprint() {
           ))
         }
       </Modal>
+
     </>
   );
 }

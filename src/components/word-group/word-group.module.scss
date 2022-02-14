@@ -39,19 +39,31 @@
 
   &.p7 {
     background: transparent;
-    border: 1px solid $color-p7;
-    color: #24292f;
+    border: 2px solid #eee;
+    color: $color-black;
+    box-shadow: unset;
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 1rem;
   }
 
   &.p8 {
     background: transparent;
-    border: 1px solid $color-p7;
-    color: #24292f;
+    border: 2px solid #eee;
+    color: $color-black;
+    box-shadow: unset;
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 1rem;
   }
 
   &.p9 {
     background: transparent;
-    border: 1px solid $color-p7;
-    color: #24292f;
+    border: 2px solid #eee;
+    color: $color-black;
+    box-shadow: unset;
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 1rem;
   }
 }

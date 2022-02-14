@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import cls from './word-group.module.scss';
 
 type WordGroupProps = {
-  group: { id: string, name: string, clsName: string };
+  group: { id: string, name: string | JSX.Element, clsName: string };
 };
 
 export default function WordGroup({ group }: WordGroupProps) {

@@ -7,11 +7,12 @@ type ModalProps = {
   show: boolean,
   title: string,
   onClose: () => void,
+  onPlayAgain: () => void,
   children: React.ReactNode,
 };
 
 export default function Modal({
-  show, title, onClose, children,
+  show, title, onClose, onPlayAgain, children,
 }: ModalProps) {
   const root = document.getElementById('root');
 
@@ -27,6 +28,10 @@ export default function Modal({
             <div className={cls.modalFooter}>
               <button type="button" onClick={onClose}>
                 Close
+              </button>
+
+              <button type="button" onClick={onPlayAgain}>
+                Play Again
               </button>
             </div>
           </div>

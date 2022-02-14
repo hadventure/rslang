@@ -12,6 +12,7 @@ import WordGroupList from '../../components/word-group-list/word-group-list';
 import WordList from '../../components/word-list/word-list';
 import userSelector from '../../features/user/user-selector';
 import { checkUserData, resetStatus } from '../../features/user/user-slice';
+import Audiocall from '../audiocall/audiocall';
 import Sprint from '../sprint/sprint';
 import Stat from '../stat/stat';
 import cls from './app.module.scss';
@@ -42,7 +43,7 @@ function App() {
             <Route path="dictionary">
               <Route index element={<WordGroupList />} />
               <Route path=":tutorial" element={<WordList />} />
-              <Route path=":tutorial/audiocall" element={<div>audiocall</div>} />
+              <Route path=":tutorial/audiocall" element={<Audiocall />} />
               <Route path=":tutorial/sprint" element={<Sprint />} />
 
             </Route>
@@ -50,7 +51,7 @@ function App() {
             <Route path="games">
               <Route index element={<div>games</div>} />
               <Route path="audiocall" element={<Levels />} />
-              <Route path="audiocall/:tutorial" element={<div>audiocall</div>} />
+              <Route path="audiocall/:tutorial" element={<Audiocall />} />
               <Route path="sprint" element={<Levels />} />
               <Route path="sprint/:tutorial" element={<Sprint />} />
             </Route>

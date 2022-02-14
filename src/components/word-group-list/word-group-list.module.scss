@@ -11,4 +11,11 @@
   margin-bottom: 1rem;
   font-size: 1.6rem;
   font-weight: bolder;
+  color: $color-black
+}
+
+.word-group-state {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: $base-indent;
 }

@@ -12,6 +12,12 @@ export function shuffle<T>(array: T[]): T[] {
   return array;
 }
 
+export const getRandomIntArr = (min: number, max: number, length: number, arr?: number[]) => {
+  const res = arr ? new Set(arr) : new Set();
+  while (res.size < length) res.add(Math.floor(Math.random() * (max - min + 1)) + min);
+  return Array.from(res);
+};
+
 // function identity<Type>(arg: Type): Type {
 //   return arg;
 // }

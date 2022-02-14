@@ -1,8 +1,24 @@
 export type TWord = {
+  audio: string,
+  audioExample: string,
+  audioMeaning: string,
+  group: number,
+  image: string,
+  page: number,
+  textExample: string,
+  textExampleTranslate: string,
+  textMeaning: string,
+  textMeaningTranslate: string,
+  transcription: string,
   _id: string,
   id: string,
   word: string,
   wordTranslate: string,
+};
+
+export type TWordSprint = {
+  word: TWord,
+  variants: TWord[],
 };
 
 export enum Difficulty {
@@ -20,7 +36,8 @@ export type TParam = {
 
 export type TGamesAnswer = {
   wrong: number,
-  right: number
+  right: number,
+  chain: number
 };
 
 export type TGames = {
@@ -37,6 +54,7 @@ export type TUserAnswer = {
   right: number,
   id: string,
   word?: string,
+  game: string,
 };
 
 export type TResult = {

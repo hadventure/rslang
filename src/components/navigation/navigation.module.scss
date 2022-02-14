@@ -72,9 +72,17 @@
   height: inherit;
   background-color: $color-grey;
   transition: background-color 0.2s;
-  cursor: pointer;
+}
 
-  &:hover {
-    background-color: $color-darker;
-  }
+.navToggle {
+  position: absolute;
+  bottom: 20%;
+  padding: 4px;
+  left: -14px;
+  background: #50006e;
+  outline: none;
+  border: 1px solid #50006e;
+  // height: 20px;
+  border-radius: 4px;
+  cursor: pointer;
 }
