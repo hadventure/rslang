@@ -1,7 +1,7 @@
 @import 'src/app.scss';
 
 .container {
-  height: inherit;
+  height: calc(100vh - 40.8px);
   display: flex;
 }
 

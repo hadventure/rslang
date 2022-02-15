@@ -1,17 +1,32 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import { AiOutlineLogin, AiOutlineLogout } from 'react-icons/ai';
 import cls from './header.module.scss';
 
-export default function Header() {
+type HeaderProps = {
+  isAuthenticated: boolean | null;
+};
+
+export default function Header({ isAuthenticated }: HeaderProps) {
+  const location = useLocation();
+
   return (
     <header className={`${cls.header} ${cls.head}`}>
-      <div className="logo">RS Lang</div>
+      <NavLink to="/" className={cls.authItem}>RS Lang</NavLink>
 
-      <div className={cls.auth}>
-        <NavLink to="auth" className={cls.authItem}>Sign in</NavLink>
-        {/* <div className={cls.authLine}> | </div>
-        <div className={cls.authItem}>Sign up</div> */}
+      <div className={location.pathname !== '/auth' ? `${cls.auth}` : `${cls.auth} ${cls.hidden}`}>
+        <NavLink
+          to="auth"
+          className={!isAuthenticated ? `${cls.authItem}` : `${cls.authItem} ${cls.hidden}`}
+        >
+          <AiOutlineLogin style={{ verticalAlign: 'middle', fontSize: '1.3em' }} />
+        </NavLink>
+        <NavLink
+          to="auth"
+          className={isAuthenticated ? `${cls.authItem}` : `${cls.authItem} ${cls.hidden}`}
+        >
+          <AiOutlineLogout style={{ verticalAlign: 'middle', fontSize: '1.3em' }} />
+        </NavLink>
       </div>
-
     </header>
   );
 }

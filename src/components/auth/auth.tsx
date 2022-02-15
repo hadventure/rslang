@@ -1,19 +1,30 @@
-import { authUser, createUser } from '@/features/user/user-slice';
+import { TAuth } from '@/features/user/types';
+import { getUser, createUser, UserState } from '@/features/user/user-slice';
 import { TWord } from '@/features/words/types';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import {
+  ChangeEvent, FormEvent, useEffect, useState,
+} from 'react';
 import { useDispatch } from 'react-redux';
-import cls from './word.module.scss';
+import cls from './auth.module.scss';
 
-// type WordProps = {
-//   item: TWord;
-// };
+type AuthProps = {
+  user: UserState;
+};
 
-export default function Auth() {
+export default function Auth({ user }: AuthProps) {
+  const [signin, setSignin] = useState(true);
+
   const [name, setName] = useState('');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user.msg === 'Please sign in') {
+      setSignin(!signin);
+    }
+  }, [user.msg]);
 
   const handleEmailInput = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -25,26 +36,87 @@ export default function Auth() {
 
   const onRegisterUser = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // "name": "string",
-    // "email": "string",
-    // "password": "string"
     // TODO: via useEffect
+    if (signin) {
+      dispatch(getUser({ email, password }));
+    }
 
-    // dispatch(createUser({ name: 'admin', email, password }));
-    dispatch(authUser({ email, password }));
-    
+    if (!signin) {
+      dispatch(createUser({ name: 'admin', email, password }));
+    }
+
     setEmail('');
     setPassword('');
+  };
 
-    
+  const toggleSignin = () => {
+    setSignin(!signin);
   };
 
   return (
-    <form onSubmit={onRegisterUser}>
-      <input type="text" value={email} onChange={handleEmailInput} />
-      <input type="password" value={password} onChange={handlePassInput} />
+    <div className={cls.main}>
+      <div className={cls.formContainer}>
+        <p className={cls.toggleSigninWrap}>
+          {
+          !signin
+            ? (
+              <>
+                Already have an account?
 
-      <button type="submit">Register</button>
-    </form>
+                {' '}
+                <span className={cls.toggleSignin} onClick={toggleSignin}>Sign In.</span>
+                {' '}
+                {' '}
+
+              </>
+            ) : (
+              <>
+                New to RS Lang?
+                {' '}
+                <span className={cls.toggleSignin} onClick={toggleSignin}>Create an account.</span>
+                {' '}
+              </>
+            )
+        }
+
+        </p>
+
+        {user.msg}
+        <br />
+        <br />
+        <form className={cls.form} onSubmit={onRegisterUser}>
+          <div className={cls.inputs}>
+            {
+              !signin
+              && (
+              <div className={cls.formItem}>
+                <label htmlFor="firstname">Firstname</label>
+                <input type="text" name="firstname" id="firstname" />
+              </div>
+              )
+            }
+
+            <div className={cls.formItem}>
+              <label htmlFor="email">Email</label>
+              <input type="email" value={email} onChange={handleEmailInput} name="email" id="email" />
+              {/* <small>Error message</small> */}
+            </div>
+
+            <div className={cls.formItem}>
+              <label htmlFor="lastname">Password</label>
+              <input type="password" value={password} onChange={handlePassInput} name="lastname" id="lastname" />
+            </div>
+          </div>
+
+          <div className={cls.btns}>
+            <button type="submit" className={cls.button}>
+              {signin ? 'Sign in' : 'Sign up'}
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
   );
 }

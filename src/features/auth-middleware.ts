@@ -5,6 +5,10 @@ const authMiddleware: Middleware = (store) => (next) => (action) => {
   const result = next(action);
   // console.log('----', action);
 
+  if (action.type?.startsWith('user/setToken')) {
+    window.location.replace('');
+  }
+
   if (action.type?.startsWith('user/checkUserData')) {
     const user = JSON.parse(localStorage.getItem('auth') as string);
 

@@ -1,4 +1,4 @@
-import { AiFillFire, AiFillPushpin, AiOutlineCheck, AiFillHourglass } from 'react-icons/ai';
+import { AiFillFire, AiOutlinePaperClip, AiOutlineCheck } from 'react-icons/ai';
 import WordGroup from '../word-group/word-group';
 import cls from './word-group-list.module.scss';
 
@@ -40,7 +40,7 @@ export default function WordGroupList() {
         <WordGroup group={{
           id: '7',
           name: <>
-            <AiFillPushpin color="#607d8b" size="1.5em" />
+            <AiOutlinePaperClip color="#607d8b" size="1.5em" />
             {'  '}
             New
           </>,

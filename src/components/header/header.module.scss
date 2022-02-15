@@ -1,7 +1,6 @@
 @import 'src/app.scss';
 
 .header {
-  border-bottom: $base-border;
   padding: 1rem $base-indent;
   font-size: 1.6rem;
   color: $color-grey;
@@ -22,8 +21,15 @@
   color: $color-grey;
   text-decoration: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
 }
 
 .auth-line {
   padding: 0 2rem;
+}
+
+.hidden {
+  display: none;
 }

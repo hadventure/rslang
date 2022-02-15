@@ -24,7 +24,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(checkUserData({}));
+    dispatch(checkUserData());
   }, []);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Header isAuthenticated={user.isAuth} />
       <div className={cls.container}>
         <Routes>
           <Route path="/" element={<Home />}>
@@ -59,7 +59,7 @@ function App() {
             <Route path="/statistics" element={<Stat />} />
           </Route>
 
-          <Route path="/auth" element={<Auth />} />
+          <Route path="/auth" element={<Auth user={user} />} />
         </Routes>
       </div>
     </>

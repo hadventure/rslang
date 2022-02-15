@@ -18,7 +18,9 @@ export const getWords = createAsyncThunk(
     ),
 );
 
-export const getUserWords = createAsyncThunk<number, Partial<TParam>, {
+export const getUserWords = createAsyncThunk<
+  number,
+  Partial<TParam>, {
   extra: TAuth
   state: RootState
 }>(

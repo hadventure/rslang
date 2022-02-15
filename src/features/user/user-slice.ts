@@ -1,53 +1,31 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TAuth, TUser } from './types';
+import * as userAPI from './user-API';
 
 export const createUser = createAsyncThunk(
   'user/create',
-  async (user: TUser, thunkApi) => {
-    const response = await fetch(`${process.env.API_URL}/users`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    });
+  async (user: TUser, thunkAPI) => {
+    const response = await userAPI.createUser(user);
 
     if (response.status === 200) {
       // Return the known error for future handling
-      // return thunkApi.rejectWithValue((await response.json()) as MyKnownError)
-      console.log(thunkApi);
+      // return thunkAPI.rejectWithValue((await response.json()) as MyKnownError)
       const data = await response.json();
-
-      thunkApi.dispatch(userSlice.actions.booksReceived(data));
       return data;
     }
 
-    return response.json();
+    return thunkAPI.rejectWithValue((await response.text() as string));
   },
 );
 
-export const authUser = createAsyncThunk(
+export const getUser = createAsyncThunk<unknown, Partial<TUser>, { extra: TAuth }>(
   'user/auth',
-  async (user: Partial<TUser>, thunkApi) => {
-    // console.log(thunkApi.extra.token);
-
-    const response = await fetch(`${process.env.API_URL}/signin`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    });
+  async (user: Partial<TUser>, thunkAPI) => {
+    const response = await userAPI.getUser(user);
 
     if (response.status === 200) {
       const data = await response.json();
-      console.log(thunkApi);
-      // thunkApi.extra = data
-      window.location.reload();
-      thunkApi.dispatch(userSlice.actions.setToken(data));
-      return data;
+      thunkAPI.dispatch(userSlice.actions.setToken(data));
     }
 
     return response.json();
@@ -55,12 +33,14 @@ export const authUser = createAsyncThunk(
 );
 
 // Define a type for the slice state
-interface UserState {
+export interface UserState {
   isAuth: boolean | null,
   user: Partial<TUser>,
   auth: Partial<TAuth>,
   status: string | null,
   responseStatus: number | null,
+
+  msg: string,
 }
 
 // Define the initial state using that type
@@ -70,6 +50,7 @@ const userState: UserState = {
   auth: {},
   status: null,
   responseStatus: null,
+  msg: '',
 };
 
 const userSlice = createSlice({
@@ -84,10 +65,15 @@ const userSlice = createSlice({
     builder.addCase(createUser.fulfilled, (state, action) => {
       const local = state;
       local.status = 'success';
+
+      local.msg = 'Please sign in';
     });
     builder.addCase(createUser.rejected, (state, action) => {
       const local = state;
       local.status = 'failed';
+
+      // TODO: how to type response.text()?
+      local.msg = String(action.payload);
     });
   },
   reducers: {
@@ -100,19 +86,10 @@ const userSlice = createSlice({
       local.responseStatus = action.payload;
     },
     set401(state, action) {
-      console.log('set401', state, action);
       const local = state;
       local.responseStatus = action.payload;
     },
-    booksReceived(state, action) {
-      // booksAdapter.setAll(state, action.payload.books)
-
-      console.log(state, action);
-    },
-    checkUserData(state, action) {
-      const local = state;
-      local.auth = action.payload;
-    },
+    checkUserData() {},
     setUserData(state, action) {
       const local = state;
       local.auth = action.payload;
