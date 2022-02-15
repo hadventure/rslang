@@ -19,8 +19,8 @@ export default function Word({ item, index }: WordProps) {
   return (
     <div className={cls.word1} onClick={onSelectWord}>
       <div className={cls.word}>{item.word}</div>
-      {' '}
-      <div className={cls.translation}>{item.transcription}</div>
+      {/* {' '}
+      <div className={cls.translation}>{item.transcription}</div> */}
     </div>
   );
 }

@@ -4,38 +4,43 @@
   display: grid;
   grid-template-columns: 45% calc(55% - 2rem);
   grid-gap: 2rem;
+
+  @include tablet {
+    grid-template-columns: unset;
+  }
 }
 
 .word-list-container {
   display: flex;
-
   flex-direction: column;
-
-  // grid-template-columns: repeat(3, 1fr);
-  // grid-gap: $base-indent;
 }
 
 .nav-games {
   display: flex;
   justify-content: space-around;
   margin-bottom: 2rem;
+
+  & a {
+    text-align: center;
+  }
 }
 
 .game-img {
-  height: 12rem;
+  width: 70%;
 }
 
 .word-list-container1 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: $base-indent;
+  grid-gap: 1rem;
+
+  @include laptop {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 
 .word-card-container {
   display: flex;
   flex-direction: column;
-  // background-color: $color-white;
-  // border: $base-border;
-  // border-radius: $base-border-radius;
 }

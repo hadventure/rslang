@@ -17,7 +17,7 @@ interface DictionaryState {
 }
 
 export default function Navigation() {
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -47,7 +47,9 @@ export default function Navigation() {
   };
 
   return (
-    <nav className={`${cls.nav} ${collapsed ? cls.navCollapsed : ''}`}>
+    <nav
+      className={`${cls.nav} ${cls.navAdaptive} ${collapsed ? cls.navCollapsed : ''}`}
+    >
       <div className={cls.navBorder}>
         <button type="button" className={cls.navToggle} onClick={toggleNav}>
           <AiOutlineLeft style={{ verticalAlign: 'middle' }} color="#eee" size="1.3em" />

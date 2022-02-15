@@ -1,4 +1,6 @@
 import { MouseEvent } from 'react';
+import { AiOutlineRight, AiOutlineLeft } from 'react-icons/ai';
+
 import cls from './pagination.module.scss';
 
 type PaginationProps = {
@@ -99,11 +101,18 @@ export default function Pagination({
   return (
     <div className={cls.paginationContainer}>
       <div>
-        <button type="button" page-key={page - 1} onClick={setPage}>prev</button>
+        <button className={cls.pageItem} type="button" page-key={page - 1} onClick={setPage}>
+          <AiOutlineLeft style={{ verticalAlign: 'middle' }} size="1.3em" />
+        </button>
       </div>
-      { renderPages(page, pageCount) }
+      <div className={cls.pages}>
+        { renderPages(page, pageCount) }
+      </div>
+
       <div>
-        <button type="button" page-key={page + 1} onClick={setPage}>next</button>
+        <button className={cls.pageItem} type="button" page-key={page + 1} onClick={setPage}>
+          <AiOutlineRight style={{ verticalAlign: 'middle' }} size="1.3em" />
+        </button>
       </div>
     </div>
   );

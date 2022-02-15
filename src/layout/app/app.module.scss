@@ -1,8 +1,12 @@
 @import 'src/app.scss';
 
 .container {
-  height: calc(100vh - 40.8px);
   display: flex;
+  min-height: 100%;
+
+  // @include laptop {
+  //   height: min-content;
+  // }
 }
 
 .main {

@@ -38,6 +38,7 @@ export default function WordList() {
       dispatch(getWords({
         page: words.page,
         group: words.group,
+        wordsPerPage: '20',
       }));
     }
   }, [words.group, words.page]);
