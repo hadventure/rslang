@@ -6,7 +6,9 @@ import { useDispatch } from 'react-redux';
 import {
   NavLink, useLocation,
 } from 'react-router-dom';
-import { AiOutlineLeft } from 'react-icons/ai';
+import {
+  AiOutlineLeft, AiOutlineBook, AiOutlineHome, AiOutlineLineChart, AiOutlineTrophy,
+} from 'react-icons/ai';
 
 import cls from './navigation.module.scss';
 
@@ -48,62 +50,62 @@ export default function Navigation() {
     <nav className={`${cls.nav} ${collapsed ? cls.navCollapsed : ''}`}>
       <div className={cls.navBorder}>
         <button type="button" className={cls.navToggle} onClick={toggleNav}>
-          <AiOutlineLeft style={{verticalAlign: 'middle'}} color="#eee" size="1.5em" />
+          <AiOutlineLeft style={{ verticalAlign: 'middle' }} color="#eee" size="1.3em" />
         </button>
       </div>
 
       <NavLink to="/" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <AiOutlineHome size="1.3em" />
         </div>
         <span className={cls.navLabel}>Home</span>
       </NavLink>
       <NavLink end to="/dictionary" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <AiOutlineBook size="1.3em" />
         </div>
         <span className={cls.navLabel}>Dictionary</span>
       </NavLink>
       <NavLink to="/dictionary/0" state={{ dictionary: '0' }} className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <i className={`${cls.part} ${cls.p1}`} />
         </div>
         <span className={cls.navLabel}>Part I</span>
       </NavLink>
       <NavLink to="/dictionary/1" state={{ dictionary: '1' }} className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <i className={`${cls.part} ${cls.p2}`} />
         </div>
         <span className={cls.navLabel}>Part II</span>
       </NavLink>
       <NavLink to="/dictionary/2" state={{ dictionary: '2' }} className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <i className={`${cls.part} ${cls.p3}`} />
         </div>
         <span className={cls.navLabel}>Part III</span>
       </NavLink>
       <NavLink to="/dictionary/3" state={{ dictionary: '3' }} className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <i className={`${cls.part} ${cls.p4}`} />
         </div>
         <span className={cls.navLabel}>Part VI</span>
       </NavLink>
       <NavLink to="/dictionary/4" state={{ dictionary: '4' }} className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <i className={`${cls.part} ${cls.p5}`} />
         </div>
         <span className={cls.navLabel}>Part V</span>
       </NavLink>
       <NavLink to="/dictionary/5" state={{ dictionary: '5' }} className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <i className={`${cls.part} ${cls.p6}`} />
         </div>
         <span className={cls.navLabel}>Part VI</span>
       </NavLink>
 
       <NavLink to="/games" end className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <AiOutlineTrophy size="1.3em" />
         </div>
         <span className={cls.navLabel}>Games</span>
       </NavLink>
@@ -122,7 +124,7 @@ export default function Navigation() {
 
       <NavLink to="/statistics" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <AiOutlineLineChart size="1.3em" />
         </div>
         <span className={cls.navLabel}>Statictics</span>
       </NavLink>

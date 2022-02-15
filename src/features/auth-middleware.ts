@@ -29,6 +29,12 @@ const authMiddleware: Middleware = (store) => (next) => (action) => {
 
     localStorage.setItem('auth', JSON.stringify(authState));
   }
+
+  if (action.type?.startsWith('user/logout')) {
+    localStorage.removeItem('auth');
+    window.location.reload();
+  }
+
   return result;
 };
 

@@ -90,6 +90,7 @@ const userSlice = createSlice({
       local.responseStatus = action.payload;
     },
     checkUserData() {},
+    logout() {},
     setUserData(state, action) {
       const local = state;
       local.auth = action.payload;
@@ -102,7 +103,7 @@ const userSlice = createSlice({
 });
 
 export const {
-  set401, resetStatus, checkUserData, setUserData, setUserIsAuth,
+  set401, resetStatus, checkUserData, setUserData, setUserIsAuth, logout,
 } = userSlice.actions;
 
 export default userSlice.reducer;

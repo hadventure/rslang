@@ -86,3 +86,34 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+.part {
+  height: 1.3rem;
+  width: 1.3rem;
+  background: #E40500;
+  border-radius: 100%;
+
+  &.p1 {
+    background: $color-p1;
+  }
+
+  &.p2 {
+    background: $color-p2;
+  }
+
+  &.p3 {
+    background: $color-p3;
+  }
+  
+  &.p4 {
+    background: $color-p4;
+  }
+
+  &.p5 {
+    background: $color-p5;
+  }
+
+  &.p6 {
+    background: $color-p6;
+  }
+}
