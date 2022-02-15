@@ -1,15 +1,30 @@
 import { configureStore } from '@reduxjs/toolkit';
 import wordsSlice from '@/features/words/words-slice';
+import userSlice from '@/features/user/user-slice';
+import authMiddleware from '@/features/auth-middleware';
+import statSlice from '@/features/stat/stat-slice';
+import levelsSlice from '@/features/levels/levels-slice';
+
+const auth = () => {
+  if (localStorage.getItem('auth') !== null) {
+    return JSON.parse(localStorage.getItem('auth') as string); // re-hydrate the store
+  }
+
+  return {};
+};
 
 const store = configureStore({
   reducer: {
     words: wordsSlice,
+    user: userSlice,
+    stat: statSlice,
+    levels: levelsSlice,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    thunk: {
+      extraArgument: auth(),
+    },
+  }).concat(authMiddleware),
 });
-
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, words: UsersState}
-export type AppDispatch = typeof store.dispatch;
 
 export default store;

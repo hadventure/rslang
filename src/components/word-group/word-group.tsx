@@ -1,25 +1,29 @@
-import { useNavigate } from 'react-router-dom';
-import classes from './word-group.module.scss';
+import { resetCurrentWord, setGroup, setPageWords } from '@/features/words/words-slice';
+import { useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import cls from './word-group.module.scss';
 
 type WordGroupProps = {
-  group: { id: number };
+  group: { id: string, name: string | JSX.Element, clsName: string };
 };
 
 export default function WordGroup({ group }: WordGroupProps) {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onChangeGroup = () => {
-    navigate(`/tutorials/${group.id}`);
+    dispatch(setGroup(group.id));
+    dispatch(setPageWords(1));
+    dispatch(resetCurrentWord({}));
   };
 
   return (
-    <button
-      key={group.id}
-      type="button"
-      data-tutorial={group.id}
+    <NavLink
+      to={`/dictionary/${group.id}`}
+      className={`${cls.wordGroupItem} ${cls[group.clsName]}`}
       onClick={onChangeGroup}
+      state={{ dictionary: group.id }}
     >
-      {group.id}
-    </button>
+      {group.name}
+    </NavLink>
   );
 }

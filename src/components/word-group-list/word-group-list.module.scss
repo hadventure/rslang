@@ -1,0 +1,21 @@
+@import 'src/app.scss';
+
+.word-group-list {
+  margin-bottom: 8rem;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: $base-indent;
+}
+
+.word-group-name {
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  font-weight: bolder;
+  color: $color-black
+}
+
+.word-group-state {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: $base-indent;
+}

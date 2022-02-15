@@ -1,34 +1,119 @@
-// .header {
-//   padding: 0.5rem;
-//   margin-bottom: 2rem;
-// }
+@import 'src/app.scss';
 
-// .navigation {
-//   display: flex;
-//   column-gap: 0.5rem;
-// }
+.nav {
+  width: 20rem;
+  height: inherit;
+  position: relative;
+  transition: width 0.4s;
+  flex-shrink: 0;
 
-// .nav {
-//   line-height: 3rem;
-//   height: 30px;
-//   padding: 0 0.5rem;
-//   cursor: pointer;
-//   border-radius: 4px;
-//   background-color:#69c0ff;
-//   border-style: solid;
-//   border-width: 0 1px 4px 0px;
-//   border-color: #5ba8e0;
-//   color: #fff;
-//   text-decoration: none;
-//   transition: background 0.3s;
+  
+  &.nav-collapsed {
+    width: 5rem;
 
-//   &:active {
-//     border-width: 1px 1px 3px 0px;
-//   }
+    & .nav-label {
+      display: none;
+    }
+  
+    & .nav-link-sub {
+      padding-left: unset;
+    }
+  }
+}
 
-//   &:hover {
-//     background-color:#5dbbff;
-//   }
+.nav-link {
+  display: flex;
+  align-items: center;
+  color: $color-black;
+  text-decoration: none;
+  font-size: small;
+  margin: 1rem;
+  border-radius: $base-border-radius;
 
+  &.nav-link-base {
+    font-weight: bold;
+  }
 
-// }
+  &.nav-link-active {
+    background-color: #ffe6ff;
+    font-size: small;
+    margin: 10px;
+    border-radius: $base-border-radius;
+  }
+  // #bd10e0
+  &.nav-link-sub {
+    padding-left: 4rem;
+  }
+
+  &:hover {
+    background-color: $color-grey;
+    transition: background-color 0.5s;
+  }
+}
+
+.nav-icon-container {
+  width: $nav-icon-width;
+  height: $nav-icon-width;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-label {
+  white-space: nowrap;
+}
+
+.nav-border {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  width: $nav-border-width;
+  height: inherit;
+  background-color: $color-grey;
+  transition: background-color 0.2s;
+}
+
+.navToggle {
+  position: absolute;
+  bottom: 20%;
+  padding: 4px;
+  left: -14px;
+  background: #50006e;
+  outline: none;
+  border: 1px solid #50006e;
+  // height: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.part {
+  height: 1.3rem;
+  width: 1.3rem;
+  background: #E40500;
+  border-radius: 100%;
+
+  &.p1 {
+    background: $color-p1;
+  }
+
+  &.p2 {
+    background: $color-p2;
+  }
+
+  &.p3 {
+    background: $color-p3;
+  }
+  
+  &.p4 {
+    background: $color-p4;
+  }
+
+  &.p5 {
+    background: $color-p5;
+  }
+
+  &.p6 {
+    background: $color-p6;
+  }
+}

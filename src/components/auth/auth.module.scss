@@ -1,0 +1,109 @@
+@import 'src/app.scss';
+
+.main {
+  padding: 2rem;
+  flex: 1 1 auto;
+  background-color: #fafbff;
+  color: $color-black;
+}
+
+.form-container {
+  padding: $base-indent;
+  background-color: $color-white;
+  // background-color: $color-dark;
+  border: 1px solid #eee;
+  border-radius: $base-border-radius;
+
+  width: calc(100% - 60%);
+  height: auto;
+  position: fixed;
+  z-index: 100;
+  top: calc(40% - 312px / 2);
+  left: calc(50% - (calc(100% - 60%) / 2));
+
+}
+
+.form {
+
+}
+
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.4rem;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+  margin-bottom: 3rem;
+
+  & input {
+    outline: none;
+    padding: 1rem;
+    font-family: 'Patrick Hand', sans-serif;
+    border: solid 1px #eee;
+    border-radius: 4px;
+    color: $color-black;
+
+    &:focus {
+      border: solid 1px $color-dark;
+    }
+  }
+
+  & label {
+    font-size: 1.4rem;
+  }
+}
+
+.btns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  padding: 6px 36px;
+  background: #50006e;
+  color: #eee;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+  font-size: initial;
+}
+
+
+.toggle-signin-wrap {
+  font-size: small;
+}
+
+.toggle-signin {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+// .error::before {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   background-color: #f0121285;
+//   transition: background-color 0.5s ease;
+//   content: "";
+// }
+
+// .success::before {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   background-color: #52ff2670;
+//   transition: background-color 0.5s ease;
+//   content: "";
+// }

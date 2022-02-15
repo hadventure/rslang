@@ -1,0 +1,9 @@
+@import 'src/app.scss';
+
+.word-card-container {
+  height: 100%;
+  background-color: $color-white;
+  border: $base-border;
+  border-radius: $base-border-radius;
+  padding: 1rem;
+}

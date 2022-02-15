@@ -1,0 +1,69 @@
+@import 'src/app.scss';
+
+.word-group-item {
+  color: $color-grey;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding: 3rem $base-indent;
+  border-radius: 1rem;
+  box-shadow: $base-shadow;
+  text-decoration: none;
+  justify-content: center;
+  font-size: 1.8rem;
+  cursor: pointer;
+
+  &.p1 {
+    background: $color-p1;
+  }
+
+  &.p2 {
+    background: $color-p2;
+  }
+
+  &.p3 {
+    background: $color-p3;
+  }
+  
+  &.p4 {
+    background: $color-p4;
+  }
+
+  &.p5 {
+    background: $color-p5;
+  }
+
+  &.p6 {
+    background: $color-p6;
+  }
+
+  &.p7 {
+    background: transparent;
+    border: 2px solid #eee;
+    color: $color-black;
+    box-shadow: unset;
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 1rem;
+  }
+
+  &.p8 {
+    background: transparent;
+    border: 2px solid #eee;
+    color: $color-black;
+    box-shadow: unset;
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 1rem;
+  }
+
+  &.p9 {
+    background: transparent;
+    border: 2px solid #eee;
+    color: $color-black;
+    box-shadow: unset;
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 1rem;
+  }
+}

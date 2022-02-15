@@ -1,5 +1,18 @@
 * {
+  box-sizing: border-box;
   font-family: 'Red Hat Text', 'Nunito Sans', sans-serif;
-  font-weight: 400;
-  background-color: #EBEDF1;
+}
+
+html {
+  font-size: 10px;
+  height: 100vh;
+}
+
+body {
+  height: inherit;
+  margin: 0;
+}
+
+#root {
+  height: inherit;
 }
