@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { TLevel } from './types';
 
 export interface ILevelsState {
-  list: TLevel[],
+  list: Array<TLevel>,
 }
 
 const levelsState: ILevelsState = {

@@ -7,7 +7,8 @@ import {
   NavLink, useLocation,
 } from 'react-router-dom';
 import {
-  AiOutlineLeft, AiOutlineBook, AiOutlineHome, AiOutlineLineChart, AiOutlineTrophy,
+  AiOutlineLeft, AiFillCustomerService, AiOutlineFieldTime,
+  AiOutlineBook, AiOutlineHome, AiOutlineLineChart, AiOutlineTrophy,
 } from 'react-icons/ai';
 
 import cls from './navigation.module.scss';
@@ -113,13 +114,15 @@ export default function Navigation() {
       </NavLink>
       <NavLink to="/games/sprint" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <AiOutlineFieldTime size="1.3em" />
         </div>
+
         <span className={cls.navLabel}>Sprint</span>
       </NavLink>
       <NavLink to="/games/audiocall" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <AiFillCustomerService size="1.3em" />
+
         </div>
         <span className={cls.navLabel}>Audiocall</span>
       </NavLink>

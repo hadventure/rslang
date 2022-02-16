@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TAuth } from '../user/types';
 import { set401 } from '../user/user-slice';
 import {
-  Difficulty, TParam, TResult, TUserAnswer, TWord,
+  Difficulty, TOptional, TParam, TResult, TUserAnswer, TWord,
 } from './types';
 import * as wordsAPI from './words-API';
 
@@ -19,8 +19,8 @@ export const getWords = createAsyncThunk(
 );
 
 export const getUserWords = createAsyncThunk<
-  number,
-  Partial<TParam>, {
+number,
+Partial<TParam>, {
   extra: TAuth
   state: RootState
 }>(
@@ -94,14 +94,17 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
 
 // Define a type for the slice state
 export interface WordsState {
-  list: TWord[],
+  list: Array<TWord>,
   page: string,
   group: string,
   limit: string,
   count: number,
+
   status: string | null,
   currentWord: TWord | null,
   result: TResult[],
+
+  refresh: boolean,
 }
 
 // Define the initial state using that type
@@ -114,6 +117,8 @@ const wordsState: WordsState = {
   status: null,
   currentWord: null,
   result: [],
+
+  refresh: false,
 };
 
 const wordsSlice = createSlice({
@@ -174,6 +179,10 @@ const wordsSlice = createSlice({
       const local = state;
       local.result.push(action.payload);
     },
+    toggleRefresh(state, action) {
+      const local = state;
+      local.refresh = !local.refresh;
+    },
   },
 });
 
@@ -183,6 +192,7 @@ export const {
   setCurrentWord,
   resetCurrentWord,
   setResult,
+  toggleRefresh,
 } = wordsSlice.actions;
 
 export default wordsSlice.reducer;
