@@ -1,6 +1,6 @@
 import { getRandomIntArr, shuffle } from '@/common/helper';
 import { TWord, TWordSprint } from '@/features/words/types';
-import { getUserWord } from '@/features/words/words-slice';
+import { getUserWord } from '@/features/words/words-thunks';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 

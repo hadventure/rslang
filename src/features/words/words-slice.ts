@@ -41,57 +41,6 @@ Partial<TParam>, {
   },
 );
 
-export const getUserWord = createAsyncThunk<string, TUserAnswer, {
-  extra: TAuth
-  state: RootState
-}>(
-  'words/getUserWord',
-  async (param, thunkAPI) => {
-    const resp = await wordsAPI.getUserWord(param, thunkAPI.extra);
-
-    if (resp.status === 404) {
-      const params = {
-        difficulty: Difficulty.studied,
-        optional: {
-          [param.game]: {
-            right: param.right ? 1 : 0,
-            wrong: param.right ? 0 : 1,
-            chain: param.right ? 1 : 0,
-          },
-        },
-      };
-
-      await wordsAPI.createUserWord(param, params, thunkAPI.extra);
-      thunkAPI.dispatch(setResult({ ...param, state: params.difficulty }));
-    }
-
-    if (resp.status === 200) {
-      const data = await resp.json();
-
-      const { right, wrong, chain } = data.optional[param.game];
-
-      const params = {
-        difficulty: param.right && chain > 2 ? Difficulty.learned : Difficulty.studied,
-        optional: {
-          [param.game]: {
-            right: param.right ? right + 1 : right,
-            wrong: param.right ? wrong : wrong + 1,
-            chain: param.right ? chain + 1 : chain,
-          },
-        },
-      };
-
-      console.log(params);
-
-      await wordsAPI.updateUserWord(param, params, thunkAPI.extra);
-
-      thunkAPI.dispatch(setResult({ ...param, state: params.difficulty }));
-    }
-
-    return resp.json();
-  },
-);
-
 // Define a type for the slice state
 export interface WordsState {
   list: Array<TWord>,

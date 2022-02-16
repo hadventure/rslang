@@ -1,4 +1,6 @@
+import { sprintTime } from '@/common/constants';
 import { useEffect, useState } from 'react';
+import cls from './sprint-timer.module.scss';
 
 type SprintTimerProps = {
   timer: boolean,
@@ -11,7 +13,7 @@ export default function SprintTimer({
   onFinishTimer,
   showModal,
 }: SprintTimerProps) {
-  const [time, setTime] = useState(20);
+  const [time, setTime] = useState(sprintTime);
 
   useEffect(() => {
     let timerID: NodeJS.Timeout;
@@ -28,13 +30,13 @@ export default function SprintTimer({
   useEffect(() => {
     if (time === 0) {
       onFinishTimer();
-      setTime(20);
+      setTime(sprintTime);
       showModal();
     }
   }, [time]);
 
   // console.log('render');
   return (
-    <div>{time}</div>
+    <div className={cls.time}>{time}</div>
   );
 }

@@ -7,10 +7,11 @@ export const getUserWord = (param: TUserAnswer, extra: TAuth) => {
   return http.get(url, {}, extra.token);
 };
 
-export const createUserWord = (param: TUserAnswer | {
+export const createUserWord = (param: TUserAnswer | Partial<{
   id: string,
-  userWord: TOptional
-}, body: TOptional, extra: TAuth) => {
+  userWord: TOptional | undefined,
+  type: string,
+}>, body: TOptional, extra: TAuth) => {
   const url = `/users/${extra.userId}/words/${param.id}`;
   return http.post<TOptional>(url, body, extra.token);
 };
@@ -22,7 +23,8 @@ export const updateUserWord = (param: TUserAnswer, body: TOptional, extra: TAuth
 
 export const addWordToDifficult = (param: {
   id: string,
-  userWord: TOptional
+  userWord: TOptional | undefined,
+  type: string,
 }, body: TOptional, extra: TAuth) => {
   const url = `/users/${extra.userId}/words/${param.id}`;
   return http.put<TOptional>(url, body, extra.token);

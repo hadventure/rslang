@@ -46,10 +46,10 @@ export type TGames = {
   audiocall: TGamesAnswer,
 };
 
-export type TOptional = Partial<{
+export type TOptional = {
   difficulty: string,
-  optional: Partial<TGames>
-}>;
+  optional: TGames
+};
 
 export type TUserAnswer = {
   right: number,

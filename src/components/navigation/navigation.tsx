@@ -18,7 +18,7 @@ interface DictionaryState {
 }
 
 export default function Navigation() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   const dispatch = useDispatch();
   const location = useLocation();

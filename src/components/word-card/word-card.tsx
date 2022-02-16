@@ -1,3 +1,5 @@
+// TODO: через реакт есть возможность?
+// https://stackoverflow.com/questions/27363891/javascript-play-audio-one-after-another-html5
 import { WordsState } from '@/features/words/words-slice';
 import { useDispatch } from 'react-redux';
 import {
@@ -13,21 +15,10 @@ type WordCardProps = {
 };
 
 export default function WordCard({ words, isAuthenticated }: WordCardProps) {
-  // const [play, setPlay] = useState(false);
   const dispatch = useDispatch();
-
   const audio = new Audio();
 
-  // useEffect(() => {
-  //   if (words.currentWord?._id) {
-  //     audio.pause();
-  //   }
-  // }, [words.currentWord?._id]);
-
   const onPlayAudio = () => {
-    // TODO: через реакт есть возможность?
-    // https://stackoverflow.com/questions/27363891/javascript-play-audio-one-after-another-html5
-
     const audioList = [
       words.currentWord?.audio,
       words.currentWord?.audioMeaning,
@@ -49,16 +40,22 @@ export default function WordCard({ words, isAuthenticated }: WordCardProps) {
   };
 
   const onAddToDifficult = (type: string) => {
-    dispatch(addToDifficult({
-      id: words.currentWord!._id,
-      userWord: words.currentWord?.userWord,
-      type,
-    }));
-  };
+    console.log(words.currentWord);
 
-  // const onStopAudio = () => {
-  //   audio.pause();
-  // };
+    if (words.currentWord?.userWord) {
+      dispatch(addToDifficult({
+        id: words.currentWord!._id,
+        userWord: words.currentWord?.userWord,
+        type,
+      }));
+    } else {
+      dispatch(addToDifficult({
+        id: words.currentWord!._id,
+        userWord: undefined,
+        type,
+      }));
+    }
+  };
 
   if (words.currentWord === null) {
     return <div className={cls.wordCardContainer}>No Word selected</div>;
@@ -74,21 +71,10 @@ export default function WordCard({ words, isAuthenticated }: WordCardProps) {
           {words.currentWord?.word}
           <br />
           <div>
-            {/* {
-              play
-                ? (
-                  <AiOutlinePauseCircle
-                    onClick={onStopAudio}
-                    style={{ verticalAlign: 'middle', fontSize: '1.3em', flexBasis: '1.3em' }}
-                  />
-                )
-                : ( */}
             <AiOutlinePlayCircle
               onClick={onPlayAudio}
               style={{ verticalAlign: 'middle', fontSize: '1.3em', flexBasis: '1.3em' }}
             />
-            {/* )
-            } */}
 
           </div>
 
