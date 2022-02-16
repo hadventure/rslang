@@ -14,7 +14,7 @@ export type TWord = {
   id: string,
   word: string,
   wordTranslate: string,
-  // userWord: null | TOptional
+  userWord: null | TOptional
 };
 
 export type TWordSprint = {

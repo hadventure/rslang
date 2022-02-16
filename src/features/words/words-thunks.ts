@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { getOptional } from '@/common/optional-entity';
 import { TAuth } from '../user/types';
 import { set401 } from '../user/user-slice';
 import { TOptional, Difficulty } from './types';
@@ -12,7 +13,7 @@ export const addToDifficult = createAsyncThunk<number, {
 }, { extra: TAuth }>(
   'words/addToDifficult',
   async (param, thunkAPI) => {
-    const p: TOptional = {};
+    const p = getOptional();
     let resp;
 
     if (param.userWord) {
@@ -22,7 +23,6 @@ export const addToDifficult = createAsyncThunk<number, {
       resp = await wordsAPI.addWordToDifficult(param, p, thunkAPI.extra);
     } else {
       p.difficulty = param.type;
-      p.optional = {};
       resp = await wordsAPI.createUserWord(param, p, thunkAPI.extra);
     }
 

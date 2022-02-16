@@ -63,7 +63,10 @@ export default function WordList() {
     <div className={cls.wordsContainer}>
       <div className={cls.wordCardContainer}>
 
-        <WordCard words={words} />
+        <WordCard
+          words={words}
+          isAuthenticated={user.isAuth}
+        />
       </div>
 
       <div className={cls.wordListContainer}>
@@ -82,7 +85,8 @@ export default function WordList() {
             index={i}
             item={item}
             color={levels.list[item.group].clsName}
-            currentWordID={words.currentWord?._id}
+            currentWordID={words.currentWord?._id || words.currentWord?.id}
+            isAuthenticated={user.isAuth}
           />
         ))
       }

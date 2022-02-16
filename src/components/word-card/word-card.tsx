@@ -3,15 +3,16 @@ import { useDispatch } from 'react-redux';
 import {
   AiOutlinePushpin, AiOutlinePlayCircle,
 } from 'react-icons/ai';
-import cls from './word-card.module.scss';
 import { addToDifficult } from '@/features/words/words-thunks';
 import { Difficulty } from '@/features/words/types';
+import cls from './word-card.module.scss';
 
 type WordCardProps = {
-  words: WordsState
+  words: WordsState,
+  isAuthenticated: boolean | null,
 };
 
-export default function WordCard({ words }: WordCardProps) {
+export default function WordCard({ words, isAuthenticated }: WordCardProps) {
   // const [play, setPlay] = useState(false);
   const dispatch = useDispatch();
 
@@ -125,23 +126,29 @@ export default function WordCard({ words }: WordCardProps) {
           <div className={cls.tansl}>{words.currentWord?.textExampleTranslate}</div>
         </div>
       </div>
-      <br />
-      <div className={cls.actions}>
-        <button
-          type="button"
-          className={cls[`p${words.currentWord?.group + 1}`]}
-          onClick={() => onAddToDifficult(Difficulty.difficult)}
-        >
-          Add to difficult
-        </button>
-        <button
-          type="button"
-          className={cls[`p${words.currentWord?.group + 1}`]}
-          onClick={() => onAddToDifficult(Difficulty.learned)}
-        >
-          Add to learned
-        </button>
-      </div>
+      {
+        isAuthenticated && (
+          <>
+            <br />
+            <div className={cls.actions}>
+              <button
+                type="button"
+                className={cls[`p${words.currentWord?.group + 1}`]}
+                onClick={() => onAddToDifficult(Difficulty.difficult)}
+              >
+                Add to difficult
+              </button>
+              <button
+                type="button"
+                className={cls[`p${words.currentWord?.group + 1}`]}
+                onClick={() => onAddToDifficult(Difficulty.learned)}
+              >
+                Add to learned
+              </button>
+            </div>
+          </>
+        )
+      }
 
     </div>
   );
