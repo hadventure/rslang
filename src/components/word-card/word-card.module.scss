@@ -2,8 +2,89 @@
 
 .word-card-container {
   height: 100%;
-  background-color: $color-white;
-  border: $base-border;
-  border-radius: $base-border-radius;
+  // background-color: $color-white;
+  // border: $base-border;
+  // border-radius: $base-border-radius;
   padding: 1rem;
+  font-size: 1.6rem;
+}
+
+.img {
+  width: 55%;
+  border-radius: 4px;
+  filter: brightness(90%) grayscale(50%);
+}
+
+.audio-example {
+  display: flex;
+  margin-bottom: 1.8rem;
+  column-gap: 2rem;
+}
+
+.tansl {
+  color: #717171;
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+.icon-wrap {
+  // flex-basis: 4rem;
+  align-self: center;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 1rem;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.card-word-head {
+  width: 100%;
+  align-self: center;
+  text-align: center;
+  // font-size: x-large;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  & button {
+    color: #eee;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    outline: none;
+    font-size: initial;
+    cursor: pointer;
+  }
+}
+
+
+
+.p1 {
+  background: $color-p1;
+}
+
+.p2 {
+  background: $color-p2;
+}
+
+.p3 {
+  background: $color-p3;
+}
+
+.p4 {
+  background: $color-p4;
+}
+
+.p5 {
+  background: $color-p5;
+}
+
+.p6 {
+  background: $color-p6;
 }

@@ -7,7 +7,8 @@ import {
   NavLink, useLocation,
 } from 'react-router-dom';
 import {
-  AiOutlineLeft, AiOutlineBook, AiOutlineHome, AiOutlineLineChart, AiOutlineTrophy,
+  AiOutlineLeft, AiFillCustomerService, AiOutlineFieldTime,
+  AiOutlineBook, AiOutlineHome, AiOutlineLineChart, AiOutlineTrophy,
 } from 'react-icons/ai';
 
 import cls from './navigation.module.scss';
@@ -17,7 +18,7 @@ interface DictionaryState {
 }
 
 export default function Navigation() {
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -47,7 +48,9 @@ export default function Navigation() {
   };
 
   return (
-    <nav className={`${cls.nav} ${collapsed ? cls.navCollapsed : ''}`}>
+    <nav
+      className={`${cls.nav} ${cls.navAdaptive} ${collapsed ? cls.navCollapsed : ''}`}
+    >
       <div className={cls.navBorder}>
         <button type="button" className={cls.navToggle} onClick={toggleNav}>
           <AiOutlineLeft style={{ verticalAlign: 'middle' }} color="#eee" size="1.3em" />
@@ -111,13 +114,15 @@ export default function Navigation() {
       </NavLink>
       <NavLink to="/games/sprint" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <AiOutlineFieldTime size="1.3em" />
         </div>
+
         <span className={cls.navLabel}>Sprint</span>
       </NavLink>
       <NavLink to="/games/audiocall" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
         <div className={cls.navIconContainer}>
-          <i>i</i>
+          <AiFillCustomerService size="1.3em" />
+
         </div>
         <span className={cls.navLabel}>Audiocall</span>
       </NavLink>

@@ -7,7 +7,7 @@
 }
 
 .word {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .word1 {
@@ -16,4 +16,33 @@
   border-radius: $base-border-radius;
   padding: 10px;
   color: $color-black;
+  cursor: pointer;
+
+  &.active {
+    color: $color-grey;
+
+    &.p1 {
+      background: $color-p1;
+    }
+  
+    &.p2 {
+      background: $color-p2;
+    }
+  
+    &.p3 {
+      background: $color-p3;
+    }
+    
+    &.p4 {
+      background: $color-p4;
+    }
+  
+    &.p5 {
+      background: $color-p5;
+    }
+  
+    &.p6 {
+      background: $color-p6;
+    }
+  }
 }

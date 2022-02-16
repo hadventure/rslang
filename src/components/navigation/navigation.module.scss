@@ -19,6 +19,20 @@
       padding-left: unset;
     }
   }
+
+  &.nav-adaptive {
+    @include tablet {
+      width: 5rem;
+
+      & .nav-label {
+        display: none;
+      }
+    
+      & .nav-link-sub {
+        padding-left: unset;
+      }
+    }
+  }
 }
 
 .nav-link {
@@ -69,22 +83,30 @@
   left: 100%;
   top: 0;
   width: $nav-border-width;
-  height: inherit;
+  min-height: 100%;
   background-color: $color-grey;
   transition: background-color 0.2s;
+
+  @include laptop {
+    height: 100%;
+  }
+
 }
 
 .navToggle {
   position: absolute;
-  bottom: 20%;
+  top: 80vh;
   padding: 4px;
   left: -14px;
   background: #50006e;
   outline: none;
   border: 1px solid #50006e;
-  // height: 20px;
   border-radius: 4px;
   cursor: pointer;
+
+  @include tablet {
+    display: none;
+  }
 }
 
 .part {

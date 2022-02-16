@@ -6,6 +6,8 @@ import {
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
+import levelsSelector from '@/features/levels/levels-selector';
+import { TWord } from '@/features/words/types';
 import Pagination from '../pagination/pagination';
 import WordCard from '../word-card/word-card';
 import Word from '../word/word';
@@ -17,15 +19,16 @@ export default function WordList() {
   const dispatch = useDispatch();
   const words = useSelector(wordsSelector);
   const user = useSelector(userSelector);
+  const levels = useSelector(levelsSelector);
   const location = useLocation();
 
   console.log(location);
 
   // let match = useMatch(location);
 
-  // console.log(match)
-
   useEffect(() => {
+    console.log(words.refresh);
+
     if (user.isAuth === true && words.group) {
       dispatch(getUserWords({
         page: words.page,
@@ -38,9 +41,10 @@ export default function WordList() {
       dispatch(getWords({
         page: words.page,
         group: words.group,
+        wordsPerPage: '20',
       }));
     }
-  }, [words.group, words.page]);
+  }, [words.group, words.page, words.refresh]);
 
   // if (words.status === 'loading') {
   //   return <div>Loading</div>;
@@ -58,16 +62,11 @@ export default function WordList() {
   return (
     <div className={cls.wordsContainer}>
       <div className={cls.wordCardContainer}>
-        <div className={cls.navGames}>
-          <NavLink to={`${location.pathname}/audiocall?page=${words.page}`}>
-            <img className={cls.gameImg} src={audiocall} alt="" />
-          </NavLink>
-          <NavLink to={`${location.pathname}/sprint?page=${words.page}`}>
-            <img className={cls.gameImg} src={sprint} alt="" />
-          </NavLink>
-        </div>
 
-        <WordCard words={words} />
+        <WordCard
+          words={words}
+          isAuthenticated={user.isAuth}
+        />
       </div>
 
       <div className={cls.wordListContainer}>
@@ -80,11 +79,28 @@ export default function WordList() {
 
         <div className={cls.wordListContainer1}>
           {
-        words.list.map((item, i) => <Word key={item.id || item._id} index={i} item={item} />)
+        words.list.map((item, i) => (
+          <Word
+            key={item.id || item._id}
+            index={i}
+            item={item}
+            color={levels.list[item.group].clsName}
+            currentWordID={words.currentWord?._id || words.currentWord?.id}
+            isAuthenticated={user.isAuth}
+          />
+        ))
       }
 
         </div>
 
+        <div className={cls.navGames}>
+          <NavLink to={`${location.pathname}/audiocall?page=${words.page}`}>
+            <img className={cls.gameImg} src={audiocall} alt="" />
+          </NavLink>
+          <NavLink to={`${location.pathname}/sprint?page=${words.page}`}>
+            <img className={cls.gameImg} src={sprint} alt="" />
+          </NavLink>
+        </div>
       </div>
 
     </div>
