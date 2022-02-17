@@ -2,12 +2,15 @@ import Modal from '@/components/modal/modal';
 import SprintTimer from '@/components/sprint-timer/sprint-timer';
 import userSelector from '@/features/user/user-selector';
 import wordsSelector from '@/features/words/words-selector';
+import { clearResult } from '@/features/words/words-slice';
 import { useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SprintPreload from './sprint-preload';
 import cls from './sprint.module.scss';
 
 export default function Sprint() {
+  const dispatch = useDispatch();
+
   const [timer, setTimer] = useState(false);
   const [modal, setModal] = useState(false);
   const wrap = useRef<HTMLDivElement>(null);
@@ -29,6 +32,11 @@ export default function Sprint() {
 
   const onPlayAgain = () => {
     setModal(false);
+  };
+
+  const onCloseModal = () => {
+    setModal(false);
+    dispatch(clearResult([]));
   };
 
   const setYesFocus = () => {
@@ -62,7 +70,7 @@ export default function Sprint() {
 
       <Modal
         title="My Modal"
-        onClose={() => setModal(false)}
+        onClose={onCloseModal}
         show={modal}
         onPlayAgain={onPlayAgain}
       >

@@ -15,18 +15,18 @@ type SprintGameProps = {
   yes: RefObject<HTMLButtonElement>,
   no: RefObject<HTMLButtonElement> | null,
   count: number,
-  getWords: (page?: number) => void,
+  setStrategyGame: (page?: number) => void,
   page: string,
   isAuth: boolean | null
 };
 
 export default function SprintGame({
-  list, yes, no, count, getWords, page, isAuth,
+  list, yes, no, count, setStrategyGame, page, isAuth,
 }: SprintGameProps) {
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(0);
   const [shuffled, setShuffled] = useState<TWord[]>([]);
-  const [variant, setVariant] = useState(count - 1);
+  const [variant, setVariant] = useState(0);
   const [isShowAnswer, setIsShowAnswer] = useState(false);
 
   useEffect(() => {
@@ -36,17 +36,15 @@ export default function SprintGame({
     }
 
     const game = shuffle<TWord>(copy);
-
-    if (game.length === 0) {
-      getWords(Number(page) === TEMP_PAGINATION_LENGTH ? 1 : Number(page) + 1);
-    } else {
-      setShuffled(game);
-    }
+    setShuffled(game);
+    setVariant(count - 1);
   }, []);
 
   useEffect(() => {
+    console.log(variant, current, Number(page), TEMP_PAGINATION_LENGTH);
+
     if (variant === -1) {
-      getWords(Number(page) === TEMP_PAGINATION_LENGTH ? 1 : Number(page) + 1);
+      setStrategyGame(Number(page) === TEMP_PAGINATION_LENGTH ? 1 : Number(page) + 1);
     }
   }, [current]);
 
@@ -74,7 +72,7 @@ export default function SprintGame({
     if (isAuth === false) {
       if (isShowAnswer) {
         dispatch(setResult({
-          id: shuffled[current]._id,
+          id: shuffled[current].id,
           word: shuffled[current].word,
           right: 1,
           game: 'sprint',
@@ -82,7 +80,7 @@ export default function SprintGame({
         }));
       } else {
         dispatch(setResult({
-          id: shuffled[current]._id,
+          id: shuffled[current].id,
           word: shuffled[current].word,
           right: 0,
           game: 'sprint',
@@ -118,7 +116,7 @@ export default function SprintGame({
     if (isAuth === false) {
       if (isShowAnswer) {
         dispatch(setResult({
-          id: shuffled[current]._id,
+          id: shuffled[current].id,
           word: shuffled[current].word,
           right: 0,
           game: 'sprint',
@@ -126,7 +124,7 @@ export default function SprintGame({
         }));
       } else {
         dispatch(setResult({
-          id: shuffled[current]._id,
+          id: shuffled[current].id,
           word: shuffled[current].word,
           right: 1,
           game: 'sprint',

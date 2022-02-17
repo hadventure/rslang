@@ -5,7 +5,7 @@ import { RootState } from '@/store/types';
 import { TAuth } from '../user/types';
 import { set401 } from '../user/user-slice';
 import {
-  TOptional, Difficulty, TUserAnswer, TGames,
+  TOptional, Difficulty, TUserAnswer, TGames, TParam,
 } from './types';
 import { setResult, toggleRefresh } from './words-slice';
 import * as wordsAPI from './words-API';
@@ -79,6 +79,18 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
 
       thunkAPI.dispatch(setResult({ ...param, state: optional.difficulty }));
     }
+
+    return resp.json();
+  },
+);
+
+export const getWords = createAsyncThunk<string, Partial<TParam>, {
+  extra: TAuth
+  state: RootState
+}>(
+  'words/getWords',
+  async (param, thunkAPI) => {
+    const resp = await wordsAPI.getWordList(param, thunkAPI.extra);
 
     return resp.json();
   },

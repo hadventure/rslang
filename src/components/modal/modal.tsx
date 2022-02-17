@@ -30,9 +30,9 @@ export default function Modal({
                 Close
               </button>
 
-              <button type="button" onClick={onPlayAgain}>
+              {/* <button type="button" onClick={onPlayAgain}>
                 Play Again
-              </button>
+              </button> */}
             </div>
           </div>
         </div>,

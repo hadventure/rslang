@@ -3,20 +3,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TAuth } from '../user/types';
 import { set401 } from '../user/user-slice';
 import {
-  Difficulty, TOptional, TParam, TResult, TUserAnswer, TWord,
+  TParam, TResult, TWord,
 } from './types';
-import * as wordsAPI from './words-API';
-
-export const getWords = createAsyncThunk(
-  'words/getWords',
-  async (param: Partial<TParam>, thunkAPI) => fetch(`${process.env.API_URL}/words?${new URLSearchParams(param).toString()}`)
-    .then(
-      (res) =>
-        // console.log(page, thunkAPI.getState());
-        res.json()
-      ,
-    ),
-);
+import { getWords } from './words-thunks';
 
 export const getUserWords = createAsyncThunk<
 number,
@@ -26,6 +15,7 @@ Partial<TParam>, {
 }>(
   'words/getUserWords',
   async (param, thunkAPI) => {
+    console.log(param)
     const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(param).toString()}`, {
       method: 'GET',
       headers: {
@@ -59,7 +49,7 @@ export interface WordsState {
 // Define the initial state using that type
 const wordsState: WordsState = {
   list: [],
-  page: '1',
+  page: '0',
   group: '',
   limit: '20',
   count: 0,
@@ -105,6 +95,8 @@ const wordsSlice = createSlice({
       local.count = Number(action.payload[0].totalCount[0]?.count)
       // @ts-ignore
       || Number(action.payload[0].totalCount[0]);
+      // @ts-ignore
+      local.page = action.payload[0].paginatedResults[0].page;
     });
     builder.addCase(getUserWords.rejected, (state) => {
       const local = state;
@@ -132,6 +124,10 @@ const wordsSlice = createSlice({
       const local = state;
       local.result.push(action.payload);
     },
+    clearResult(state, action) {
+      const local = state;
+      local.result = action.payload;
+    },
     toggleRefresh(state, action) {
       const local = state;
       local.refresh = !local.refresh;
@@ -146,6 +142,7 @@ export const {
   resetCurrentWord,
   setResult,
   toggleRefresh,
+  clearResult,
 } = wordsSlice.actions;
 
 export default wordsSlice.reducer;

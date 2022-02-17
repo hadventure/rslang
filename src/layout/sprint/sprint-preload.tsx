@@ -1,8 +1,9 @@
 import SprintGame from '@/components/sprint-game/sprint-game';
 import { Difficulty } from '@/features/words/types';
 import {
-  getUserWords, getWords, setGroup, setPageWords, WordsState,
+  getUserWords, setGroup, setPageWords, WordsState,
 } from '@/features/words/words-slice';
+import { getWords } from '@/features/words/words-thunks';
 import { RefObject, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -28,11 +29,13 @@ export default function SprintPreload({
   const location = useLocation();
 
   function getWords1(page?: number) {
+    console.log('--------', page);
+
     let param;
     if (page) {
       dispatch(setPageWords(page));
     } else {
-      dispatch(setPageWords(Number(searchParams.get('page')!)));
+      dispatch(setPageWords(searchParams.get('page')!));
     }
 
     if (location.pathname.indexOf('games') > -1) {
@@ -43,6 +46,7 @@ export default function SprintPreload({
             $or: [
               { 'userWord.difficulty': Difficulty.studied },
               { 'userWord.difficulty': Difficulty.difficult },
+              { 'userWord.difficulty': Difficulty.learned },
               { userWord: null }],
           },
           { page: page || Number(searchParams.get('page')!) },
@@ -72,22 +76,55 @@ export default function SprintPreload({
     dispatch(getUserWords(param));
   }
 
-  function setStrategyGame() {
+  function getWordsUnauth(page?: number) {
+    let param;
+    if (page) {
+      dispatch(setPageWords(page));
+    } else {
+      dispatch(setPageWords(searchParams.get('page')!));
+    }
+
+    if (location.pathname.indexOf('games') > -1) {
+      dispatch(setGroup(location.pathname.split('/')[3]));
+      param = {
+        page: page || Number(searchParams.get('page')!),
+        wordsPerPage: '20',
+        group: Number(location.pathname.split('/')[3]),
+      };
+    } else {
+      dispatch(setGroup(location.pathname.split('/')[2]));
+      param = {
+        page: page || Number(searchParams.get('page')!),
+        wordsPerPage: '20',
+        group: Number(location.pathname.split('/')[2]),
+      };
+    }
+
+    dispatch(getWords(param));
+  }
+
+  function setStrategyGame(page?: number) {
+    console.log('+++++', isAuth);
     if (isAuth) {
-      console.log('------');
-      getWords1();
+      getWords1(page);
     }
 
     if (isAuth === false) {
-      dispatch(getWords({
-        page: '1',
-      }));
+      getWordsUnauth(page);
     }
   }
 
+  // useEffect(() => {
+  //   setStrategyGame();
+  // }, []);
+
   useEffect(() => {
-    setStrategyGame();
-  }, []);
+    console.log(timer)
+
+    if (timer) {
+      setStrategyGame();
+    }
+  }, [timer]);
 
   if (words.status === 'loading') {
     return <div>loading</div>;
@@ -104,7 +141,7 @@ export default function SprintPreload({
             no={no}
             count={words.count}
             // eslint-disable-next-line react/jsx-no-bind
-            getWords={setStrategyGame}
+            setStrategyGame={setStrategyGame}
             page={words.page}
             isAuth={isAuth}
           />

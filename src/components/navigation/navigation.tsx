@@ -28,7 +28,7 @@ export default function Navigation() {
   useEffect(() => {
     if (location.state) {
       dispatch(setGroup(state.dictionary));
-      dispatch(setPageWords(1));
+      dispatch(setPageWords(0));
       dispatch(resetCurrentWord({}));
     }
   }, [location]);

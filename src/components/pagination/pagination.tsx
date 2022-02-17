@@ -19,7 +19,7 @@ export default function Pagination({
   const setPage = (e: MouseEvent) => {
     const newPage = e.currentTarget.getAttribute('page-key');
     if (newPage) {
-      onChangePage(Number(newPage));
+      onChangePage(Number(newPage) - 1);
     }
   };
 
@@ -106,7 +106,7 @@ export default function Pagination({
         </button>
       </div>
       <div className={cls.pages}>
-        { renderPages(page, pageCount) }
+        { renderPages(page + 1, pageCount) }
       </div>
 
       <div>

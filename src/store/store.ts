@@ -13,6 +13,8 @@ const auth = () => {
   return {};
 };
 
+console.log(auth())
+
 const store = configureStore({
   reducer: {
     words: wordsSlice,

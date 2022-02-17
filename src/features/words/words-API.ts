@@ -1,6 +1,6 @@
 import * as http from '@/common/http';
 import { TAuth } from '../user/types';
-import { TOptional, TUserAnswer } from './types';
+import { TOptional, TParam, TUserAnswer } from './types';
 
 export const getUserWord = (param: TUserAnswer, extra: TAuth) => {
   const url = `/users/${extra.userId}/words/${param.id}`;
@@ -28,4 +28,9 @@ export const addWordToDifficult = (param: {
 }, body: TOptional, extra: TAuth) => {
   const url = `/users/${extra.userId}/words/${param.id}`;
   return http.put<TOptional>(url, body, extra.token);
+};
+
+export const getWordList = (param: Partial<TParam>, extra: TAuth) => {
+  const url = `/words?${new URLSearchParams(param).toString()}`;
+  return http.get(url);
 };

@@ -30,16 +30,16 @@
   width: 500px;
   background-color: #fff;
   transition: all 0.3s ease-in-out;
-  transform: translateY(-200px);
+  height: 500px;
 }
 
-.modal.enter-done .modal-content {
-  transform: translateY(0);
-}
+// .modal.enter-done .modal-content {
+//   transform: translateY(0);
+// }
 
-.modal.exit .modal-content {
-  transform: translateY(-200px);
-}
+// .modal.exit .modal-content {
+//   transform: translateY(-200px);
+// }
 
 .modal-header,
 .modal-footer {
@@ -54,4 +54,6 @@
   padding: 10px;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
+  overflow-y: scroll;
+  height: 84%;
 }
