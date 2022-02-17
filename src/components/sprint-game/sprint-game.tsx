@@ -58,6 +58,7 @@ export default function SprintGame({
           word: shuffled[current].word,
           right: 1,
           game: 'sprint',
+          wordTranslate: shuffled[current].wordTranslate,
         }));
       } else {
         dispatch(getUserWord({
@@ -65,6 +66,7 @@ export default function SprintGame({
           word: shuffled[current].word,
           right: 0,
           game: 'sprint',
+          wordTranslate: shuffled[current].wordTranslate,
         }));
       }
     }
@@ -77,6 +79,7 @@ export default function SprintGame({
           right: 1,
           game: 'sprint',
           state: Difficulty.studied,
+          wordTranslate: shuffled[current].wordTranslate,
         }));
       } else {
         dispatch(setResult({
@@ -85,6 +88,7 @@ export default function SprintGame({
           right: 0,
           game: 'sprint',
           state: Difficulty.studied,
+          wordTranslate: shuffled[current].wordTranslate,
         }));
       }
     }
@@ -102,6 +106,7 @@ export default function SprintGame({
           word: shuffled[current].word,
           right: 0,
           game: 'sprint',
+          wordTranslate: shuffled[current].wordTranslate,
         }));
       } else {
         dispatch(getUserWord({
@@ -109,6 +114,7 @@ export default function SprintGame({
           word: shuffled[current].word,
           right: 1,
           game: 'sprint',
+          wordTranslate: shuffled[current].wordTranslate,
         }));
       }
     }
@@ -121,6 +127,7 @@ export default function SprintGame({
           right: 0,
           game: 'sprint',
           state: Difficulty.studied,
+          wordTranslate: shuffled[current].wordTranslate,
         }));
       } else {
         dispatch(setResult({
@@ -129,6 +136,7 @@ export default function SprintGame({
           right: 1,
           game: 'sprint',
           state: Difficulty.studied,
+          wordTranslate: shuffled[current].wordTranslate,
         }));
       }
     }

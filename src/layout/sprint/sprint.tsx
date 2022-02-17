@@ -1,5 +1,7 @@
+import GameResult from '@/components/game-result/game-result';
 import Modal from '@/components/modal/modal';
 import SprintTimer from '@/components/sprint-timer/sprint-timer';
+import { getStat } from '@/features/stat/stat-thunks';
 import userSelector from '@/features/user/user-selector';
 import wordsSelector from '@/features/words/words-selector';
 import { clearResult } from '@/features/words/words-slice';
@@ -28,6 +30,7 @@ export default function Sprint() {
   const onFinishTimer = () => {
     setTimer(false);
     setModal(true);
+    dispatch(getStat(null));
   };
 
   const onPlayAgain = () => {
@@ -69,21 +72,12 @@ export default function Sprint() {
       </div>
 
       <Modal
-        title="My Modal"
+        title="Result"
         onClose={onCloseModal}
         show={modal}
         onPlayAgain={onPlayAgain}
       >
-        {
-          words.result.map((el) => (
-            <p key={el.id}>
-              {el.word}
-              {el.right}
-              {' '}
-              {el.state}
-            </p>
-          ))
-        }
+        <GameResult result={words.result} />
       </Modal>
     </>
   );

@@ -21,3 +21,20 @@
     @content;
   }
 }
+
+
+@mixin setButtonPrimary {
+  border-radius: $base-border-radius;
+  background-color: $color-primary;
+  color: $color-grey;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: darken($color-primary, 10%);
+  }
+
+  @content;
+}

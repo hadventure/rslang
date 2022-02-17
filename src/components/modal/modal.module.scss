@@ -1,3 +1,5 @@
+@import 'src/app.scss';
+
 .hidden {
   display: none;
 }
@@ -12,18 +14,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  // opacity: 0;
   transition: all 0.3s ease-in-out;
-  // pointer-events: none;
-}
-
-.modal.enter-done {
-  opacity: 1;
-  pointer-events: visible;
-}
-
-.modal.exit {
-  opacity: 0;
 }
 
 .modal-content {
@@ -31,19 +22,13 @@
   background-color: #fff;
   transition: all 0.3s ease-in-out;
   height: 500px;
+  font-size: 1.4rem;
+  border-radius: $base-border-radius;
 }
-
-// .modal.enter-done .modal-content {
-//   transform: translateY(0);
-// }
-
-// .modal.exit .modal-content {
-//   transform: translateY(-200px);
-// }
 
 .modal-header,
 .modal-footer {
-  padding: 10px;
+  padding: 1rem 2rem;
 }
 
 .modal-title {
@@ -51,9 +36,15 @@
 }
 
 .modal-body {
-  padding: 10px;
+  padding: 2rem;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 84%;
+}
+
+.btn-close {
+  @include setButtonPrimary {
+    padding: 4px 12px;
+  }
 }

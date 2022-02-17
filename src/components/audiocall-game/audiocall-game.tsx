@@ -46,6 +46,7 @@ export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps
         word: shuffled[current].word.word,
         right: 1,
         game: 'audiocall',
+        wordTranslate: shuffled[current].word.wordTranslate,
       }));
     } else {
       dispatch(getUserWord({
@@ -53,6 +54,7 @@ export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps
         word: shuffled[current].word.word,
         right: 0,
         game: 'audiocall',
+        wordTranslate: shuffled[current].word.wordTranslate,
       }));
     }
   };

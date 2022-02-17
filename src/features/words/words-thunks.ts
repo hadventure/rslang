@@ -9,6 +9,7 @@ import {
 } from './types';
 import { setResult, toggleRefresh } from './words-slice';
 import * as wordsAPI from './words-API';
+import { getStat } from '../stat/stat-thunks';
 
 export const addToDifficult = createAsyncThunk<number, Partial<{
   id: string,
@@ -75,6 +76,9 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
         chain: param.right ? chain + 1 : 0,
       };
 
+      if (optional.difficulty === Difficulty.learned) {
+        thunkAPI.dispatch(getStat(1));
+      }
       await wordsAPI.updateUserWord(param, optional, thunkAPI.extra);
 
       thunkAPI.dispatch(setResult({ ...param, state: optional.difficulty }));

@@ -11,3 +11,30 @@ export type TAuth = {
   token: string
   userId: string
 };
+
+export type TStatGameItem = {
+  wrong: number,
+  right: number,
+  rightchain: number,
+};
+
+export type TStatGame = {
+  [key: string]: {
+    audiocall: TStatGameItem,
+    sprint: TStatGameItem,
+    [key: string]: TStatGameItem,
+  }
+};
+
+export type TStat = {
+  learnedWords: 0,
+  optional: {
+    learnedWords: {
+      [key: string]: number
+    },
+    pages: {
+      learned: number[]
+    },
+    games: TStatGame
+  }
+};

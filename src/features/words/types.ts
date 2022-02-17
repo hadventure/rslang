@@ -29,7 +29,7 @@ export enum Difficulty {
 }
 
 export type TParam = {
-  page: string,
+  page: string | number,
   group: string,
   wordsPerPage: string,
   filter: string,
@@ -56,6 +56,7 @@ export type TUserAnswer = {
   id: string,
   word?: string,
   game: string,
+  wordTranslate: string,
 };
 
 export type TResult = {
@@ -63,4 +64,6 @@ export type TResult = {
   word: string,
   state: string,
   right: number,
+  game: string,
+  wordTranslate: string,
 };
