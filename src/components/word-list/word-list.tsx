@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import levelsSelector from '@/features/levels/levels-selector';
-import { TWord } from '@/features/words/types';
+import { Difficulty, TWord } from '@/features/words/types';
 import Pagination from '../pagination/pagination';
 import WordCard from '../word-card/word-card';
 import Word from '../word/word';
@@ -31,8 +31,18 @@ export default function WordList() {
 
     if (user.isAuth === true && words.group) {
       dispatch(getUserWords({
-        page: words.page,
-        group: words.group,
+        filter: JSON.stringify({
+          $and: [{
+            $or: [
+              { 'userWord.difficulty': Difficulty.studied },
+              { 'userWord.difficulty': Difficulty.difficult },
+              { 'userWord.difficulty': Difficulty.learned },
+              { userWord: null }],
+          },
+          { page: Number(words.page) },
+          { group: Number(words.group) },
+          ],
+        }),
         wordsPerPage: '20',
       }));
     }

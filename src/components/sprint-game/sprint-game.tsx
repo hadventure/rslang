@@ -1,12 +1,13 @@
 import { getRandomInt, shuffle } from '@/common/helper';
-import { TWord } from '@/features/words/types';
+import { Difficulty, TWord } from '@/features/words/types';
 import React, {
   RefObject, useEffect, useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 import { getUserWord } from '@/features/words/words-thunks';
-import { SPRINT_LEGTH } from '@/common/constants';
+import { SPRINT_LEGTH, TEMP_PAGINATION_LENGTH } from '@/common/constants';
+import { setResult } from '@/features/words/words-slice';
 import cls from './sprint-game.module.scss';
 
 type SprintGameProps = {
@@ -14,10 +15,13 @@ type SprintGameProps = {
   yes: RefObject<HTMLButtonElement>,
   no: RefObject<HTMLButtonElement> | null,
   count: number,
+  getWords: (page?: number) => void,
+  page: string,
+  isAuth: boolean | null
 };
 
 export default function SprintGame({
-  list, yes, no, count,
+  list, yes, no, count, getWords, page, isAuth,
 }: SprintGameProps) {
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(0);
@@ -31,26 +35,60 @@ export default function SprintGame({
       yes.current.focus();
     }
 
-    setShuffled(shuffle<TWord>(copy));
+    const game = shuffle<TWord>(copy);
+
+    if (game.length === 0) {
+      getWords(Number(page) === TEMP_PAGINATION_LENGTH ? 1 : Number(page) + 1);
+    } else {
+      setShuffled(game);
+    }
   }, []);
+
+  useEffect(() => {
+    if (variant === -1) {
+      getWords(Number(page) === TEMP_PAGINATION_LENGTH ? 1 : Number(page) + 1);
+    }
+  }, [current]);
 
   const onApprove = () => {
     // console.log(variant, current, shuffled[current]?.word, shuffled[current].wordTranslate);
 
-    if (isShowAnswer) {
-      dispatch(getUserWord({
-        id: shuffled[current]._id,
-        word: shuffled[current].word,
-        right: 1,
-        game: 'sprint',
-      }));
-    } else {
-      dispatch(getUserWord({
-        id: shuffled[current]._id,
-        word: shuffled[current].word,
-        right: 0,
-        game: 'sprint',
-      }));
+    if (isAuth) {
+      if (isShowAnswer) {
+        dispatch(getUserWord({
+          id: shuffled[current]._id,
+          word: shuffled[current].word,
+          right: 1,
+          game: 'sprint',
+        }));
+      } else {
+        dispatch(getUserWord({
+          id: shuffled[current]._id,
+          word: shuffled[current].word,
+          right: 0,
+          game: 'sprint',
+        }));
+      }
+    }
+
+    if (isAuth === false) {
+      if (isShowAnswer) {
+        dispatch(setResult({
+          id: shuffled[current]._id,
+          word: shuffled[current].word,
+          right: 1,
+          game: 'sprint',
+          state: Difficulty.studied,
+        }));
+      } else {
+        dispatch(setResult({
+          id: shuffled[current]._id,
+          word: shuffled[current].word,
+          right: 0,
+          game: 'sprint',
+          state: Difficulty.studied,
+        }));
+      }
     }
 
     setCurrent(current + 1);
@@ -59,20 +97,42 @@ export default function SprintGame({
   };
 
   const onAbort = () => {
-    if (isShowAnswer) {
-      dispatch(getUserWord({
-        id: shuffled[current]._id,
-        word: shuffled[current].word,
-        right: 0,
-        game: 'sprint',
-      }));
-    } else {
-      dispatch(getUserWord({
-        id: shuffled[current]._id,
-        word: shuffled[current].word,
-        right: 1,
-        game: 'sprint',
-      }));
+    if (isAuth) {
+      if (isShowAnswer) {
+        dispatch(getUserWord({
+          id: shuffled[current]._id,
+          word: shuffled[current].word,
+          right: 0,
+          game: 'sprint',
+        }));
+      } else {
+        dispatch(getUserWord({
+          id: shuffled[current]._id,
+          word: shuffled[current].word,
+          right: 1,
+          game: 'sprint',
+        }));
+      }
+    }
+
+    if (isAuth === false) {
+      if (isShowAnswer) {
+        dispatch(setResult({
+          id: shuffled[current]._id,
+          word: shuffled[current].word,
+          right: 0,
+          game: 'sprint',
+          state: Difficulty.studied,
+        }));
+      } else {
+        dispatch(setResult({
+          id: shuffled[current]._id,
+          word: shuffled[current].word,
+          right: 1,
+          game: 'sprint',
+          state: Difficulty.studied,
+        }));
+      }
     }
 
     setCurrent(current + 1);

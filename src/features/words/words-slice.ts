@@ -84,6 +84,7 @@ const wordsSlice = createSlice({
       const local = state;
       local.status = 'success';
       local.list = action.payload;
+      local.count = action.payload.length;
     });
     builder.addCase(getWords.rejected, (state) => {
       const local = state;
@@ -95,12 +96,15 @@ const wordsSlice = createSlice({
       local.status = 'loading';
     });
     builder.addCase(getUserWords.fulfilled, (state, action) => {
+      console.log(action.payload, Number([]));
       const local = state;
       local.status = 'success';
       // @ts-ignore
       local.list = action.payload[0].paginatedResults;
       // @ts-ignore
-      local.count = action.payload[0].totalCount[0].count;
+      local.count = Number(action.payload[0].totalCount[0]?.count)
+      // @ts-ignore
+      || Number(action.payload[0].totalCount[0]);
     });
     builder.addCase(getUserWords.rejected, (state) => {
       const local = state;

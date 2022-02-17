@@ -25,7 +25,7 @@ export default function SprintTimer({
     }
 
     return () => clearTimeout(timerID);
-  }, [time, timer]);
+  }, [time]);
 
   useEffect(() => {
     if (time === 0) {
@@ -35,7 +35,6 @@ export default function SprintTimer({
     }
   }, [time]);
 
-  // console.log('render');
   return (
     <div className={cls.time}>{time}</div>
   );
