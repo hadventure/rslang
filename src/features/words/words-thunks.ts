@@ -87,7 +87,7 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
   },
 );
 
-export const getWords = createAsyncThunk<TWord[], Partial<TParam>, {
+export const getWords = createAsyncThunk<TWord[], Pick<TParam, 'group' | 'page' | 'wordsPerPage'>, {
   extra: TAuth
   state: RootState
 }>(

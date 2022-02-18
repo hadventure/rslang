@@ -3,19 +3,22 @@ import { TWord, TWordSprint } from '@/features/words/types';
 import { getUserWord } from '@/features/words/words-thunks';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  AiOutlinePushpin, AiOutlinePlayCircle,
-} from 'react-icons/ai';
+import { AiOutlinePlayCircle } from 'react-icons/ai';
+import { setResult } from '@/features/words/words-slice';
 import cls from './audiocall-game.module.scss';
 import right from '../../assets/yes.mp3';
 import wrong from '../../assets/now.mp3';
 
 type AudiocallGameProps = {
   list: TWord[],
-  onFinishGame: () => void
+  onFinishGame: () => void,
+  count: number,
+  isAuth: boolean | null,
 };
 
-export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps) {
+export default function AudiocallGame({
+  list, onFinishGame, count, isAuth,
+}: AudiocallGameProps) {
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(0);
   const [shuffled, setShuffled] = useState<TWordSprint[]>([]);
@@ -36,26 +39,30 @@ export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps
 
     const copy = list.slice(0);
     // as TODO
-    const a = getRandomIntArr(0, 19, 20)
+    const a = getRandomIntArr(0, count - 1, count)
       .map((el) => ({
         word: copy[el as number],
-        variants: shuffle(getRandomIntArr(0, 19, 5, [el as number]).map((j) => copy[j as number])),
+        variants: shuffle(getRandomIntArr(0, count - 1, 5, [el as number])
+          .map((j) => copy[j as number])),
       }));
 
+    console.log(a);
     setShuffled(a);
 
     audio.src = `${process.env.API_URL}/${a[current]?.word?.audio}`;
     audio.play();
 
     return () => {
-      document.addEventListener('click', setFocusOnPage);
+      document.removeEventListener('click', setFocusOnPage);
     };
   }, []);
 
   useEffect(() => {
-    if (current === 10) {
+    if (current === count) {
       onFinishGame();
-    } else if (current !== 0) {
+    }
+
+    if (current !== 0 && current !== count) {
       audio.src = `${process.env.API_URL}/${shuffled[current]?.word?.audio}`;
       audio.play();
     }
@@ -66,26 +73,37 @@ export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps
   const onAnswer = (id: string) => {
     toggleIsAnswered();
 
-    if (id === shuffled[current].word._id) {
+    const common = {
+      id: shuffled[current].word._id || shuffled[current].word.id,
+      word: shuffled[current].word.word,
+      game: 'audiocall',
+      wordTranslate: shuffled[current].word.wordTranslate,
+    };
+
+    if (id === (shuffled[current].word._id || shuffled[current].word.id)) {
       yes.play();
 
-      dispatch(getUserWord({
-        id: shuffled[current].word._id,
-        word: shuffled[current].word.word,
-        right: 1,
-        game: 'audiocall',
-        wordTranslate: shuffled[current].word.wordTranslate,
-      }));
+      if (isAuth) {
+        dispatch(getUserWord({
+          right: 1, ...common,
+        }));
+      } else {
+        dispatch(setResult({
+          right: 1, ...common,
+        }));
+      }
     } else {
       no.play();
 
-      dispatch(getUserWord({
-        id: shuffled[current].word._id,
-        word: shuffled[current].word.word,
-        right: 0,
-        game: 'audiocall',
-        wordTranslate: shuffled[current].word.wordTranslate,
-      }));
+      if (isAuth) {
+        dispatch(getUserWord({
+          right: 0, ...common,
+        }));
+      } else {
+        dispatch(setResult({
+          right: 0, ...common,
+        }));
+      }
     }
   };
 
@@ -96,7 +114,9 @@ export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps
 
   const onNext = () => {
     setCurrent(current + 1);
-    toggleIsAnswered();
+    if (isAnswered) {
+      toggleIsAnswered();
+    }
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -114,12 +134,15 @@ export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps
 
     if (e.code === 'Space') {
       setCurrent(current + 1);
-      toggleIsAnswered();
+      if (isAnswered) {
+        toggleIsAnswered();
+      }
     }
   };
 
   return (
     <>
+      <b>{shuffled[current]?.word.word}</b>
       <div className={cls.answer} ref={wrap} tabIndex={0} onKeyDown={onKeyDown}>
         {
         isAnswered && (
@@ -151,9 +174,9 @@ export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps
         shuffled[current]?.variants.map((el, i) => (
           <button
             className={cls.variant}
-            key={el._id}
+            key={el._id || el.id}
             type="button"
-            onClick={() => onAnswer(el._id)}
+            onClick={() => onAnswer(el._id || el.id)}
             disabled={isAnswered}
           >
             {`${i + 1}. ${el.wordTranslate}`}

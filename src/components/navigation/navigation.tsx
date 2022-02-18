@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import {
   AiFillCustomerService, AiOutlineFieldTime,
-  AiOutlineBook, AiOutlineHome, AiOutlineLineChart, AiOutlineTrophy,
+  AiOutlineBook, AiOutlineHome, AiOutlineLineChart,
   AiOutlineMenu,
 } from 'react-icons/ai';
 
@@ -107,20 +107,20 @@ export default function Navigation() {
         <span className={cls.navLabel}>Part VI</span>
       </NavLink>
 
-      <NavLink to="/games" end className={(navData) => isNavActive(navData, cls.navLinkBase)}>
+      {/* <NavLink to="/games" end className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
           <AiOutlineTrophy size="1.3em" />
         </div>
         <span className={cls.navLabel}>Games</span>
-      </NavLink>
-      <NavLink to="/games/sprint" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      </NavLink> */}
+      <NavLink to="/games/sprint" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
           <AiOutlineFieldTime size="1.3em" />
         </div>
 
         <span className={cls.navLabel}>Sprint</span>
       </NavLink>
-      <NavLink to="/games/audiocall" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      <NavLink to="/games/audiocall" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
           <AiFillCustomerService size="1.3em" />
 
