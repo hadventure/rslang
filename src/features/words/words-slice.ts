@@ -9,14 +9,13 @@ import { getWords } from './words-thunks';
 
 export const getUserWords = createAsyncThunk<
 number,
-Partial<TParam>, {
+Pick<TParam, 'filter' | 'wordsPerPage'>, {
   extra: TAuth
   state: RootState
 }>(
   'words/getUserWords',
   async (param, thunkAPI) => {
-    console.log(param)
-    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(JSON.stringify(param)).toString()}`, {
+    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(param).toString()}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${thunkAPI.extra.token}`,

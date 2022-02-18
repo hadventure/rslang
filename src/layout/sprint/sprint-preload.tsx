@@ -14,14 +14,12 @@ import cls from './sprint.module.scss';
 type SprintPreloadProps = {
   onStart: () => void,
   timer: boolean,
-  yes: RefObject<HTMLButtonElement>,
-  no: RefObject<HTMLButtonElement> | null,
   words: WordsState,
   isAuth: boolean | null,
 };
 
 export default function SprintPreload({
-  onStart, timer, yes, no, words, isAuth,
+  onStart, timer, words, isAuth,
 }: SprintPreloadProps) {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
@@ -131,8 +129,6 @@ export default function SprintPreload({
         ? (
           <SprintGame
             list={words.list}
-            yes={yes}
-            no={no}
             count={words.count}
             // eslint-disable-next-line react/jsx-no-bind
             setStrategyGame={setStrategyGame}

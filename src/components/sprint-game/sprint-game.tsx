@@ -1,19 +1,19 @@
 import { getRandomInt, shuffle } from '@/common/helper';
 import { Difficulty, TWord } from '@/features/words/types';
 import React, {
-  RefObject, useEffect, useState,
+  useEffect, useRef, useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 import { getUserWord } from '@/features/words/words-thunks';
-import { SPRINT_LEGTH, TEMP_PAGINATION_LENGTH } from '@/common/constants';
+import { TEMP_PAGINATION_LENGTH } from '@/common/constants';
 import { setResult } from '@/features/words/words-slice';
 import cls from './sprint-game.module.scss';
+import right from '../../assets/yes.mp3';
+import wrong from '../../assets/now.mp3';
 
 type SprintGameProps = {
   list: TWord[],
-  yes: RefObject<HTMLButtonElement>,
-  no: RefObject<HTMLButtonElement> | null,
   count: number,
   setStrategyGame: (page?: number) => void,
   page: number,
@@ -21,27 +21,38 @@ type SprintGameProps = {
 };
 
 export default function SprintGame({
-  list, yes, no, count, setStrategyGame, page, isAuth,
+  list, count, setStrategyGame, page, isAuth,
 }: SprintGameProps) {
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(0);
   const [shuffled, setShuffled] = useState<TWord[]>([]);
   const [variant, setVariant] = useState(0);
   const [isShowAnswer, setIsShowAnswer] = useState(false);
+  const wrap = useRef<HTMLDivElement>(null);
+
+  const yes = new Audio(right);
+  const no = new Audio(wrong);
 
   useEffect(() => {
     const copy = list.slice(0);
-    if (yes.current) {
-      yes.current.focus();
-    }
+    wrap.current?.focus();
+
+    document.addEventListener('click', () => {
+      wrap.current?.focus();
+    });
 
     const game = shuffle<TWord>(copy);
+
     setShuffled(game);
     setVariant(count - 1);
+
+    return document.removeEventListener('click', () => {
+      wrap.current?.focus();
+    });
   }, []);
 
   useEffect(() => {
-    console.log(variant, current, Number(page), TEMP_PAGINATION_LENGTH);
+    // console.log(shuffled, variant);
 
     if (variant === -1) {
       setStrategyGame(Number(page) === TEMP_PAGINATION_LENGTH ? 1 : Number(page) + 1);
@@ -58,10 +69,12 @@ export default function SprintGame({
 
     if (isAuth) {
       if (isShowAnswer) {
+        yes.play();
         dispatch(getUserWord({
           right: 1, ...common,
         }));
       } else {
+        no.play();
         dispatch(getUserWord({
           right: 0, ...common,
         }));
@@ -70,10 +83,12 @@ export default function SprintGame({
 
     if (isAuth === false) {
       if (isShowAnswer) {
+        yes.play();
         dispatch(setResult({
           right: 1, ...common,
         }));
       } else {
+        no.play();
         dispatch(setResult({
           right: 0, ...common,
         }));
@@ -96,10 +111,12 @@ export default function SprintGame({
 
     if (isAuth) {
       if (isShowAnswer) {
+        no.play();
         dispatch(getUserWord({
           right: 0, ...common,
         }));
       } else {
+        yes.play();
         dispatch(getUserWord({
           right: 1, ...common,
         }));
@@ -108,10 +125,12 @@ export default function SprintGame({
 
     if (isAuth === false) {
       if (isShowAnswer) {
+        no.play();
         dispatch(setResult({
           right: 0, ...common,
         }));
       } else {
+        yes.play();
         dispatch(setResult({
           right: 1, ...common,
         }));
@@ -124,12 +143,13 @@ export default function SprintGame({
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
+    console.log(e);
     if (e.code === 'ArrowLeft') {
-      yes?.current?.focus();
+      onApprove();
     }
 
     if (e.code === 'ArrowRight') {
-      no?.current?.focus();
+      onAbort();
     }
   };
 
@@ -145,11 +165,11 @@ export default function SprintGame({
         }
 
       </div>
-      <div className={cls.actions} onKeyDown={onKeyDown}>
-        <button ref={yes} className={`${cls.btn} ${cls.yes}`} type="button" onClick={onApprove}>
+      <div className={cls.actions} ref={wrap} tabIndex={0} onKeyDown={onKeyDown}>
+        <button className={`${cls.btn} ${cls.yes}`} type="button" onClick={onApprove}>
           <AiFillLike style={{ verticalAlign: 'middle' }} color="#eee" size="1.6em" />
         </button>
-        <button ref={no} className={`${cls.btn} ${cls.no}`} type="button" onClick={onAbort}>
+        <button className={`${cls.btn} ${cls.no}`} type="button" onClick={onAbort}>
           <AiFillDislike style={{ verticalAlign: 'middle' }} color="#eee" size="1.6em" />
         </button>
       </div>

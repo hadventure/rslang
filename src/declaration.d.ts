@@ -6,3 +6,4 @@ declare module '*.scss' {
 // https://www.typescriptlang.org/docs/handbook/declaration-files/introduction.html
 declare module '*.png'
 declare module '*.svg'
+declare module '*.mp3'

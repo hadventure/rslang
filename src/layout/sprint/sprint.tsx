@@ -5,7 +5,7 @@ import { getStat } from '@/features/stat/stat-thunks';
 import userSelector from '@/features/user/user-selector';
 import wordsSelector from '@/features/words/words-selector';
 import { clearResult } from '@/features/words/words-slice';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SprintPreload from './sprint-preload';
 import cls from './sprint.module.scss';
@@ -15,10 +15,6 @@ export default function Sprint() {
 
   const [timer, setTimer] = useState(false);
   const [modal, setModal] = useState(false);
-  const wrap = useRef<HTMLDivElement>(null);
-
-  const yes = useRef<HTMLButtonElement>(null);
-  const no = useRef<HTMLButtonElement>(null);
 
   const words = useSelector(wordsSelector);
   const user = useSelector(userSelector);
@@ -42,15 +38,9 @@ export default function Sprint() {
     dispatch(clearResult([]));
   };
 
-  const setYesFocus = () => {
-    if (yes.current) {
-      yes.current.focus();
-    }
-  };
-
   return (
     <>
-      <div ref={wrap} className={cls.initView} onClick={setYesFocus}>
+      <div className={cls.initView}>
         {
       timer && (
       <SprintTimer
@@ -62,8 +52,6 @@ export default function Sprint() {
       }
 
         <SprintPreload
-          yes={yes}
-          no={no}
           onStart={onStart}
           timer={timer}
           words={words}
