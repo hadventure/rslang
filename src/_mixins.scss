@@ -38,3 +38,14 @@
 
   @content;
 }
+
+@mixin setButton {
+  border-radius: $base-border-radius;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  @content;
+}
+

@@ -1,4 +1,5 @@
 import AudiocallGame from '@/components/audiocall-game/audiocall-game';
+import GameResult from '@/components/game-result/game-result';
 import Modal from '@/components/modal/modal';
 import { Difficulty } from '@/features/words/types';
 import wordsSelector from '@/features/words/words-selector';
@@ -20,10 +21,6 @@ export default function Audiocall() {
 
   const location = useLocation();
   const words = useSelector(wordsSelector);
-
-  useEffect(() => {
-    getWords();
-  }, []);
 
   function getWords(page?: number) {
     let param;
@@ -66,6 +63,10 @@ export default function Audiocall() {
     dispatch(getUserWords(param));
   }
 
+  useEffect(() => {
+    getWords();
+  }, []);
+
   const onStart = () => {
     setStart(true);
   };
@@ -96,20 +97,12 @@ export default function Audiocall() {
       }
 
       <Modal
-        title="My Modal"
+        title="Result"
         onClose={() => setModal(false)}
         show={modal}
         onPlayAgain={onPlayAgain}
       >
-        {
-          words.result.map((el) => (
-            <p key={el.id}>
-              {el.word}
-              {' '}
-              {el.state}
-            </p>
-          ))
-        }
+        <GameResult result={words.result} />
       </Modal>
 
     </div>

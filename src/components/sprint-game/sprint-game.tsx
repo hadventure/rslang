@@ -33,22 +33,22 @@ export default function SprintGame({
   const yes = new Audio(right);
   const no = new Audio(wrong);
 
+  const setFocusOnPage = () => wrap.current?.focus();
+
   useEffect(() => {
     const copy = list.slice(0);
-    wrap.current?.focus();
+    setFocusOnPage();
 
-    document.addEventListener('click', () => {
-      wrap.current?.focus();
-    });
+    document.addEventListener('click', setFocusOnPage);
 
     const game = shuffle<TWord>(copy);
 
     setShuffled(game);
     setVariant(count - 1);
 
-    return document.removeEventListener('click', () => {
-      wrap.current?.focus();
-    });
+    return () => {
+      document.addEventListener('click', setFocusOnPage);
+    };
   }, []);
 
   useEffect(() => {
@@ -143,7 +143,6 @@ export default function SprintGame({
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
-    console.log(e);
     if (e.code === 'ArrowLeft') {
       onApprove();
     }

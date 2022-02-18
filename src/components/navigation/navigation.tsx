@@ -7,8 +7,9 @@ import {
   NavLink, useLocation,
 } from 'react-router-dom';
 import {
-  AiOutlineLeft, AiFillCustomerService, AiOutlineFieldTime,
+  AiFillCustomerService, AiOutlineFieldTime,
   AiOutlineBook, AiOutlineHome, AiOutlineLineChart, AiOutlineTrophy,
+  AiOutlineMenu,
 } from 'react-icons/ai';
 
 import cls from './navigation.module.scss';
@@ -53,7 +54,7 @@ export default function Navigation() {
     >
       <div className={cls.navBorder}>
         <button type="button" className={cls.navToggle} onClick={toggleNav}>
-          <AiOutlineLeft style={{ verticalAlign: 'middle' }} color="#eee" size="1.3em" />
+          <AiOutlineMenu style={{ verticalAlign: 'middle' }} color="#eee" size="1.3em" />
         </button>
       </div>
 
@@ -133,13 +134,6 @@ export default function Navigation() {
         </div>
         <span className={cls.navLabel}>Statictics</span>
       </NavLink>
-
-      {/* <NavLink to="/settings" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
-        <div className={cls.navIconContainer}>
-          <i>i</i>
-        </div>
-        <span className={cls.navLabel}>Settings</span>
-      </NavLink> */}
     </nav>
 
   );
