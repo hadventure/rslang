@@ -33,7 +33,7 @@
   transition: all 0.3s;
 
   &:hover {
-    background-color: darken($color-primary, 10%);
+    background-color: darken($color-primary, 5%);
   }
 
   @content;

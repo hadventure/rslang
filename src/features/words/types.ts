@@ -66,4 +66,6 @@ export type TResult = {
   right: number,
   game: string,
   wordTranslate: string,
+
+  isNewWord: boolean,
 };

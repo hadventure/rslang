@@ -114,10 +114,6 @@ export default function SprintPreload({
     }
   }
 
-  // useEffect(() => {
-  //   setStrategyGame();
-  // }, []);
-
   useEffect(() => {
     console.log(timer)
 

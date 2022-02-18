@@ -38,7 +38,7 @@ export default function WordList() {
               { 'userWord.difficulty': Difficulty.learned },
               { userWord: null }],
           },
-          { page: Number(words.page) },
+          { page: words.page },
           { group: Number(words.group) },
           ],
         }),

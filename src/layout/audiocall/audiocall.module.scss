@@ -1,0 +1,21 @@
+@import 'src/app.scss';
+
+.btn {
+  @include setButtonPrimary {
+    padding: 12px 50px;
+    font-size: 18px;
+    position: relative;
+    overflow: hidden;
+    // box-shadow: 6px 7px 40px -4px rgba(0, 0, 0, 0.2);
+    box-shadow: rgb(0 0 0 / 10%) 0 0 5px 0, rgb(0 0 0 / 10%) 0 0 1px 0;
+  }
+}
+
+.init-view {
+  height: calc(100% - 40.8px - 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 8rem;
+}

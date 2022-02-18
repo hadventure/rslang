@@ -1,0 +1,16 @@
+.play {
+  width: min-content;
+  border-radius: 100%;
+  padding: 0.5rem;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #eee;
+
+  }
+}
+.svg {
+  &:active {
+      transform: scale(90%);
+  }
+}

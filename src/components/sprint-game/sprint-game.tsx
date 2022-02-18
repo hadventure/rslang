@@ -49,24 +49,21 @@ export default function SprintGame({
   }, [current]);
 
   const onApprove = () => {
-    // console.log(variant, current, shuffled[current]?.word, shuffled[current].wordTranslate);
+    const common = {
+      id: shuffled[current]._id || shuffled[current].id,
+      word: shuffled[current].word,
+      game: 'sprint',
+      wordTranslate: shuffled[current].wordTranslate,
+    };
 
     if (isAuth) {
       if (isShowAnswer) {
         dispatch(getUserWord({
-          id: shuffled[current]._id,
-          word: shuffled[current].word,
-          right: 1,
-          game: 'sprint',
-          wordTranslate: shuffled[current].wordTranslate,
+          right: 1, ...common,
         }));
       } else {
         dispatch(getUserWord({
-          id: shuffled[current]._id,
-          word: shuffled[current].word,
-          right: 0,
-          game: 'sprint',
-          wordTranslate: shuffled[current].wordTranslate,
+          right: 0, ...common,
         }));
       }
     }
@@ -74,21 +71,11 @@ export default function SprintGame({
     if (isAuth === false) {
       if (isShowAnswer) {
         dispatch(setResult({
-          id: shuffled[current].id,
-          word: shuffled[current].word,
-          right: 1,
-          game: 'sprint',
-          state: Difficulty.studied,
-          wordTranslate: shuffled[current].wordTranslate,
+          right: 1, ...common,
         }));
       } else {
         dispatch(setResult({
-          id: shuffled[current].id,
-          word: shuffled[current].word,
-          right: 0,
-          game: 'sprint',
-          state: Difficulty.studied,
-          wordTranslate: shuffled[current].wordTranslate,
+          right: 0, ...common,
         }));
       }
     }
@@ -99,22 +86,22 @@ export default function SprintGame({
   };
 
   const onAbort = () => {
+    const common = {
+      id: shuffled[current]._id || shuffled[current].id,
+      word: shuffled[current].word,
+      game: 'sprint',
+      wordTranslate: shuffled[current].wordTranslate,
+      state: Difficulty.studied,
+    };
+
     if (isAuth) {
       if (isShowAnswer) {
         dispatch(getUserWord({
-          id: shuffled[current]._id,
-          word: shuffled[current].word,
-          right: 0,
-          game: 'sprint',
-          wordTranslate: shuffled[current].wordTranslate,
+          right: 0, ...common,
         }));
       } else {
         dispatch(getUserWord({
-          id: shuffled[current]._id,
-          word: shuffled[current].word,
-          right: 1,
-          game: 'sprint',
-          wordTranslate: shuffled[current].wordTranslate,
+          right: 1, ...common,
         }));
       }
     }
@@ -122,21 +109,11 @@ export default function SprintGame({
     if (isAuth === false) {
       if (isShowAnswer) {
         dispatch(setResult({
-          id: shuffled[current].id,
-          word: shuffled[current].word,
-          right: 0,
-          game: 'sprint',
-          state: Difficulty.studied,
-          wordTranslate: shuffled[current].wordTranslate,
+          right: 0, ...common,
         }));
       } else {
         dispatch(setResult({
-          id: shuffled[current].id,
-          word: shuffled[current].word,
-          right: 1,
-          game: 'sprint',
-          state: Difficulty.studied,
-          wordTranslate: shuffled[current].wordTranslate,
+          right: 1, ...common,
         }));
       }
     }

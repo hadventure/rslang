@@ -38,11 +38,13 @@ export const getOptionalStat = (): TStat => ({
           wrong: 0,
           right: 0,
           rightchain: 0,
+          newWordCount: 0,
         },
         audiocall: {
           wrong: 0,
           right: 0,
           rightchain: 0,
+          newWordCount: 0,
         },
       },
     },

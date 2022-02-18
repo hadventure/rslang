@@ -16,6 +16,7 @@ export type TStatGameItem = {
   wrong: number,
   right: number,
   rightchain: number,
+  newWordCount: number,
 };
 
 export type TStatGame = {

@@ -31,19 +31,25 @@ number | null,
     }
 
     if (response.status === 200 && !learnedWordsCount) {
-      const { words } = thunkAPI.getState();
+      const { result } = thunkAPI.getState().words;
+
+      console.log(result);
 
       const data = await response.json();
       const stat = getOptionalStat();
 
       stat.optional = JSON.parse(JSON.stringify(data.optional));
 
-      stat.optional.games[`${getFormattedDate()}`][words.result[0].game as keyof TStatGame].right += words.result.filter(
+      stat.optional.games[`${getFormattedDate()}`][result[0].game].right += result.filter(
         (el) => el.right === 1,
       ).length;
 
-      stat.optional.games[`${getFormattedDate()}`][words.result[0].game as keyof TStatGame].wrong += words.result.filter(
+      stat.optional.games[`${getFormattedDate()}`][result[0].game].wrong += result.filter(
         (el) => el.right === 0,
+      ).length;
+
+      stat.optional.games[`${getFormattedDate()}`][result[0].game].newWordCount += result.filter(
+        (el) => el.isNewWord === true,
       ).length;
 
       console.log(stat.optional, data.optional);
@@ -51,15 +57,19 @@ number | null,
     }
 
     if (response.status === 404 && !learnedWordsCount) {
-      const { words } = thunkAPI.getState();
+      const { result } = thunkAPI.getState().words;
       const stat = getOptionalStat();
 
-      stat.optional.games[`${getFormattedDate()}`][words.result[0].game as keyof TStatGame].right += words.result.filter(
+      stat.optional.games[`${getFormattedDate()}`][result[0].game].right += result.filter(
         (el) => el.right === 1,
       ).length;
 
-      stat.optional.games[`${getFormattedDate()}`][words.result[0].game as keyof TStatGame].wrong += words.result.filter(
+      stat.optional.games[`${getFormattedDate()}`][result[0].game].wrong += result.filter(
         (el) => el.right === 0,
+      ).length;
+
+      stat.optional.games[`${getFormattedDate()}`][result[0].game].newWordCount += result.filter(
+        (el) => el.isNewWord === true,
       ).length;
 
       await statAPI.updateStat(stat, thunkAPI.extra);

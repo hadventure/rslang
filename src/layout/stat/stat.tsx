@@ -1,4 +1,4 @@
-import { getStat } from '@/features/stat/stat-slice';
+import { getStat } from '@/features/stat/stat-thunks';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -10,7 +10,7 @@ export default function Stat() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getStat({}));
+    // dispatch(getStat({}));
   }, [dispatch]);
 
   return (
