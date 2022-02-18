@@ -43,6 +43,9 @@ export interface WordsState {
   result: TResult[],
 
   refresh: boolean,
+
+  sprintRightChainCount: number,
+  sprintRightChain: number,
 }
 
 // Define the initial state using that type
@@ -57,6 +60,9 @@ const wordsState: WordsState = {
   result: [],
 
   refresh: false,
+
+  sprintRightChainCount: 0,
+  sprintRightChain: 0,
 };
 
 const wordsSlice = createSlice({
@@ -131,6 +137,24 @@ const wordsSlice = createSlice({
       const local = state;
       local.refresh = !local.refresh;
     },
+    setRightChainArr(state, action) {
+      const local = state;
+
+      console.log(local.sprintRightChainCount)
+
+      local.sprintRightChain = local.sprintRightChainCount > local.sprintRightChain
+        ? local.sprintRightChainCount : local.sprintRightChain;
+      local.sprintRightChainCount = 0;
+    },
+    setRightChainCount(state, action) {
+      const local = state;
+      local.sprintRightChainCount += 1;
+    },
+    resetRightChainCount(state, action) {
+      const local = state;
+      local.sprintRightChainCount = 0;
+      local.sprintRightChain = 0;
+    },
   },
 });
 
@@ -142,6 +166,9 @@ export const {
   setResult,
   toggleRefresh,
   clearResult,
+  setRightChainArr,
+  setRightChainCount,
+  resetRightChainCount,
 } = wordsSlice.actions;
 
 export default wordsSlice.reducer;

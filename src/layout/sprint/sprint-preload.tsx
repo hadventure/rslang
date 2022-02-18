@@ -4,7 +4,7 @@ import {
   getUserWords, setGroup, setPageWords, WordsState,
 } from '@/features/words/words-slice';
 import { getWords } from '@/features/words/words-thunks';
-import { RefObject, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   useLocation, useSearchParams,
@@ -113,6 +113,7 @@ export default function SprintPreload({
   }
 
   useEffect(() => {
+    console.log(timer);
     if (timer) {
       setStrategyGame();
     }

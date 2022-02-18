@@ -6,7 +6,7 @@ import { UserState } from '@/features/user/user-slice';
 import { Difficulty } from '@/features/words/types';
 import wordsSelector from '@/features/words/words-selector';
 import {
-  getUserWords, setGroup, clearResult, setPageWords,
+  getUserWords, setGroup, clearResult, setPageWords, setRightChainArr, resetRightChainCount,
 } from '@/features/words/words-slice';
 import { getWords } from '@/features/words/words-thunks';
 import { useEffect, useState } from 'react';
@@ -117,18 +117,22 @@ export default function Audiocall({ user }: AudiocallProps) {
     getWordsAuth();
   };
 
-  const onFinishGame = () => {
+  const onFinishGame = (rightChain?: number) => {
+    console.log(rightChain);
+
     setModal(true);
     setStart(false);
 
     if (user.isAuth) {
-      dispatch(getStat(null));
+      dispatch(setRightChainArr({}));
+      dispatch(getStat(0));
     }
   };
 
   const onClose = () => {
     setModal(false);
     dispatch(clearResult([]));
+    dispatch(resetRightChainCount(null));
   };
 
   if (words.status === 'loading') {

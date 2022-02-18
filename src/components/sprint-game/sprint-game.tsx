@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 import { getUserWord } from '@/features/words/words-thunks';
 import { TEMP_PAGINATION_LENGTH } from '@/common/constants';
-import { setResult } from '@/features/words/words-slice';
+import { setResult, setRightChainArr, setRightChainCount } from '@/features/words/words-slice';
 import cls from './sprint-game.module.scss';
 import right from '../../assets/yes.mp3';
 import wrong from '../../assets/now.mp3';
@@ -73,11 +73,15 @@ export default function SprintGame({
         dispatch(getUserWord({
           right: 1, ...common,
         }));
+
+        dispatch(setRightChainCount({}));
       } else {
         no.play();
         dispatch(getUserWord({
           right: 0, ...common,
         }));
+
+        dispatch(setRightChainArr({}));
       }
     }
 
@@ -115,11 +119,15 @@ export default function SprintGame({
         dispatch(getUserWord({
           right: 0, ...common,
         }));
+
+        dispatch(setRightChainArr({}));
       } else {
         yes.play();
         dispatch(getUserWord({
           right: 1, ...common,
         }));
+
+        dispatch(setRightChainCount({}));
       }
     }
 

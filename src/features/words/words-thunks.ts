@@ -9,7 +9,7 @@ import {
 } from './types';
 import { setResult, toggleRefresh } from './words-slice';
 import * as wordsAPI from './words-API';
-import { getStat } from '../stat/stat-thunks';
+import { getStat, setLearnedWords } from '../stat/stat-thunks';
 
 export const addToDifficult = createAsyncThunk<number, {
   id: string,
@@ -68,15 +68,28 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
       const data = await resp.json();
       const { right, wrong, chain } = data.optional[param.game];
 
-      optional.difficulty = param.right && chain >= 2 ? Difficulty.learned : Difficulty.studied;
+      optional.difficulty = data.difficulty;
       optional.optional[param.game as keyof TGames] = {
         right: param.right ? right + 1 : right,
         wrong: param.right ? wrong : wrong + 1,
         chain: param.right ? chain + 1 : 0,
       };
 
-      if (optional.difficulty === Difficulty.learned) {
-        thunkAPI.dispatch(getStat(1));
+      if (param.right && chain >= 2 && optional.difficulty === Difficulty.studied) {
+        optional.difficulty = Difficulty.learned;
+      }
+
+      if (param.right && chain >= 4 && optional.difficulty === Difficulty.difficult) {
+        optional.difficulty = Difficulty.learned;
+      }
+
+      if (!param.right && chain >= 3) {
+        optional.difficulty = Difficulty.studied;
+        thunkAPI.dispatch(setLearnedWords(-1));
+      }
+
+      if (optional.difficulty === Difficulty.learned && data.difficulty === Difficulty.studied) {
+        thunkAPI.dispatch(setLearnedWords(1));
       }
       await wordsAPI.updateUserWord(param, optional, thunkAPI.extra);
 

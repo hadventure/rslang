@@ -4,14 +4,14 @@ import { getUserWord } from '@/features/words/words-thunks';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
-import { setResult } from '@/features/words/words-slice';
+import { setResult, setRightChainArr, setRightChainCount } from '@/features/words/words-slice';
 import cls from './audiocall-game.module.scss';
 import right from '../../assets/yes.mp3';
 import wrong from '../../assets/now.mp3';
 
 type AudiocallGameProps = {
   list: TWord[],
-  onFinishGame: () => void,
+  onFinishGame: (chain: number) => void,
   count: number,
   isAuth: boolean | null,
 };
@@ -24,6 +24,8 @@ export default function AudiocallGame({
   const [shuffled, setShuffled] = useState<TWordSprint[]>([]);
   const [isAnswered, setIsAnswered] = useState(false);
   const wrap = useRef<HTMLDivElement>(null);
+
+  const [rightChain, setRightChain] = useState(0);
 
   const audio = new Audio();
 
@@ -38,7 +40,6 @@ export default function AudiocallGame({
     document.addEventListener('click', setFocusOnPage);
 
     const copy = list.slice(0);
-    // as TODO
     const a = getRandomIntArr(0, count - 1, count)
       .map((el) => ({
         word: copy[el as number],
@@ -46,7 +47,6 @@ export default function AudiocallGame({
           .map((j) => copy[j as number])),
       }));
 
-    console.log(a);
     setShuffled(a);
 
     audio.src = `${process.env.API_URL}/${a[current]?.word?.audio}`;
@@ -59,7 +59,7 @@ export default function AudiocallGame({
 
   useEffect(() => {
     if (current === count) {
-      onFinishGame();
+      onFinishGame(rightChain);
     }
 
     if (current !== 0 && current !== count) {
@@ -87,6 +87,9 @@ export default function AudiocallGame({
         dispatch(getUserWord({
           right: 1, ...common,
         }));
+
+        dispatch(setRightChainCount({}));
+
       } else {
         dispatch(setResult({
           right: 1, ...common,
@@ -95,10 +98,15 @@ export default function AudiocallGame({
     } else {
       no.play();
 
+      setRightChain(0);
+
       if (isAuth) {
         dispatch(getUserWord({
           right: 0, ...common,
         }));
+
+        dispatch(setRightChainArr({}));
+
       } else {
         dispatch(setResult({
           right: 0, ...common,

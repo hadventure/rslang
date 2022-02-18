@@ -7,6 +7,7 @@ import {
 } from 'react-icons/ai';
 import { addToDifficult } from '@/features/words/words-thunks';
 import { Difficulty } from '@/features/words/types';
+import { setLearnedWords } from '@/features/stat/stat-thunks';
 import cls from './word-card.module.scss';
 
 type WordCardProps = {
@@ -54,6 +55,10 @@ export default function WordCard({ words, isAuthenticated }: WordCardProps) {
         userWord: undefined,
         type: type1,
       }));
+    }
+
+    if (type1 === Difficulty.learned) {
+      dispatch(setLearnedWords(1));
     }
   };
 
