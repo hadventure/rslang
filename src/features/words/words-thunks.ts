@@ -5,32 +5,31 @@ import { RootState } from '@/store/types';
 import { TAuth } from '../user/types';
 import { set401 } from '../user/user-slice';
 import {
-  TOptional, Difficulty, TUserAnswer, TGames, TParam,
+  TOptional, Difficulty, TUserAnswer, TGames, TParam, TWord,
 } from './types';
 import { setResult, toggleRefresh } from './words-slice';
 import * as wordsAPI from './words-API';
 import { getStat } from '../stat/stat-thunks';
 
-export const addToDifficult = createAsyncThunk<number, Partial<{
+export const addToDifficult = createAsyncThunk<number, {
   id: string,
   userWord: TOptional | undefined,
   type: string
-}>, { extra: TAuth }>(
+}, { extra: TAuth }>(
   'words/addToDifficult',
   async (param, thunkAPI) => {
     const p = getOptional();
-    // let resp;
+    let resp;
 
-    // if (param.userWord) {
-    //   p.optional = param.userWord.optional;
-    //   p.difficulty = param.type;
-    const resp = await wordsAPI.createUserWord(param, p, thunkAPI.extra);
+    if (param.userWord) {
+      p.optional = param.userWord.optional;
+      p.difficulty = param.type;
+      resp = await wordsAPI.addWordToDifficult(param, p, thunkAPI.extra);
+    } else {
+      p.difficulty = param.type;
 
-    //   // resp = await wordsAPI.addWordToDifficult(param, p, thunkAPI.extra);
-    // } else {
-    //   p.difficulty = param.type;
-    //   resp = await wordsAPI.createUserWord(param, p, thunkAPI.extra);
-    // }
+      resp = await wordsAPI.createUserWord(param, p, thunkAPI.extra);
+    }
 
     if (resp.status === 401) {
       thunkAPI.dispatch(set401(401));
@@ -88,13 +87,13 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
   },
 );
 
-export const getWords = createAsyncThunk<string, Partial<TParam>, {
+export const getWords = createAsyncThunk<TWord[], Partial<TParam>, {
   extra: TAuth
   state: RootState
 }>(
   'words/getWords',
-  async (param, thunkAPI) => {
-    const resp = await wordsAPI.getWordList(param, thunkAPI.extra);
+  async (param) => {
+    const resp = await wordsAPI.getWordList(param);
 
     return resp.json();
   },

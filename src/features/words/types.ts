@@ -29,7 +29,7 @@ export enum Difficulty {
 }
 
 export type TParam = {
-  page: string | number,
+  page: number,
   group: string,
   wordsPerPage: string,
   filter: string,

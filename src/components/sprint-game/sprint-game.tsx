@@ -16,7 +16,7 @@ type SprintGameProps = {
   no: RefObject<HTMLButtonElement> | null,
   count: number,
   setStrategyGame: (page?: number) => void,
-  page: string,
+  page: number,
   isAuth: boolean | null
 };
 

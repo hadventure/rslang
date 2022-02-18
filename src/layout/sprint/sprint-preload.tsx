@@ -35,7 +35,7 @@ export default function SprintPreload({
     if (page) {
       dispatch(setPageWords(page));
     } else {
-      dispatch(setPageWords(searchParams.get('page')!));
+      dispatch(setPageWords(Number(searchParams.get('page')!)));
     }
 
     if (location.pathname.indexOf('games') > -1) {
@@ -81,7 +81,7 @@ export default function SprintPreload({
     if (page) {
       dispatch(setPageWords(page));
     } else {
-      dispatch(setPageWords(searchParams.get('page')!));
+      dispatch(setPageWords(Number(searchParams.get('page')!)));
     }
 
     if (location.pathname.indexOf('games') > -1) {
@@ -89,14 +89,14 @@ export default function SprintPreload({
       param = {
         page: page || Number(searchParams.get('page')!),
         wordsPerPage: '20',
-        group: Number(location.pathname.split('/')[3]),
+        group: location.pathname.split('/')[3],
       };
     } else {
       dispatch(setGroup(location.pathname.split('/')[2]));
       param = {
         page: page || Number(searchParams.get('page')!),
         wordsPerPage: '20',
-        group: Number(location.pathname.split('/')[2]),
+        group: location.pathname.split('/')[2],
       };
     }
 
@@ -115,8 +115,6 @@ export default function SprintPreload({
   }
 
   useEffect(() => {
-    console.log(timer)
-
     if (timer) {
       setStrategyGame();
     }

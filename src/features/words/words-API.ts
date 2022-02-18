@@ -21,16 +21,16 @@ export const updateUserWord = (param: TUserAnswer, body: TOptional, extra: TAuth
   return http.put<TOptional>(url, body, extra.token);
 };
 
-export const addWordToDifficult = (param: {
+export const addWordToDifficult = (param: Partial<{
   id: string,
   userWord: TOptional | undefined,
   type: string,
-}, body: TOptional, extra: TAuth) => {
+}>, body: TOptional, extra: TAuth) => {
   const url = `/users/${extra.userId}/words/${param.id}`;
   return http.put<TOptional>(url, body, extra.token);
 };
 
-export const getWordList = (param: Partial<TParam>, extra: TAuth) => {
-  const url = `/words?${new URLSearchParams(param).toString()}`;
+export const getWordList = (param: Partial<TParam>) => {
+  const url = `/words?${new URLSearchParams(JSON.stringify(param)).toString()}`;
   return http.get(url);
 };

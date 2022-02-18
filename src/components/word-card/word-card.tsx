@@ -39,20 +39,20 @@ export default function WordCard({ words, isAuthenticated }: WordCardProps) {
     };
   };
 
-  const onAddToDifficult = (type: string) => {
+  const onAddToDifficult = (type1: string) => {
     console.log(words.currentWord);
 
     if (words.currentWord?.userWord) {
       dispatch(addToDifficult({
         id: words.currentWord!._id,
         userWord: words.currentWord?.userWord,
-        type,
+        type: type1,
       }));
     } else {
       dispatch(addToDifficult({
         id: words.currentWord!._id,
         userWord: undefined,
-        type,
+        type: type1,
       }));
     }
   };

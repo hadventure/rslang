@@ -16,7 +16,7 @@ Partial<TParam>, {
   'words/getUserWords',
   async (param, thunkAPI) => {
     console.log(param)
-    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(param).toString()}`, {
+    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(JSON.stringify(param)).toString()}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${thunkAPI.extra.token}`,
@@ -34,7 +34,7 @@ Partial<TParam>, {
 // Define a type for the slice state
 export interface WordsState {
   list: Array<TWord>,
-  page: string,
+  page: number,
   group: string,
   limit: string,
   count: number,
@@ -49,7 +49,7 @@ export interface WordsState {
 // Define the initial state using that type
 const wordsState: WordsState = {
   list: [],
-  page: '0',
+  page: 0,
   group: '',
   limit: '20',
   count: 0,
