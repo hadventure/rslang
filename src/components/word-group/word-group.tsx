@@ -12,7 +12,7 @@ export default function WordGroup({ group }: WordGroupProps) {
 
   const onChangeGroup = () => {
     dispatch(setGroup(group.id));
-    dispatch(setPageWords(1));
+    dispatch(setPageWords(0));
     dispatch(resetCurrentWord({}));
   };
 

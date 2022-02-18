@@ -3,24 +3,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TAuth } from '../user/types';
 import { set401 } from '../user/user-slice';
 import {
-  Difficulty, TOptional, TParam, TResult, TUserAnswer, TWord,
+  TParam, TResult, TWord,
 } from './types';
-import * as wordsAPI from './words-API';
-
-export const getWords = createAsyncThunk(
-  'words/getWords',
-  async (param: Partial<TParam>, thunkAPI) => fetch(`${process.env.API_URL}/words?${new URLSearchParams(param).toString()}`)
-    .then(
-      (res) =>
-        // console.log(page, thunkAPI.getState());
-        res.json()
-      ,
-    ),
-);
+import { getWords } from './words-thunks';
 
 export const getUserWords = createAsyncThunk<
 number,
-Partial<TParam>, {
+Pick<TParam, 'filter' | 'wordsPerPage'>, {
   extra: TAuth
   state: RootState
 }>(
@@ -41,61 +30,10 @@ Partial<TParam>, {
   },
 );
 
-export const getUserWord = createAsyncThunk<string, TUserAnswer, {
-  extra: TAuth
-  state: RootState
-}>(
-  'words/getUserWord',
-  async (param, thunkAPI) => {
-    const resp = await wordsAPI.getUserWord(param, thunkAPI.extra);
-
-    if (resp.status === 404) {
-      const params = {
-        difficulty: Difficulty.studied,
-        optional: {
-          [param.game]: {
-            right: param.right ? 1 : 0,
-            wrong: param.right ? 0 : 1,
-            chain: param.right ? 1 : 0,
-          },
-        },
-      };
-
-      await wordsAPI.createUserWord(param, params, thunkAPI.extra);
-      thunkAPI.dispatch(setResult({ ...param, state: params.difficulty }));
-    }
-
-    if (resp.status === 200) {
-      const data = await resp.json();
-
-      const { right, wrong, chain } = data.optional[param.game];
-
-      const params = {
-        difficulty: param.right && chain > 2 ? Difficulty.learned : Difficulty.studied,
-        optional: {
-          [param.game]: {
-            right: param.right ? right + 1 : right,
-            wrong: param.right ? wrong : wrong + 1,
-            chain: param.right ? chain + 1 : chain,
-          },
-        },
-      };
-
-      console.log(params);
-
-      await wordsAPI.updateUserWord(param, params, thunkAPI.extra);
-
-      thunkAPI.dispatch(setResult({ ...param, state: params.difficulty }));
-    }
-
-    return resp.json();
-  },
-);
-
 // Define a type for the slice state
 export interface WordsState {
   list: Array<TWord>,
-  page: string,
+  page: number,
   group: string,
   limit: string,
   count: number,
@@ -110,7 +48,7 @@ export interface WordsState {
 // Define the initial state using that type
 const wordsState: WordsState = {
   list: [],
-  page: '1',
+  page: 0,
   group: '',
   limit: '20',
   count: 0,
@@ -135,6 +73,7 @@ const wordsSlice = createSlice({
       const local = state;
       local.status = 'success';
       local.list = action.payload;
+      local.count = action.payload.length;
     });
     builder.addCase(getWords.rejected, (state) => {
       const local = state;
@@ -146,12 +85,17 @@ const wordsSlice = createSlice({
       local.status = 'loading';
     });
     builder.addCase(getUserWords.fulfilled, (state, action) => {
+      console.log(action.payload, Number([]));
       const local = state;
       local.status = 'success';
       // @ts-ignore
       local.list = action.payload[0].paginatedResults;
       // @ts-ignore
-      local.count = action.payload[0].totalCount[0].count;
+      local.count = Number(action.payload[0].totalCount[0]?.count)
+      // @ts-ignore
+      || Number(action.payload[0].totalCount[0]);
+      // @ts-ignore
+      local.page = action.payload[0].paginatedResults[0].page;
     });
     builder.addCase(getUserWords.rejected, (state) => {
       const local = state;
@@ -179,6 +123,10 @@ const wordsSlice = createSlice({
       const local = state;
       local.result.push(action.payload);
     },
+    clearResult(state, action) {
+      const local = state;
+      local.result = action.payload;
+    },
     toggleRefresh(state, action) {
       const local = state;
       local.refresh = !local.refresh;
@@ -193,6 +141,7 @@ export const {
   resetCurrentWord,
   setResult,
   toggleRefresh,
+  clearResult,
 } = wordsSlice.actions;
 
 export default wordsSlice.reducer;

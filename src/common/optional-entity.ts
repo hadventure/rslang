@@ -1,3 +1,5 @@
+// https://stackoverflow.com/questions/39256682/how-to-define-an-interface-for-objects-with-dynamic-keys
+import { TStat } from '@/features/stat/types';
 import { TOptional } from '@/features/words/types';
 
 export const getOptional = (): TOptional => ({
@@ -16,4 +18,36 @@ export const getOptional = (): TOptional => ({
   },
 });
 
-export default getOptional;
+export const getFormattedDate = () => {
+  const today = new Date();
+  return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+};
+
+export const getOptionalStat = (): TStat => ({
+  learnedWords: 0,
+  optional: {
+    pages: {
+      learned: [],
+    },
+    learnedWords: {
+      [getFormattedDate()]: 0,
+    },
+    games: {
+      [getFormattedDate()]: {
+        sprint: {
+          wrong: 0,
+          right: 0,
+          rightchain: 0,
+          newWordCount: 0,
+        },
+        audiocall: {
+          wrong: 0,
+          right: 0,
+          rightchain: 0,
+          newWordCount: 0,
+        },
+      },
+    },
+  },
+
+});

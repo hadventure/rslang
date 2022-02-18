@@ -29,7 +29,7 @@ export enum Difficulty {
 }
 
 export type TParam = {
-  page: string,
+  page: number,
   group: string,
   wordsPerPage: string,
   filter: string,
@@ -46,16 +46,17 @@ export type TGames = {
   audiocall: TGamesAnswer,
 };
 
-export type TOptional = Partial<{
+export type TOptional = {
   difficulty: string,
-  optional: Partial<TGames>
-}>;
+  optional: TGames
+};
 
 export type TUserAnswer = {
   right: number,
   id: string,
   word?: string,
   game: string,
+  wordTranslate: string,
 };
 
 export type TResult = {
@@ -63,4 +64,8 @@ export type TResult = {
   word: string,
   state: string,
   right: number,
+  game: string,
+  wordTranslate: string,
+
+  isNewWord: boolean,
 };

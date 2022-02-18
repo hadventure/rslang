@@ -34,36 +34,41 @@ function App() {
     }
   }, [user.responseStatus]);
 
-  return (
-    <>
-      <Header isAuthenticated={user.isAuth} />
-      <div className={cls.container}>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route path="dictionary">
-              <Route index element={<WordGroupList />} />
-              <Route path=":tutorial" element={<WordList />} />
-              <Route path=":tutorial/audiocall" element={<Audiocall />} />
-              <Route path=":tutorial/sprint" element={<Sprint />} />
+  console.log('------', user);
 
+  if (user.isAuth !== null) {
+    return (
+      <>
+        <Header isAuthenticated={user.isAuth} />
+        <div className={cls.container}>
+          <Routes>
+            <Route path="/" element={<Home />}>
+              <Route path="dictionary">
+                <Route index element={<WordGroupList />} />
+                <Route path=":tutorial" element={<WordList />} />
+                <Route path=":tutorial/audiocall" element={<Audiocall />} />
+                <Route path=":tutorial/sprint" element={<Sprint />} />
+
+              </Route>
+
+              <Route path="games">
+                <Route index element={<div>games</div>} />
+                <Route path="audiocall" element={<Levels />} />
+                <Route path="audiocall/:tutorial" element={<Audiocall />} />
+                <Route path="sprint" element={<Levels />} />
+                <Route path="sprint/:tutorial" element={<Sprint />} />
+              </Route>
+
+              <Route path="/statistics" element={<Stat />} />
             </Route>
 
-            <Route path="games">
-              <Route index element={<div>games</div>} />
-              <Route path="audiocall" element={<Levels />} />
-              <Route path="audiocall/:tutorial" element={<Audiocall />} />
-              <Route path="sprint" element={<Levels />} />
-              <Route path="sprint/:tutorial" element={<Sprint />} />
-            </Route>
-
-            <Route path="/statistics" element={<Stat />} />
-          </Route>
-
-          <Route path="/auth" element={<Auth user={user} />} />
-        </Routes>
-      </div>
-    </>
-  );
+            <Route path="/auth" element={<Auth user={user} />} />
+          </Routes>
+        </div>
+      </>
+    );
+  }
+  return null;
 }
 
 export default App;

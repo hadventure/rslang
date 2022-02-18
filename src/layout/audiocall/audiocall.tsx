@@ -1,5 +1,6 @@
 import AudiocallGame from '@/components/audiocall-game/audiocall-game';
 import Modal from '@/components/modal/modal';
+import { Difficulty } from '@/features/words/types';
 import wordsSelector from '@/features/words/words-selector';
 import {
   getUserWords, setGroup,
@@ -9,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   useLocation, useSearchParams,
 } from 'react-router-dom';
+import cls from './audiocall.module.scss';
 
 export default function Audiocall() {
   const dispatch = useDispatch();
@@ -23,23 +25,40 @@ export default function Audiocall() {
     getWords();
   }, []);
 
-  function getWords() {
+  function getWords(page?: number) {
     let param;
 
     if (location.pathname.indexOf('games') > -1) {
       dispatch(setGroup(location.pathname.split('/')[3]));
       param = {
-        page: '1',
-        filter: JSON.stringify({ $or: [{ 'userWord.difficulty': 'studied' }, { userWord: null }] }),
-        group: location.pathname.split('/')[3],
+        filter: JSON.stringify({
+          $and: [{
+            $or: [
+              { 'userWord.difficulty': Difficulty.studied },
+              { 'userWord.difficulty': Difficulty.difficult },
+              { 'userWord.difficulty': Difficulty.learned },
+              { userWord: null }],
+          },
+          { page: page || Number(searchParams.get('page')!) },
+          { group: Number(location.pathname.split('/')[3]) },
+          ],
+        }),
         wordsPerPage: '20',
       };
     } else {
       dispatch(setGroup(location.pathname.split('/')[2]));
       param = {
-        page: searchParams.get('page')!,
-        filter: JSON.stringify({ $or: [{ 'userWord.difficulty': 'studied' }, { userWord: null }] }),
-        group: location.pathname.split('/')[2],
+        filter: JSON.stringify({
+          $and: [{
+            $or: [
+              { 'userWord.difficulty': Difficulty.studied },
+              { 'userWord.difficulty': Difficulty.difficult },
+              { userWord: null }],
+          },
+          { page: page || Number(searchParams.get('page')!) },
+          { group: Number(location.pathname.split('/')[2]) },
+          ],
+        }),
         wordsPerPage: '20',
       };
     }
@@ -69,11 +88,11 @@ export default function Audiocall() {
   console.log('---', words.list);
 
   return (
-    <>
+    <div className={cls.initView}>
       {
       isStart
         ? <AudiocallGame list={words.list} onFinishGame={onFinishGame} />
-        : <button type="button" onClick={onStart}>Start</button>
+        : <button className={cls.btn} type="button" onClick={onStart}>Start game!</button>
       }
 
       <Modal
@@ -93,6 +112,6 @@ export default function Audiocall() {
         }
       </Modal>
 
-    </>
+    </div>
   );
 }

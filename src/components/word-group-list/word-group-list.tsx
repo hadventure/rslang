@@ -37,7 +37,7 @@ export default function WordGroupList() {
           clsName: 'p7',
         }}
         />
-        <WordGroup group={{
+        {/* <WordGroup group={{
           id: '7',
           name: <>
             <AiOutlinePaperClip color="#607d8b" size="1.5em" />
@@ -46,7 +46,7 @@ export default function WordGroupList() {
           </>,
           clsName: 'p8',
         }}
-        />
+        /> */}
         <WordGroup group={{
           id: '8',
           name: <>

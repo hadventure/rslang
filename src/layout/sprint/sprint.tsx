@@ -1,52 +1,23 @@
+import GameResult from '@/components/game-result/game-result';
 import Modal from '@/components/modal/modal';
-import SprintGame from '@/components/sprint-game/sprint-game';
 import SprintTimer from '@/components/sprint-timer/sprint-timer';
+import { getStat } from '@/features/stat/stat-thunks';
+import userSelector from '@/features/user/user-selector';
 import wordsSelector from '@/features/words/words-selector';
-import {
-  getUserWords, setGroup,
-} from '@/features/words/words-slice';
-import { useEffect, useState } from 'react';
+import { clearResult } from '@/features/words/words-slice';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  useLocation, useSearchParams,
-} from 'react-router-dom';
+import SprintPreload from './sprint-preload';
+import cls from './sprint.module.scss';
 
 export default function Sprint() {
   const dispatch = useDispatch();
+
   const [timer, setTimer] = useState(false);
   const [modal, setModal] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
 
-  const location = useLocation();
   const words = useSelector(wordsSelector);
-
-  useEffect(() => {
-    getWords();
-  }, []);
-
-  function getWords() {
-    let param;
-    console.log(location);
-    if (location.pathname.indexOf('games') > -1) {
-      dispatch(setGroup(location.pathname.split('/')[3]));
-      param = {
-        page: '1',
-        filter: JSON.stringify({ $or: [{ 'userWord.difficulty': 'studied' }, { userWord: null }] }),
-        group: location.pathname.split('/')[3],
-        wordsPerPage: '4',
-      };
-    } else {
-      dispatch(setGroup(location.pathname.split('/')[2]));
-      param = {
-        page: searchParams.get('page')!,
-        filter: JSON.stringify({ $or: [{ 'userWord.difficulty': 'studied' }, { userWord: null }] }),
-        group: location.pathname.split('/')[2],
-        wordsPerPage: '4',
-      };
-    }
-
-    dispatch(getUserWords(param));
-  }
+  const user = useSelector(userSelector);
 
   const onStart = () => {
     setTimer(true);
@@ -54,46 +25,47 @@ export default function Sprint() {
 
   const onFinishTimer = () => {
     setTimer(false);
+    setModal(true);
+    dispatch(getStat(null));
   };
 
   const onPlayAgain = () => {
-    setTimer(true);
     setModal(false);
-    getWords();
   };
 
-  if (words.status === 'loading') {
-    return <div>loading</div>;
-  }
+  const onCloseModal = () => {
+    setModal(false);
+    dispatch(clearResult([]));
+  };
 
   return (
     <>
+      <div className={cls.initView}>
+        {
+      timer && (
       <SprintTimer
         timer={timer}
         onFinishTimer={onFinishTimer}
         showModal={() => setModal(true)}
       />
-      {
-      timer
-        ? <SprintGame list={words.list} />
-        : <button type="button" onClick={onStart}>Start</button>
+      )
       }
 
+        <SprintPreload
+          onStart={onStart}
+          timer={timer}
+          words={words}
+          isAuth={user.isAuth}
+        />
+      </div>
+
       <Modal
-        title="My Modal"
-        onClose={() => setModal(false)}
+        title="Result"
+        onClose={onCloseModal}
         show={modal}
         onPlayAgain={onPlayAgain}
       >
-        {
-          words.result.map((el) => (
-            <p key={el.id}>
-              {el.word}
-              {' '}
-              {el.state}
-            </p>
-          ))
-        }
+        <GameResult result={words.result} />
       </Modal>
     </>
   );

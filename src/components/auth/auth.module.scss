@@ -10,7 +10,7 @@
 .form-container {
   padding: $base-indent;
   background-color: $color-white;
-  // background-color: $color-dark;
+  // background-color: $color-primary;
   border: 1px solid #eee;
   border-radius: $base-border-radius;
 
@@ -49,7 +49,7 @@
     color: $color-black;
 
     &:focus {
-      border: solid 1px $color-dark;
+      border: solid 1px $color-primary;
     }
   }
 
@@ -65,7 +65,7 @@
 
 .button {
   padding: 6px 36px;
-  background: #50006e;
+  background: $color-primary;
   color: #eee;
   outline: none;
   border: none;

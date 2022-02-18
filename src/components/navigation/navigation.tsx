@@ -18,7 +18,7 @@ interface DictionaryState {
 }
 
 export default function Navigation() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -28,7 +28,7 @@ export default function Navigation() {
   useEffect(() => {
     if (location.state) {
       dispatch(setGroup(state.dictionary));
-      dispatch(setPageWords(1));
+      dispatch(setPageWords(0));
       dispatch(resetCurrentWord({}));
     }
   }, [location]);

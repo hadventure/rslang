@@ -1,13 +1,14 @@
 import userSelector from '@/features/user/user-selector';
 import wordsSelector from '@/features/words/words-selector';
 import {
-  getUserWords, getWords, resetCurrentWord, setPageWords,
+  getUserWords, resetCurrentWord, setPageWords,
 } from '@/features/words/words-slice';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import levelsSelector from '@/features/levels/levels-selector';
-import { TWord } from '@/features/words/types';
+import { Difficulty, TWord } from '@/features/words/types';
+import { getWords } from '@/features/words/words-thunks';
 import Pagination from '../pagination/pagination';
 import WordCard from '../word-card/word-card';
 import Word from '../word/word';
@@ -22,17 +23,25 @@ export default function WordList() {
   const levels = useSelector(levelsSelector);
   const location = useLocation();
 
-  console.log(location);
-
-  // let match = useMatch(location);
-
   useEffect(() => {
-    console.log(words.refresh);
+    
 
     if (user.isAuth === true && words.group) {
+      console.log(words.page);
+
       dispatch(getUserWords({
-        page: words.page,
-        group: words.group,
+        filter: JSON.stringify({
+          $and: [{
+            $or: [
+              { 'userWord.difficulty': Difficulty.studied },
+              { 'userWord.difficulty': Difficulty.difficult },
+              { 'userWord.difficulty': Difficulty.learned },
+              { userWord: null }],
+          },
+          { page: words.page },
+          { group: Number(words.group) },
+          ],
+        }),
         wordsPerPage: '20',
       }));
     }
@@ -94,10 +103,10 @@ export default function WordList() {
         </div>
 
         <div className={cls.navGames}>
-          <NavLink to={`${location.pathname}/audiocall?page=${words.page}`}>
+          <NavLink to={`${location.pathname}/audiocall?page=${Number(words.page)}`}>
             <img className={cls.gameImg} src={audiocall} alt="" />
           </NavLink>
-          <NavLink to={`${location.pathname}/sprint?page=${words.page}`}>
+          <NavLink to={`${location.pathname}/sprint?page=${Number(words.page)}`}>
             <img className={cls.gameImg} src={sprint} alt="" />
           </NavLink>
         </div>

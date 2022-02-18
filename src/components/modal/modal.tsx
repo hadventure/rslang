@@ -26,12 +26,8 @@ export default function Modal({
             </div>
             <div className={cls.modalBody}>{children}</div>
             <div className={cls.modalFooter}>
-              <button type="button" onClick={onClose}>
+              <button className={cls.btnClose} type="button" onClick={onClose}>
                 Close
-              </button>
-
-              <button type="button" onClick={onPlayAgain}>
-                Play Again
               </button>
             </div>
           </div>

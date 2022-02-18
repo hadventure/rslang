@@ -1,8 +1,12 @@
 import { getRandomIntArr, shuffle } from '@/common/helper';
 import { TWord, TWordSprint } from '@/features/words/types';
-import { getUserWord } from '@/features/words/words-slice';
+import { getUserWord } from '@/features/words/words-thunks';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import {
+  AiOutlinePushpin, AiOutlinePlayCircle,
+} from 'react-icons/ai';
+import cls from './audiocall-game.module.scss';
 
 type AudiocallGameProps = {
   list: TWord[],
@@ -46,6 +50,7 @@ export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps
         word: shuffled[current].word.word,
         right: 1,
         game: 'audiocall',
+        wordTranslate: shuffled[current].word.wordTranslate,
       }));
     } else {
       dispatch(getUserWord({
@@ -53,6 +58,7 @@ export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps
         word: shuffled[current].word.word,
         right: 0,
         game: 'audiocall',
+        wordTranslate: shuffled[current].word.wordTranslate,
       }));
     }
   };
@@ -71,7 +77,16 @@ export default function AudiocallGame({ list, onFinishGame }: AudiocallGameProps
       <div>{shuffled[current]?.word.audioExample}</div>
       <div>{shuffled[current]?.word.word}</div>
       <div>{shuffled[current]?.word.wordTranslate}</div>
-      <button type="button" onClick={play}>Play</button>
+      <div className={cls.play}>
+        <AiOutlinePlayCircle
+          onClick={play}
+          className={cls.svg}
+          style={{
+            verticalAlign: 'middle', fontSize: '4.5em', flexBasis: '1.3em', cursor: 'pointer',
+          }}
+        />
+      </div>
+
       <div>
         {
         shuffled[current]?.variants.map((el) => (
