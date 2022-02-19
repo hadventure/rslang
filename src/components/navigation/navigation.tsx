@@ -7,8 +7,9 @@ import {
   NavLink, useLocation,
 } from 'react-router-dom';
 import {
-  AiOutlineLeft, AiFillCustomerService, AiOutlineFieldTime,
-  AiOutlineBook, AiOutlineHome, AiOutlineLineChart, AiOutlineTrophy,
+  AiFillCustomerService, AiOutlineFieldTime,
+  AiOutlineBook, AiOutlineHome, AiOutlineLineChart,
+  AiOutlineMenu,
 } from 'react-icons/ai';
 
 import cls from './navigation.module.scss';
@@ -53,11 +54,11 @@ export default function Navigation() {
     >
       <div className={cls.navBorder}>
         <button type="button" className={cls.navToggle} onClick={toggleNav}>
-          <AiOutlineLeft style={{ verticalAlign: 'middle' }} color="#eee" size="1.3em" />
+          <AiOutlineMenu style={{ verticalAlign: 'middle' }} color="#eee" size="1.3em" />
         </button>
       </div>
 
-      <NavLink to="/" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
+      <NavLink to="/home" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
           <AiOutlineHome size="1.3em" />
         </div>
@@ -106,20 +107,20 @@ export default function Navigation() {
         <span className={cls.navLabel}>Part VI</span>
       </NavLink>
 
-      <NavLink to="/games" end className={(navData) => isNavActive(navData, cls.navLinkBase)}>
+      {/* <NavLink to="/games" end className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
           <AiOutlineTrophy size="1.3em" />
         </div>
         <span className={cls.navLabel}>Games</span>
-      </NavLink>
-      <NavLink to="/games/sprint" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      </NavLink> */}
+      <NavLink to="/games/sprint" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
           <AiOutlineFieldTime size="1.3em" />
         </div>
 
         <span className={cls.navLabel}>Sprint</span>
       </NavLink>
-      <NavLink to="/games/audiocall" className={(navData) => isNavActive(navData, cls.navLinkSub)}>
+      <NavLink to="/games/audiocall" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
           <AiFillCustomerService size="1.3em" />
 
@@ -133,13 +134,6 @@ export default function Navigation() {
         </div>
         <span className={cls.navLabel}>Statictics</span>
       </NavLink>
-
-      {/* <NavLink to="/settings" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
-        <div className={cls.navIconContainer}>
-          <i>i</i>
-        </div>
-        <span className={cls.navLabel}>Settings</span>
-      </NavLink> */}
     </nav>
 
   );

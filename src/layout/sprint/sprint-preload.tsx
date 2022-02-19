@@ -4,7 +4,7 @@ import {
   getUserWords, setGroup, setPageWords, WordsState,
 } from '@/features/words/words-slice';
 import { getWords } from '@/features/words/words-thunks';
-import { RefObject, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   useLocation, useSearchParams,
@@ -102,7 +102,6 @@ export default function SprintPreload({
   }
 
   function setStrategyGame(page?: number) {
-    console.log('+++++', isAuth);
     if (isAuth) {
       getWords1(page);
     }
@@ -129,7 +128,7 @@ export default function SprintPreload({
         ? (
           <SprintGame
             list={words.list}
-            count={words.count}
+            count={words.list.length}
             // eslint-disable-next-line react/jsx-no-bind
             setStrategyGame={setStrategyGame}
             page={words.page}

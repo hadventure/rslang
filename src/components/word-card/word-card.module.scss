@@ -51,6 +51,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  margin-bottom: 2rem;
 
   & button {
     color: #eee;
@@ -87,4 +88,20 @@
 
 .p6 {
   background: $color-p6;
+}
+
+.stat {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 1rem;
+
+  text-align: center;
+
+  border: 2px solid #eee;
+  border-radius: 4px;
+}
+
+.no-word {
+  text-align: center;
+  margin-top: 50%;
 }

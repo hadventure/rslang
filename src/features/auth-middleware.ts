@@ -6,7 +6,7 @@ const authMiddleware: Middleware = (store) => (next) => (action) => {
   // console.log('----', action);
 
   if (action.type?.startsWith('user/setToken')) {
-    window.location.replace('');
+    window.location.replace('/home');
   }
 
   if (action.type?.startsWith('user/checkUserData')) {

@@ -30,7 +30,17 @@ export const addWordToDifficult = (param: Partial<{
   return http.put<TOptional>(url, body, extra.token);
 };
 
-export const getWordList = (param: Partial<TParam>) => {
-  const url = `/words?${new URLSearchParams(JSON.stringify(param)).toString()}`;
+export const getWordList = (param: Pick<TParam, 'group' | 'page' | 'wordsPerPage'>) => {
+  const x = {
+    page: '',
+    wordsPerPage: '',
+    group: '',
+  };
+
+  x.page = String(param.page);
+  x.wordsPerPage = param.wordsPerPage;
+  x.group = param.group;
+
+  const url = `/words?${new URLSearchParams(x).toString()}`;
   return http.get(url);
 };

@@ -11,7 +11,7 @@ export const getStat = createAsyncThunk<
 // Return type of the payload creator
 null,
 // First argument to the payload creator
-number | null,
+number,
 {
   // Optional fields for defining thunkAPI field types
   extra: TAuth,
@@ -19,59 +19,117 @@ number | null,
 }
 >(
   'user/stat',
+  async (rightChain, thunkAPI) => {
+    const response = await statAPI.getStat(thunkAPI.extra);
+
+    const { result, sprintRightChain } = thunkAPI.getState().words;
+    const today = `${getFormattedDate()}`;
+    const { game } = result[0];
+
+    console.log(sprintRightChain);
+
+    const stat = getOptionalStat();
+
+    if (response.status === 200) {
+      const data = await response.json();
+
+      stat.optional.games = {
+        ...stat.optional.games,
+        ...JSON.parse(JSON.stringify(data.optional)).games,
+      };
+
+      stat.optional.learnedWords = {
+        ...stat.optional.learnedWords,
+        ...JSON.parse(JSON.stringify(data.optional)).learnedWords,
+      };
+
+      stat.optional.pages = {
+        ...stat.optional.pages,
+        ...JSON.parse(JSON.stringify(data.optional)).pages,
+      };
+
+      stat.learnedWords = data.learnedWords || stat.learnedWords;
+
+      stat.optional.games[today][game].right += result.filter(
+        (el) => el.right === 1,
+      ).length;
+
+      stat.optional.games[today][game].wrong += result.filter(
+        (el) => el.right === 0,
+      ).length;
+
+      stat.optional.games[today][game].newWordCount += result.filter(
+        (el) => el.isNewWord === true,
+      ).length;
+
+      if (stat.optional.games[today][game].gamerightchain < sprintRightChain) {
+        stat.optional.games[today][game].gamerightchain = sprintRightChain;
+      }
+
+      await statAPI.updateStat(stat, thunkAPI.extra);
+    }
+
+    if (response.status === 404) {
+      stat.optional.games[today][game].right += result.filter(
+        (el) => el.right === 1,
+      ).length;
+
+      stat.optional.games[today][game].wrong += result.filter(
+        (el) => el.right === 0,
+      ).length;
+
+      stat.optional.games[today][game].newWordCount += result.filter(
+        (el) => el.isNewWord === true,
+      ).length;
+
+      if (stat.optional.games[today][game].gamerightchain < sprintRightChain) {
+        stat.optional.games[today][game].gamerightchain = sprintRightChain;
+      }
+
+      await statAPI.updateStat(stat, thunkAPI.extra);
+    }
+
+    if (response.status === 401) {
+      thunkAPI.dispatch(set401(401));
+    }
+
+    return response.json();
+  },
+);
+
+export const setLearnedWords = createAsyncThunk<
+// Return type of the payload creator
+null,
+// First argument to the payload creator
+number,
+{
+  // Optional fields for defining thunkAPI field types
+  extra: TAuth,
+  state: RootState
+}
+>(
+  'stat/setLearnedWords',
   async (learnedWordsCount, thunkAPI) => {
     const response = await statAPI.getStat(thunkAPI.extra);
 
-    if (response.status === 200 && learnedWordsCount) {
-      console.log(learnedWordsCount);
-    }
-
-    if (response.status === 404 && learnedWordsCount) {
-      console.log(learnedWordsCount);
-    }
-
-    if (response.status === 200 && !learnedWordsCount) {
-      const { result } = thunkAPI.getState().words;
-
-      console.log(result);
-
+    if (response.status === 200) {
       const data = await response.json();
       const stat = getOptionalStat();
 
       stat.optional = JSON.parse(JSON.stringify(data.optional));
 
-      stat.optional.games[`${getFormattedDate()}`][result[0].game].right += result.filter(
-        (el) => el.right === 1,
-      ).length;
+      if (stat.optional.learnedWords[`${getFormattedDate()}`]) {
+        stat.optional.learnedWords[`${getFormattedDate()}`] += learnedWordsCount;
+      } else {
+        stat.optional.learnedWords[`${getFormattedDate()}`] = 1;
+      }
 
-      stat.optional.games[`${getFormattedDate()}`][result[0].game].wrong += result.filter(
-        (el) => el.right === 0,
-      ).length;
-
-      stat.optional.games[`${getFormattedDate()}`][result[0].game].newWordCount += result.filter(
-        (el) => el.isNewWord === true,
-      ).length;
-
-      console.log(stat.optional, data.optional);
       await statAPI.updateStat(stat, thunkAPI.extra);
     }
 
-    if (response.status === 404 && !learnedWordsCount) {
-      const { result } = thunkAPI.getState().words;
+    if (response.status === 404) {
       const stat = getOptionalStat();
-
-      stat.optional.games[`${getFormattedDate()}`][result[0].game].right += result.filter(
-        (el) => el.right === 1,
-      ).length;
-
-      stat.optional.games[`${getFormattedDate()}`][result[0].game].wrong += result.filter(
-        (el) => el.right === 0,
-      ).length;
-
-      stat.optional.games[`${getFormattedDate()}`][result[0].game].newWordCount += result.filter(
-        (el) => el.isNewWord === true,
-      ).length;
-
+      stat.optional.learnedWords[`${getFormattedDate()}`] += 1;
       await statAPI.updateStat(stat, thunkAPI.extra);
     }
 

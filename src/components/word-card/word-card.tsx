@@ -7,6 +7,7 @@ import {
 } from 'react-icons/ai';
 import { addToDifficult } from '@/features/words/words-thunks';
 import { Difficulty } from '@/features/words/types';
+import { setLearnedWords } from '@/features/stat/stat-thunks';
 import cls from './word-card.module.scss';
 
 type WordCardProps = {
@@ -40,8 +41,6 @@ export default function WordCard({ words, isAuthenticated }: WordCardProps) {
   };
 
   const onAddToDifficult = (type1: string) => {
-    console.log(words.currentWord);
-
     if (words.currentWord?.userWord) {
       dispatch(addToDifficult({
         id: words.currentWord!._id,
@@ -55,10 +54,18 @@ export default function WordCard({ words, isAuthenticated }: WordCardProps) {
         type: type1,
       }));
     }
+
+    if (type1 === Difficulty.learned) {
+      dispatch(setLearnedWords(1));
+    }
   };
 
   if (words.currentWord === null) {
-    return <div className={cls.wordCardContainer}>No Word selected</div>;
+    return (
+      <div className={cls.wordCardContainer}>
+        <div className={cls.noWord}>No Word selected</div>
+      </div>
+    );
   }
 
   return (
@@ -133,6 +140,30 @@ export default function WordCard({ words, isAuthenticated }: WordCardProps) {
               </button>
             </div>
           </>
+        )
+      }
+
+      {
+        isAuthenticated && (
+        <div className={cls.stat}>
+          <div className={cls.statItem}>
+            <div>Audiocall</div>
+            <div>
+              {`${words.currentWord?.userWord
+                ? `${words.currentWord?.userWord.optional.audiocall.right} / ${words.currentWord?.userWord.optional.audiocall.right + words.currentWord?.userWord.optional.audiocall.wrong} `
+                : '0 / 0'}`}
+
+            </div>
+          </div>
+          <div className={cls.statItem}>
+            <div>Sprint</div>
+            <div>
+              {`${words.currentWord?.userWord
+                ? `${words.currentWord?.userWord.optional.sprint.right} / ${words.currentWord?.userWord.optional.sprint.right + words.currentWord?.userWord.optional.sprint.wrong} `
+                : '0 / 0'}`}
+            </div>
+          </div>
+        </div>
         )
       }
 

@@ -1,3 +1,5 @@
+@import 'src/app.scss';
+
 .play {
   width: min-content;
   border-radius: 100%;
@@ -11,6 +13,55 @@
 }
 .svg {
   &:active {
-      transform: scale(90%);
+      transform: scale(95%);
   }
+}
+
+.varints {
+  display: flex;
+  column-gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.variant {
+  @include setButtonPrimary {
+    padding: 4px 12px;
+    font-size: 1.6rem;
+  }
+}
+
+.next-wrap {
+  width: 80%;
+}
+
+.next {
+  
+
+  @include setButton {
+    width: 100%;
+    background-color: transparent;
+    padding: 0.8rem 1.2rem;
+    border: 2px solid #eee;
+    font-weight: bold;
+
+    &:hover {
+      border: 2px solid $color-primary;
+    }
+  }
+}
+
+.answer {
+  flex-basis: 40%;
+  text-align: center;
+}
+
+.img {
+  width: 70%;
+  border-radius: 4px;
+  filter: brightness(90%) grayscale(50%);
+}
+
+.answer-word {
+  font-size: 2rem;
+  margin: 1rem 0;
 }
