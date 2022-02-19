@@ -1,5 +1,5 @@
 import { MouseEvent } from 'react';
-import { AiOutlineRight, AiOutlineLeft } from 'react-icons/ai';
+import { AiFillFastForward, AiFillFastBackward } from 'react-icons/ai';
 
 import cls from './pagination.module.scss';
 
@@ -101,8 +101,8 @@ export default function Pagination({
   return (
     <div className={cls.paginationContainer}>
       <div>
-        <button className={cls.pageItem} type="button" page-key={page - 1} onClick={setPage}>
-          <AiOutlineLeft style={{ verticalAlign: 'middle' }} size="1.3em" />
+        <button className={cls.pageItem} type="button" page-key={1} onClick={setPage}>
+          <AiFillFastBackward style={{ verticalAlign: 'middle' }} size="1.3em" />
         </button>
       </div>
       <div className={cls.pages}>
@@ -110,8 +110,8 @@ export default function Pagination({
       </div>
 
       <div>
-        <button className={cls.pageItem} type="button" page-key={page + 1} onClick={setPage}>
-          <AiOutlineRight style={{ verticalAlign: 'middle' }} size="1.3em" />
+        <button className={cls.pageItem} type="button" page-key={pageCount} onClick={setPage}>
+          <AiFillFastForward style={{ verticalAlign: 'middle' }} size="1.3em" />
         </button>
       </div>
     </div>

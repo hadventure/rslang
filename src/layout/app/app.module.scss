@@ -2,15 +2,26 @@
 
 .container {
   display: flex;
-  min-height: calc(100% - 40.8px);
+  min-height: calc(100% - 40.8px - 52.4px);
 
   // @include laptop {
   //   height: min-content;
   // }
 }
 
+.container-no-footer {
+  display: flex;
+  min-height: calc(100% - 40.8px);
+}
+
 .main {
   padding: 2rem;
   flex: 1 1 auto;
   background-color:#fafbff
+}
+
+.footer {
+  padding: 1.6rem 1rem;
+  border-top: 2px solid #eee;
+  font-size: 1.4rem;
 }

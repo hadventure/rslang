@@ -11,7 +11,7 @@ import wrong from '../../assets/now.mp3';
 
 type AudiocallGameProps = {
   list: TWord[],
-  onFinishGame: (chain: number) => void,
+  onFinishGame: () => void,
   count: number,
   isAuth: boolean | null,
 };
@@ -24,8 +24,6 @@ export default function AudiocallGame({
   const [shuffled, setShuffled] = useState<TWordSprint[]>([]);
   const [isAnswered, setIsAnswered] = useState(false);
   const wrap = useRef<HTMLDivElement>(null);
-
-  const [rightChain, setRightChain] = useState(0);
 
   const audio = new Audio();
 
@@ -59,7 +57,7 @@ export default function AudiocallGame({
 
   useEffect(() => {
     if (current === count) {
-      onFinishGame(rightChain);
+      onFinishGame();
     }
 
     if (current !== 0 && current !== count) {
@@ -89,7 +87,6 @@ export default function AudiocallGame({
         }));
 
         dispatch(setRightChainCount({}));
-
       } else {
         dispatch(setResult({
           right: 1, ...common,
@@ -98,15 +95,12 @@ export default function AudiocallGame({
     } else {
       no.play();
 
-      setRightChain(0);
-
       if (isAuth) {
         dispatch(getUserWord({
           right: 0, ...common,
         }));
 
         dispatch(setRightChainArr({}));
-
       } else {
         dispatch(setResult({
           right: 0, ...common,

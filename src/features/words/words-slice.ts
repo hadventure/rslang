@@ -79,7 +79,7 @@ const wordsSlice = createSlice({
       const local = state;
       local.status = 'success';
       local.list = action.payload;
-      local.count = action.payload.length;
+      local.count = 600;
     });
     builder.addCase(getWords.rejected, (state) => {
       const local = state;
@@ -91,17 +91,14 @@ const wordsSlice = createSlice({
       local.status = 'loading';
     });
     builder.addCase(getUserWords.fulfilled, (state, action) => {
-      console.log(action.payload, Number([]));
       const local = state;
       local.status = 'success';
       // @ts-ignore
       local.list = action.payload[0].paginatedResults;
       // @ts-ignore
-      local.count = Number(action.payload[0].totalCount[0]?.count)
+      local.count = Number(action.payload[0].totalCount[0]) || 600;
       // @ts-ignore
-      || Number(action.payload[0].totalCount[0]);
-      // @ts-ignore
-      local.page = action.payload[0].paginatedResults[0].page;
+      // local.page = action.payload[0].paginatedResults[0].page;
     });
     builder.addCase(getUserWords.rejected, (state) => {
       const local = state;
@@ -139,8 +136,6 @@ const wordsSlice = createSlice({
     },
     setRightChainArr(state, action) {
       const local = state;
-
-      console.log(local.sprintRightChainCount)
 
       local.sprintRightChain = local.sprintRightChainCount > local.sprintRightChain
         ? local.sprintRightChainCount : local.sprintRightChain;

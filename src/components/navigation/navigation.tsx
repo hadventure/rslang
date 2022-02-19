@@ -58,7 +58,7 @@ export default function Navigation() {
         </button>
       </div>
 
-      <NavLink to="/" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
+      <NavLink to="/home" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
           <AiOutlineHome size="1.3em" />
         </div>

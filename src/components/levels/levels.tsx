@@ -1,10 +1,9 @@
 import levelsSelector from '@/features/levels/levels-selector';
 import { useSelector } from 'react-redux';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import cls from './levels.module.scss';
 
 export default function Levels() {
-  const navigate = useNavigate();
   const levels = useSelector(levelsSelector);
   const location = useLocation();
 

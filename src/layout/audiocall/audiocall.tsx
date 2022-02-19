@@ -97,7 +97,6 @@ export default function Audiocall({ user }: AudiocallProps) {
   }
 
   useEffect(() => {
-    console.log(user.isAuth);
     if (user.isAuth) {
       getWordsAuth();
     }
@@ -117,9 +116,7 @@ export default function Audiocall({ user }: AudiocallProps) {
     getWordsAuth();
   };
 
-  const onFinishGame = (rightChain?: number) => {
-    console.log(rightChain);
-
+  const onFinishGame = () => {
     setModal(true);
     setStart(false);
 
@@ -139,8 +136,6 @@ export default function Audiocall({ user }: AudiocallProps) {
     return <div>loading</div>;
   }
 
-  console.log('---', words.list);
-
   return (
     <div className={cls.initView}>
       {
@@ -149,7 +144,7 @@ export default function Audiocall({ user }: AudiocallProps) {
           <AudiocallGame
             list={words.list}
             onFinishGame={onFinishGame}
-            count={words.count}
+            count={words.list.length}
             isAuth={user.isAuth}
           />
         )

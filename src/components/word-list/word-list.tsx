@@ -55,9 +55,38 @@ export default function WordList() {
     }
   }, [words.group, words.page, words.refresh]);
 
-  // if (words.status === 'loading') {
-  //   return <div>Loading</div>;
-  // }
+
+  useEffect(() => {
+    
+
+    if (user.isAuth === true && words.group) {
+      console.log(words.page);
+
+      dispatch(getUserWords({
+        filter: JSON.stringify({
+          $and: [{
+            $or: [
+              { 'userWord.difficulty': Difficulty.studied },
+              { 'userWord.difficulty': Difficulty.difficult },
+              { 'userWord.difficulty': Difficulty.learned },
+              { userWord: null }],
+          },
+          { page: 0 },
+          { group: Number(words.group) },
+          ],
+        }),
+        wordsPerPage: '20',
+      }));
+    }
+
+    if (user.isAuth === false && words.group) {
+      dispatch(getWords({
+        page: 0,
+        group: words.group,
+        wordsPerPage: '20',
+      }));
+    }
+  }, []);
 
   if (words.list.length === 0) {
     return <div>No Items</div>;
@@ -67,6 +96,8 @@ export default function WordList() {
     dispatch(resetCurrentWord({}));
     dispatch(setPageWords(page));
   };
+
+  console.log(words.count, words.limit)
 
   return (
     <div className={cls.wordsContainer}>
@@ -81,7 +112,7 @@ export default function WordList() {
       <div className={cls.wordListContainer}>
         <Pagination
           page={+words.page}
-          pageCount={Math.floor(words.count / +words.limit) - 1}
+          pageCount={Math.floor(words.count / +words.limit)}
           size={5}
           onChangePage={onChangePage}
         />

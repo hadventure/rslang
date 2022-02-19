@@ -10,6 +10,8 @@ export default function Home() {
       <Navigation />
       <main className={cls.main}>
         <Outlet />
+
+        
       </main>
     </>
   );

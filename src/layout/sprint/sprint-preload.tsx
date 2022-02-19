@@ -102,7 +102,6 @@ export default function SprintPreload({
   }
 
   function setStrategyGame(page?: number) {
-    console.log('+++++', isAuth);
     if (isAuth) {
       getWords1(page);
     }
@@ -113,7 +112,6 @@ export default function SprintPreload({
   }
 
   useEffect(() => {
-    console.log(timer);
     if (timer) {
       setStrategyGame();
     }
@@ -130,7 +128,7 @@ export default function SprintPreload({
         ? (
           <SprintGame
             list={words.list}
-            count={words.count}
+            count={words.list.length}
             // eslint-disable-next-line react/jsx-no-bind
             setStrategyGame={setStrategyGame}
             page={words.page}
