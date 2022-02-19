@@ -1,10 +1,11 @@
 import { getRandomIntArr, shuffle } from '@/common/helper';
-import { TWord, TWordSprint } from '@/features/words/types';
+import { Difficulty, TWord, TWordSprint } from '@/features/words/types';
 import { getUserWord } from '@/features/words/words-thunks';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
 import { setResult, setRightChainArr, setRightChainCount } from '@/features/words/words-slice';
+import { useLocation } from 'react-router';
 import cls from './audiocall-game.module.scss';
 import right from '../../assets/yes.mp3';
 import wrong from '../../assets/now.mp3';
@@ -14,21 +15,27 @@ type AudiocallGameProps = {
   onFinishGame: () => void,
   count: number,
   isAuth: boolean | null,
+  pages: number[] | undefined,
 };
 
 export default function AudiocallGame({
-  list, onFinishGame, count, isAuth,
+  list, onFinishGame, count, isAuth, pages,
 }: AudiocallGameProps) {
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(0);
   const [shuffled, setShuffled] = useState<TWordSprint[]>([]);
   const [isAnswered, setIsAnswered] = useState(false);
   const wrap = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
   const audio = new Audio();
 
   const yes = new Audio(right);
   const no = new Audio(wrong);
+
+  if (pages && pages.includes(list[0].page)) {
+    return <div>Learned</div>;
+  }
 
   const setFocusOnPage = () => wrap.current?.focus();
 
@@ -38,16 +45,41 @@ export default function AudiocallGame({
     document.addEventListener('click', setFocusOnPage);
 
     const copy = list.slice(0);
-    const a = getRandomIntArr(0, count - 1, count)
-      .map((el) => ({
-        word: copy[el as number],
-        variants: shuffle(getRandomIntArr(0, count - 1, 5, [el as number])
-          .map((j) => copy[j as number])),
-      }));
+    let questions;
 
-    setShuffled(a);
+    if (isAuth) {
+      const unlearned = copy
+        .filter((el: TWord) => {
+          if (location.pathname.indexOf('games') > -1) {
+            return el;
+          }
+          return el.userWord && el.userWord.difficulty !== Difficulty.learned;
+        });
 
-    audio.src = `${process.env.API_URL}/${a[current]?.word?.audio}`;
+      questions = getRandomIntArr(0, unlearned.length - 1, unlearned.length)
+        .map((el) => ({
+          word: unlearned[el as number],
+        }))
+        .map((word1) => ({
+          word: word1.word,
+          // eslint-disable-next-line max-len
+          variants: shuffle(getRandomIntArr(0, count - 1, 5, [copy.findIndex((el) => el.word === word1.word.word) as number])
+            .map((j) => copy[j as number])),
+        }));
+    } else {
+      questions = getRandomIntArr(0, count - 1, count)
+        .map((el) => ({
+          word: copy[el as number],
+          variants: shuffle(getRandomIntArr(0, count - 1, 5, [el as number])
+            .map((j) => copy[j as number])),
+        }));
+    }
+
+    console.log(questions);
+
+    setShuffled(questions);
+
+    audio.src = `${process.env.API_URL}/${questions[current]?.word?.audio}`;
     audio.play();
 
     return () => {
@@ -56,15 +88,17 @@ export default function AudiocallGame({
   }, []);
 
   useEffect(() => {
-    if (current === count) {
-      onFinishGame();
+    if (shuffled.length > 0) {
+      if (current === shuffled.length) {
+        onFinishGame();
+      }
     }
 
-    if (current !== 0 && current !== count) {
+    if (current !== 0 && current !== shuffled.length) {
       audio.src = `${process.env.API_URL}/${shuffled[current]?.word?.audio}`;
       audio.play();
     }
-  }, [current]);
+  }, [current, shuffled.length]);
 
   const toggleIsAnswered = () => setIsAnswered(!isAnswered);
 

@@ -83,7 +83,7 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
         optional.difficulty = Difficulty.learned;
       }
 
-      if (!param.right && chain >= 3) {
+      if (!param.right) {
         optional.difficulty = Difficulty.studied;
         thunkAPI.dispatch(setLearnedWords(-1));
       }

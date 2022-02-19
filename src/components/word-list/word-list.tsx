@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import levelsSelector from '@/features/levels/levels-selector';
-import { Difficulty, TWord } from '@/features/words/types';
+import { Difficulty } from '@/features/words/types';
 import { getWords } from '@/features/words/words-thunks';
 import Pagination from '../pagination/pagination';
 import WordCard from '../word-card/word-card';
@@ -15,17 +15,25 @@ import Word from '../word/word';
 import cls from './word-list.module.scss';
 import sprint from '../../assets/ILLUSTRATION_OFFICE_13.svg';
 import audiocall from '../../assets/ILLUSTRATION_OFFICE_08.svg';
+import MsgBlock from '../msg-block/msg-block';
 
-export default function WordList() {
+type WordListProps = {
+  pages: number[],
+};
+
+export default function WordList({ pages }: WordListProps) {
   const dispatch = useDispatch();
   const words = useSelector(wordsSelector);
   const user = useSelector(userSelector);
   const levels = useSelector(levelsSelector);
   const location = useLocation();
+  let isLearned;
+
+  if (words.status === 'success') {
+    isLearned = pages.includes(words.list[0].page);
+  }
 
   useEffect(() => {
-    
-
     if (user.isAuth === true && words.group) {
       console.log(words.page);
 
@@ -55,10 +63,7 @@ export default function WordList() {
     }
   }, [words.group, words.page, words.refresh]);
 
-
   useEffect(() => {
-    
-
     if (user.isAuth === true && words.group) {
       console.log(words.page);
 
@@ -88,7 +93,7 @@ export default function WordList() {
     }
   }, []);
 
-  if (words.list.length === 0) {
+  if (words.list.length === 0 && words.status === 'success') {
     return <div>No Items</div>;
   }
 
@@ -97,28 +102,34 @@ export default function WordList() {
     dispatch(setPageWords(page));
   };
 
-  console.log(words.count, words.limit)
+  // console.log(pages.length);
 
   return (
-    <div className={cls.wordsContainer}>
-      <div className={cls.wordCardContainer}>
+    <>
+      {
+      isLearned
+      && <MsgBlock text="Learned" />
+      }
 
-        <WordCard
-          words={words}
-          isAuthenticated={user.isAuth}
-        />
-      </div>
+      <div className={cls.wordsContainer}>
+        <div className={cls.wordCardContainer}>
 
-      <div className={cls.wordListContainer}>
-        <Pagination
-          page={+words.page}
-          pageCount={Math.floor(words.count / +words.limit)}
-          size={5}
-          onChangePage={onChangePage}
-        />
+          <WordCard
+            words={words}
+            isAuthenticated={user.isAuth}
+          />
+        </div>
 
-        <div className={cls.wordListContainer1}>
-          {
+        <div className={cls.wordListContainer}>
+          <Pagination
+            page={+words.page}
+            pageCount={Math.floor(words.count / +words.limit)}
+            size={5}
+            onChangePage={onChangePage}
+          />
+
+          <div className={cls.wordListContainer1}>
+            {
         words.list.map((item, i) => (
           <Word
             key={item.id || item._id}
@@ -131,18 +142,34 @@ export default function WordList() {
         ))
       }
 
+          </div>
+
+          <div className={cls.navGames}>
+            {
+              isLearned
+                ? <img className={isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={audiocall} alt="" />
+                : (
+                  <NavLink to={`${location.pathname}/audiocall?page=${Number(words.page)}`}>
+                    <img className={isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={audiocall} alt="" />
+                  </NavLink>
+                )
+            }
+
+            {
+              isLearned
+                ? <img className={isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={sprint} alt="" />
+
+                : (
+                  <NavLink to={`${location.pathname}/sprint?page=${Number(words.page)}`}>
+                    <img className={isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={sprint} alt="" />
+                  </NavLink>
+                )
+            }
+          </div>
         </div>
 
-        <div className={cls.navGames}>
-          <NavLink to={`${location.pathname}/audiocall?page=${Number(words.page)}`}>
-            <img className={cls.gameImg} src={audiocall} alt="" />
-          </NavLink>
-          <NavLink to={`${location.pathname}/sprint?page=${Number(words.page)}`}>
-            <img className={cls.gameImg} src={sprint} alt="" />
-          </NavLink>
-        </div>
       </div>
+    </>
 
-    </div>
   );
 }

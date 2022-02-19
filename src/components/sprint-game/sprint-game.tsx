@@ -41,6 +41,10 @@ export default function SprintGame({
 
     document.addEventListener('click', setFocusOnPage);
 
+    if (copy.length === 1) {
+      setIsShowAnswer(true);
+    }
+
     const game = shuffle<TWord>(copy);
 
     setShuffled(game);
@@ -52,8 +56,6 @@ export default function SprintGame({
   }, []);
 
   useEffect(() => {
-    // console.log(shuffled, variant);
-
     if (variant === -1) {
       setStrategyGame(Number(page) === TEMP_PAGINATION_LENGTH ? 1 : Number(page) + 1);
     }

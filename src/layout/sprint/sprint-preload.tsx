@@ -111,11 +111,25 @@ export default function SprintPreload({
     }
   }
 
+  // useEffect(() => {
+  //   if (timer) {
+  //     setStrategyGame();
+  //   }
+  // }, [timer]);
+
   useEffect(() => {
-    if (timer) {
-      setStrategyGame();
+    if (words.status === 'success' && words.list.length !== 0) {
+      onStart();
     }
-  }, [timer]);
+  }, [words.status]);
+
+  const onStartGame = () => {
+    setStrategyGame();
+  };
+
+  if (words.list.length === 0 && words.status === 'success') {
+    return <div>Эта страница изучена</div>;
+  }
 
   if (words.status === 'loading') {
     return <div>loading</div>;
@@ -135,7 +149,7 @@ export default function SprintPreload({
             isAuth={isAuth}
           />
         )
-        : <button className={cls.btn} type="button" onClick={onStart}>Start game!</button>
+        : <button className={cls.btn} type="button" onClick={onStartGame}>Start game!</button>
       }
       <span />
     </>

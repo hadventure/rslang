@@ -1,11 +1,15 @@
+import { getOptionalStat } from '@/common/optional-entity';
 import { RootState } from '@/store/types';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import * as statAPI from '@/features/stat/stat-API';
 import { TAuth } from '../user/types';
 import { set401 } from '../user/user-slice';
 import {
+  Difficulty,
   TParam, TResult, TWord,
 } from './types';
 import { getWords } from './words-thunks';
+import { getStatData } from '../stat/stat-thunks';
 
 export const getUserWords = createAsyncThunk<
 number,
@@ -22,11 +26,50 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
       },
     });
 
+    const data = await resp.json();
+
+    if (resp.status === 200) {
+      const { stat } = thunkAPI.getState();
+      const learnedCount = data[0].paginatedResults
+        .filter((el: TWord) => el.userWord && el.userWord.difficulty === Difficulty.learned).length;
+
+      const { page } = data[0].paginatedResults[0];
+
+      console.log(learnedCount, page, stat.stat?.optional?.pages.learned);
+
+      if (learnedCount === 20) {
+        const optional = getOptionalStat();
+        optional.optional = JSON.parse(JSON.stringify(stat.stat?.optional));
+
+        const indexPage = optional.optional.pages.learned.indexOf(page);
+        if (indexPage === -1) {
+          optional.optional.pages.learned.push(page);
+
+          await statAPI.updateStat(optional, thunkAPI.extra);
+          thunkAPI.dispatch(getStatData({}));
+        }
+      }
+
+      if (learnedCount < 20) {
+        const optional = getOptionalStat();
+        optional.optional = JSON.parse(JSON.stringify(stat.stat?.optional));
+
+        const indexPage = optional.optional.pages.learned.indexOf(page);
+        if (indexPage !== -1) {
+          optional.optional.pages.learned.splice(indexPage, 1);
+
+          await statAPI.updateStat(optional, thunkAPI.extra);
+          thunkAPI.dispatch(getStatData({}));
+        }
+        console.log(optional.optional.pages.learned, indexPage);
+      }
+    }
+
     if (resp.status === 401) {
       thunkAPI.dispatch(set401(401));
     }
 
-    return resp.json();
+    return data;
   },
 );
 

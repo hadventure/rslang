@@ -4,8 +4,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '@/store/types';
 import { getFormattedDate, getOptionalStat } from '@/common/optional-entity';
 import { set401 } from '../user/user-slice';
-import { TAuth, TStatGame } from './types';
+import { TAuth, TStat, TStatGame } from './types';
 import * as statAPI from './stat-API';
+import { clearResult } from '../words/words-slice';
 
 export const getStat = createAsyncThunk<
 // Return type of the payload creator
@@ -87,6 +88,8 @@ number,
       }
 
       await statAPI.updateStat(stat, thunkAPI.extra);
+
+      thunkAPI.dispatch(clearResult([]));
     }
 
     if (response.status === 401) {
@@ -111,6 +114,7 @@ number,
   'stat/setLearnedWords',
   async (learnedWordsCount, thunkAPI) => {
     const response = await statAPI.getStat(thunkAPI.extra);
+    const today = getFormattedDate();
 
     if (response.status === 200) {
       const data = await response.json();
@@ -118,10 +122,10 @@ number,
 
       stat.optional = JSON.parse(JSON.stringify(data.optional));
 
-      if (stat.optional.learnedWords[`${getFormattedDate()}`]) {
-        stat.optional.learnedWords[`${getFormattedDate()}`] += learnedWordsCount;
+      if (stat.optional.learnedWords[today]) {
+        stat.optional.learnedWords[today] += learnedWordsCount;
       } else {
-        stat.optional.learnedWords[`${getFormattedDate()}`] = 1;
+        stat.optional.learnedWords[today] = 1;
       }
 
       await statAPI.updateStat(stat, thunkAPI.extra);
@@ -129,7 +133,49 @@ number,
 
     if (response.status === 404) {
       const stat = getOptionalStat();
-      stat.optional.learnedWords[`${getFormattedDate()}`] += 1;
+      stat.optional.learnedWords[today] += 1;
+      await statAPI.updateStat(stat, thunkAPI.extra);
+    }
+
+    if (response.status === 401) {
+      thunkAPI.dispatch(set401(401));
+    }
+
+    return response.json();
+  },
+);
+
+export const getStatData = createAsyncThunk<
+// Return type of the payload creator
+TStat,
+// First argument to the payload creator
+unknown,
+{
+  // Optional fields for defining thunkAPI field types
+  extra: TAuth,
+  state: RootState
+}
+>(
+  'stat/getStat',
+  async (param, thunkAPI) => {
+    const response = await statAPI.getStat(thunkAPI.extra);
+    // if (response.status === 200) {
+    //   const data = await response.json();
+    //   const stat = getOptionalStat();
+
+    //   stat.optional = JSON.parse(JSON.stringify(data.optional));
+
+    //   if (stat.optional.learnedWords[today]) {
+    //     stat.optional.learnedWords[today] += learnedWordsCount;
+    //   } else {
+    //     stat.optional.learnedWords[today] = 1;
+    //   }
+
+    //   await statAPI.updateStat(stat, thunkAPI.extra);
+    // }
+
+    if (response.status === 404) {
+      const stat = getOptionalStat();
       await statAPI.updateStat(stat, thunkAPI.extra);
     }
 

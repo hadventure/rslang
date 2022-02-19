@@ -25,11 +25,14 @@
 }
 
 .go-to-part {
-  @include setButtonPrimary {
+  @include setButton {
     width: 100%;
     padding: 4px 12px;
     font-size: 1.6rem;
     text-transform: capitalize;
     font-weight: bold;
+    background-color: transparent;
+    border: 2px solid $color-grey;
+    color: $color-black;
   }
 }

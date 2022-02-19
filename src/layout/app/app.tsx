@@ -1,6 +1,8 @@
 import Header from '@/components/header/header';
 import Levels from '@/components/levels/levels';
-import { useEffect, useState } from 'react';
+import statSelector from '@/features/stat/stat-selector';
+import { getStatData } from '@/features/stat/stat-thunks';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Routes,
@@ -23,11 +25,10 @@ import Home from './home';
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
+  const stat = useSelector(statSelector);
   const navigate = useNavigate();
   const location = useLocation();
   const isGame = location.pathname.indexOf('sprint') > -1 || location.pathname.indexOf('audiocall') > -1;
-
-  console.log(location);
 
   useEffect(() => {
     dispatch(checkUserData());
@@ -40,7 +41,14 @@ function App() {
     }
   }, [user.responseStatus]);
 
+  useEffect(() => {
+    if (user.isAuth) {
+      dispatch(getStatData({}));
+    }
+  }, [user.isAuth]);
+
   if (user.isAuth !== null) {
+    // console.log(stat.stat)
     return (
       <>
         <Header isAuthenticated={user.isAuth} />
@@ -51,8 +59,14 @@ function App() {
 
               <Route path="dictionary">
                 <Route index element={<WordGroupList />} />
-                <Route path=":tutorial" element={<WordList />} />
-                <Route path=":tutorial/audiocall" element={<Audiocall user={user} />} />
+
+                {stat.stat && (
+                <>
+                  <Route path=":tutorial" element={<WordList pages={stat.stat.optional!.pages!.learned} />} />
+                  <Route path=":tutorial/audiocall" element={<Audiocall user={user} pages={stat.stat.optional!.pages!.learned} />} />
+
+                </>
+                )}
                 <Route path=":tutorial/sprint" element={<Sprint />} />
 
               </Route>

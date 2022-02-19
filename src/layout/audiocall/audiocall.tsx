@@ -17,10 +17,11 @@ import {
 import cls from './audiocall.module.scss';
 
 type AudiocallProps = {
-  user: UserState;
+  user: UserState,
+  pages?: number[]
 };
 
-export default function Audiocall({ user }: AudiocallProps) {
+export default function Audiocall({ user, pages }: AudiocallProps) {
   const dispatch = useDispatch();
   const [isStart, setStart] = useState(false);
   const [modal, setModal] = useState(false);
@@ -57,6 +58,7 @@ export default function Audiocall({ user }: AudiocallProps) {
             $or: [
               { 'userWord.difficulty': Difficulty.studied },
               { 'userWord.difficulty': Difficulty.difficult },
+              { 'userWord.difficulty': Difficulty.learned },
               { userWord: null }],
           },
           { page: page || Number(searchParams.get('page')!) },
@@ -96,7 +98,7 @@ export default function Audiocall({ user }: AudiocallProps) {
     dispatch(getWords(param));
   }
 
-  useEffect(() => {
+  const onStart = () => {
     if (user.isAuth) {
       getWordsAuth();
     }
@@ -104,9 +106,7 @@ export default function Audiocall({ user }: AudiocallProps) {
     if (user.isAuth === false) {
       getWordsUnauth();
     }
-  }, []);
 
-  const onStart = () => {
     setStart(true);
   };
 
@@ -145,6 +145,7 @@ export default function Audiocall({ user }: AudiocallProps) {
             list={words.list}
             onFinishGame={onFinishGame}
             count={words.list.length}
+            pages={pages}
             isAuth={user.isAuth}
           />
         )
@@ -171,3 +172,7 @@ export default function Audiocall({ user }: AudiocallProps) {
     </div>
   );
 }
+
+Audiocall.defaultProps = {
+  pages: null,
+};

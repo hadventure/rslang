@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getStat } from './stat-thunks';
-import { TAuth, TUser } from './types';
+import { getStat, getStatData } from './stat-thunks';
+import { TAuth, TStat, TUser } from './types';
 
 // Define a type for the slice state
 interface UserState {
+  stat: Partial<TStat> | null,
   user: Partial<TUser>,
   auth: Partial<TAuth>,
   status: string | null
@@ -14,8 +15,9 @@ const userState: UserState = {
   user: {},
   auth: {},
   status: null,
+  stat: null,
 };
-
+// getStatData
 const statSlice = createSlice({
   name: 'stat',
   initialState: userState,
@@ -26,8 +28,6 @@ const statSlice = createSlice({
       local.status = 'loading';
     });
     builder.addCase(getStat.fulfilled, (state, action) => {
-      console.log(state, action);
-
       const local = state;
       local.status = 'success';
     });
@@ -35,6 +35,12 @@ const statSlice = createSlice({
       const local = state;
       local.status = 'failed';
     });
+    builder.addCase(getStatData.pending, (state, action) => {});
+    builder.addCase(getStatData.fulfilled, (state, action) => {
+      const local = state;
+      local.stat = action.payload;
+    });
+    builder.addCase(getStatData.rejected, (state, action) => {});
   },
   reducers: {},
 });
