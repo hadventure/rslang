@@ -60,13 +60,23 @@ function App() {
               <Route path="dictionary">
                 <Route index element={<WordGroupList />} />
 
-                {stat.stat && (
-                <>
-                  <Route path=":tutorial" element={<WordList pages={stat.stat.optional!.pages!.learned} />} />
-                  <Route path=":tutorial/audiocall" element={<Audiocall user={user} pages={stat.stat.optional!.pages!.learned} />} />
+                {
+                  user.isAuth && stat.stat
+                    ? (
+                      <>
+                        <Route path=":tutorial" element={<WordList pages={stat.stat.optional!.pages!} />} />
+                        <Route path=":tutorial/audiocall" element={<Audiocall user={user} pages={stat.stat.optional!.pages!} />} />
 
-                </>
-                )}
+                      </>
+                    )
+                    : (
+                      <>
+                        <Route path=":tutorial" element={<WordList pages={undefined} />} />
+                        <Route path=":tutorial/audiocall" element={<Audiocall user={user} pages={undefined} />} />
+                      </>
+                    )
+                }
+
                 <Route path=":tutorial/sprint" element={<Sprint />} />
 
               </Route>

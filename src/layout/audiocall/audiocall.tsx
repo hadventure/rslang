@@ -18,7 +18,7 @@ import cls from './audiocall.module.scss';
 
 type AudiocallProps = {
   user: UserState,
-  pages?: number[]
+  pages?: { [key: string]: number[] },
 };
 
 export default function Audiocall({ user, pages }: AudiocallProps) {

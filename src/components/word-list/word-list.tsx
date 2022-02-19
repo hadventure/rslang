@@ -1,9 +1,9 @@
 import userSelector from '@/features/user/user-selector';
 import wordsSelector from '@/features/words/words-selector';
 import {
-  getUserWords, resetCurrentWord, setPageWords,
+  getUserWords, resetCurrentWord, resetStatus, setPageWords,
 } from '@/features/words/words-slice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import levelsSelector from '@/features/levels/levels-selector';
@@ -18,7 +18,7 @@ import audiocall from '../../assets/ILLUSTRATION_OFFICE_08.svg';
 import MsgBlock from '../msg-block/msg-block';
 
 type WordListProps = {
-  pages: number[],
+  pages: { [key: string]: number[] } | undefined,
 };
 
 export default function WordList({ pages }: WordListProps) {
@@ -29,9 +29,12 @@ export default function WordList({ pages }: WordListProps) {
   const location = useLocation();
   let isLearned;
 
-  if (words.status === 'success') {
-    isLearned = pages.includes(words.list[0].page);
+  if (words.status === 'success' && pages) {
+    isLearned = pages[words.list[0].group].includes(words.list[0].page)
   }
+
+
+  console.log(pages, words)
 
   useEffect(() => {
     if (user.isAuth === true && words.group) {
@@ -65,8 +68,6 @@ export default function WordList({ pages }: WordListProps) {
 
   useEffect(() => {
     if (user.isAuth === true && words.group) {
-      console.log(words.page);
-
       dispatch(getUserWords({
         filter: JSON.stringify({
           $and: [{
@@ -101,8 +102,6 @@ export default function WordList({ pages }: WordListProps) {
     dispatch(resetCurrentWord({}));
     dispatch(setPageWords(page));
   };
-
-  // console.log(pages.length);
 
   return (
     <>
@@ -149,7 +148,10 @@ export default function WordList({ pages }: WordListProps) {
               isLearned
                 ? <img className={isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={audiocall} alt="" />
                 : (
-                  <NavLink to={`${location.pathname}/audiocall?page=${Number(words.page)}`}>
+                  <NavLink
+                    to={`${location.pathname}/audiocall?page=${Number(words.page)}`}
+                    onClick={() => dispatch(resetStatus(''))}
+                  >
                     <img className={isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={audiocall} alt="" />
                   </NavLink>
                 )
@@ -160,7 +162,10 @@ export default function WordList({ pages }: WordListProps) {
                 ? <img className={isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={sprint} alt="" />
 
                 : (
-                  <NavLink to={`${location.pathname}/sprint?page=${Number(words.page)}`}>
+                  <NavLink
+                    to={`${location.pathname}/sprint?page=${Number(words.page)}`}
+                    onClick={() => dispatch(resetStatus(''))}
+                  >
                     <img className={isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={sprint} alt="" />
                   </NavLink>
                 )

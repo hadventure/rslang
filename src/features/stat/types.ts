@@ -35,7 +35,7 @@ export type TStat = {
       [key: string]: number
     },
     pages: {
-      learned: number[]
+      [key: string]: number[]
     },
     games: TStatGame
   }

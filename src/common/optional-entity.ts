@@ -27,7 +27,13 @@ export const getOptionalStat = (): TStat => ({
   learnedWords: 0,
   optional: {
     pages: {
-      learned: [],
+      0: [],
+      1: [],
+      2: [],
+      3: [],
+      4: [],
+      5: [],
+      6: [],
     },
     learnedWords: {
       [getFormattedDate()]: 0,

@@ -28,22 +28,20 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
 
     const data = await resp.json();
 
-    if (resp.status === 200) {
+    if (resp.status === 200 && thunkAPI.extra.userId) {
       const { stat } = thunkAPI.getState();
       const learnedCount = data[0].paginatedResults
         .filter((el: TWord) => el.userWord && el.userWord.difficulty === Difficulty.learned).length;
 
-      const { page } = data[0].paginatedResults[0];
-
-      console.log(learnedCount, page, stat.stat?.optional?.pages.learned);
+      const { page, group } = data[0].paginatedResults[0];
 
       if (learnedCount === 20) {
         const optional = getOptionalStat();
         optional.optional = JSON.parse(JSON.stringify(stat.stat?.optional));
 
-        const indexPage = optional.optional.pages.learned.indexOf(page);
+        const indexPage = optional.optional.pages[group].indexOf(page);
         if (indexPage === -1) {
-          optional.optional.pages.learned.push(page);
+          optional.optional.pages[group].push(page);
 
           await statAPI.updateStat(optional, thunkAPI.extra);
           thunkAPI.dispatch(getStatData({}));
@@ -53,15 +51,15 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
       if (learnedCount < 20) {
         const optional = getOptionalStat();
         optional.optional = JSON.parse(JSON.stringify(stat.stat?.optional));
+        console.log(page, group, optional.optional.pages)
 
-        const indexPage = optional.optional.pages.learned.indexOf(page);
+        const indexPage = optional.optional.pages[group].indexOf(page);
         if (indexPage !== -1) {
-          optional.optional.pages.learned.splice(indexPage, 1);
+          optional.optional.pages[group].splice(indexPage, 1);
 
           await statAPI.updateStat(optional, thunkAPI.extra);
           thunkAPI.dispatch(getStatData({}));
         }
-        console.log(optional.optional.pages.learned, indexPage);
       }
     }
 
@@ -135,6 +133,7 @@ const wordsSlice = createSlice({
     });
     builder.addCase(getUserWords.fulfilled, (state, action) => {
       const local = state;
+      console.log('----------')
       local.status = 'success';
       // @ts-ignore
       local.list = action.payload[0].paginatedResults;
@@ -193,6 +192,10 @@ const wordsSlice = createSlice({
       local.sprintRightChainCount = 0;
       local.sprintRightChain = 0;
     },
+    resetStatus(state, action) {
+      const local = state;
+      local.status = action.payload;
+    },
   },
 });
 
@@ -207,6 +210,7 @@ export const {
   setRightChainArr,
   setRightChainCount,
   resetRightChainCount,
+  resetStatus,
 } = wordsSlice.actions;
 
 export default wordsSlice.reducer;

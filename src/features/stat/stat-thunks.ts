@@ -176,7 +176,8 @@ unknown,
 
     if (response.status === 404) {
       const stat = getOptionalStat();
-      await statAPI.updateStat(stat, thunkAPI.extra);
+      const r = await statAPI.updateStat(stat, thunkAPI.extra);
+      return r.json();
     }
 
     if (response.status === 401) {

@@ -1,11 +1,13 @@
+import { TEMP_PAGINATION_LENGTH } from '@/common/constants';
 import SprintGame from '@/components/sprint-game/sprint-game';
+import statSelector from '@/features/stat/stat-selector';
 import { Difficulty } from '@/features/words/types';
 import {
   getUserWords, setGroup, setPageWords, WordsState,
 } from '@/features/words/words-slice';
 import { getWords } from '@/features/words/words-thunks';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   useLocation, useSearchParams,
 } from 'react-router-dom';
@@ -24,17 +26,47 @@ export default function SprintPreload({
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
+  const stat = useSelector(statSelector);
   const location = useLocation();
 
+  const calculateP = (page: number) => {
+    const learned = stat.stat!.optional!.pages[words.list[0].group];
+    const possiblePages = new Array(TEMP_PAGINATION_LENGTH + 1)
+      .fill(1)
+      .map((el, i) => i)
+      .filter((el) => learned.indexOf(el) === -1);
+
+    let newPage;
+
+    console.log(possiblePages, learned, page);
+
+    const index = possiblePages.indexOf(page);
+
+    if (index !== possiblePages.length - 1) {
+      possiblePages.splice(index, 1);
+
+      newPage = possiblePages[index];
+    } else {
+      newPage = possiblePages[0];
+    }
+
+    return newPage;
+  };
+
   function getWords1(page?: number) {
-    console.log('--------', page);
+    console.log(words.page, page)
 
     let param;
-    if (page) {
-      dispatch(setPageWords(page));
+    let newPage;
+
+    if (page !== undefined) {
+      newPage = calculateP(page);
+      dispatch(setPageWords(newPage));
     } else {
       dispatch(setPageWords(Number(searchParams.get('page')!)));
     }
+
+    console.log(newPage);
 
     if (location.pathname.indexOf('games') > -1) {
       dispatch(setGroup(location.pathname.split('/')[3]));
@@ -47,7 +79,7 @@ export default function SprintPreload({
               { 'userWord.difficulty': Difficulty.learned },
               { userWord: null }],
           },
-          { page: page || Number(searchParams.get('page')!) },
+          { page: newPage !== undefined ? newPage : Number(searchParams.get('page')!) },
           { group: Number(location.pathname.split('/')[3]) },
           ],
         }),
@@ -63,7 +95,7 @@ export default function SprintPreload({
               { 'userWord.difficulty': Difficulty.difficult },
               { userWord: null }],
           },
-          { page: page || Number(searchParams.get('page')!) },
+          { page: newPage !== undefined ? newPage : Number(searchParams.get('page')!) },
           { group: Number(location.pathname.split('/')[2]) },
           ],
         }),
@@ -76,7 +108,10 @@ export default function SprintPreload({
 
   function getWordsUnauth(page?: number) {
     let param;
-    if (page) {
+    let newPage;
+
+    if (typeof page === 'number') {
+      newPage = calculateP(page);
       dispatch(setPageWords(page));
     } else {
       dispatch(setPageWords(Number(searchParams.get('page')!)));
@@ -85,14 +120,14 @@ export default function SprintPreload({
     if (location.pathname.indexOf('games') > -1) {
       dispatch(setGroup(location.pathname.split('/')[3]));
       param = {
-        page: page || Number(searchParams.get('page')!),
+        page: newPage !== undefined ? newPage : Number(searchParams.get('page')!),
         wordsPerPage: '20',
         group: location.pathname.split('/')[3],
       };
     } else {
       dispatch(setGroup(location.pathname.split('/')[2]));
       param = {
-        page: page || Number(searchParams.get('page')!),
+        page: newPage !== undefined ? newPage : Number(searchParams.get('page')!),
         wordsPerPage: '20',
         group: location.pathname.split('/')[2],
       };
@@ -102,6 +137,7 @@ export default function SprintPreload({
   }
 
   function setStrategyGame(page?: number) {
+
     if (isAuth) {
       getWords1(page);
     }
@@ -111,14 +147,8 @@ export default function SprintPreload({
     }
   }
 
-  // useEffect(() => {
-  //   if (timer) {
-  //     setStrategyGame();
-  //   }
-  // }, [timer]);
-
   useEffect(() => {
-    if (words.status === 'success' && words.list.length !== 0) {
+    if (words.status === 'success') {
       onStart();
     }
   }, [words.status]);

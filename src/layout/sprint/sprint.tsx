@@ -4,7 +4,9 @@ import SprintTimer from '@/components/sprint-timer/sprint-timer';
 import { getStat } from '@/features/stat/stat-thunks';
 import userSelector from '@/features/user/user-selector';
 import wordsSelector from '@/features/words/words-selector';
-import { clearResult, resetRightChainCount, setRightChainArr } from '@/features/words/words-slice';
+import {
+  clearResult, resetRightChainCount, setRightChainArr,
+} from '@/features/words/words-slice';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SprintPreload from './sprint-preload';
@@ -20,8 +22,6 @@ export default function Sprint() {
   const user = useSelector(userSelector);
 
   const onStart = () => {
-    console.log(words.status)
-
     setTimer(true);
   };
 

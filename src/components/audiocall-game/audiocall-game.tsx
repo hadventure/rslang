@@ -15,7 +15,7 @@ type AudiocallGameProps = {
   onFinishGame: () => void,
   count: number,
   isAuth: boolean | null,
-  pages: number[] | undefined,
+  pages: { [key: string]: number[] } | undefined,
 };
 
 export default function AudiocallGame({
@@ -33,7 +33,8 @@ export default function AudiocallGame({
   const yes = new Audio(right);
   const no = new Audio(wrong);
 
-  if (pages && pages.includes(list[0].page)) {
+  console.log(pages)
+  if (pages && pages[list[0].group].includes(list[0].page)) {
     return <div>Learned</div>;
   }
 
