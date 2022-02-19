@@ -7,7 +7,8 @@ interface UserState {
   stat: Partial<TStat> | null,
   user: Partial<TUser>,
   auth: Partial<TAuth>,
-  status: string | null
+  status: string | null,
+  lastStat: Partial<TStat> | null,
 }
 
 // Define the initial state using that type
@@ -16,6 +17,7 @@ const userState: UserState = {
   auth: {},
   status: null,
   stat: null,
+  lastStat: null,
 };
 // getStatData
 const statSlice = createSlice({

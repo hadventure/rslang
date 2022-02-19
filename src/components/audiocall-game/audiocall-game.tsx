@@ -33,7 +33,7 @@ export default function AudiocallGame({
   const yes = new Audio(right);
   const no = new Audio(wrong);
 
-  console.log(pages)
+  console.log(pages, list);
   if (pages && pages[list[0].group].includes(list[0].page)) {
     return <div>Learned</div>;
   }
@@ -54,7 +54,11 @@ export default function AudiocallGame({
           if (location.pathname.indexOf('games') > -1) {
             return el;
           }
-          return el.userWord && el.userWord.difficulty !== Difficulty.learned;
+
+          if (el.userWord) {
+            return el.userWord.difficulty;
+          }
+          return el;
         });
 
       questions = getRandomIntArr(0, unlearned.length - 1, unlearned.length)

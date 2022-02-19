@@ -89,7 +89,7 @@ function App() {
                 <Route path="sprint/:tutorial" element={<Sprint />} />
               </Route>
 
-              <Route path="/statistics" element={<Stat />} />
+              <Route path="/statistics" element={<Stat stat={stat.stat} />} />
             </Route>
 
             <Route path="/auth" element={<Auth user={user} />} />

@@ -1,0 +1,69 @@
+@import '../../app.scss';
+
+.stat-page {
+  text-transform: capitalize;
+}
+
+.title {
+  margin-bottom: 2rem;
+  font-weight: bold;
+  font-size: medium;
+}
+
+.game-stat-item-wrap {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: repeat(3, auto);
+  column-gap: 1rem;
+  margin-bottom: 2rem;
+  font-size: medium;
+
+}
+
+.game-stat-item {
+  padding: 1rem;
+  border: 2px solid #eee;
+  border-radius: 4px;
+  height: max-content;
+  // text-align: center;
+  font-size: medium;
+}
+
+.today-stat {
+  padding: 1rem;
+  border: 2px solid #eee;
+  border-radius: 4px;
+  text-align: center;
+  font-size: medium;
+}
+
+.img {
+  height: 80%;
+}
+
+.img-wrap {
+  text-align: center;
+}
+
+.count {font-weight: bold;}
+
+// .game-title {
+//   margin-bottom: 1rem;
+// }
+
+.game-chunk {
+  display: flex;
+  flex-direction: row-reverse;
+  column-gap: 1rem;
+  justify-content: center;
+}
+
+.count {
+  width: 30%;
+  text-align: right;
+}
+
+.note {
+  font-size: medium;
+  width: 70%;
+}

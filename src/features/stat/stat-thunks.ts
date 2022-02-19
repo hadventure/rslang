@@ -88,7 +88,6 @@ number,
       }
 
       await statAPI.updateStat(stat, thunkAPI.extra);
-
       thunkAPI.dispatch(clearResult([]));
     }
 
@@ -159,21 +158,6 @@ unknown,
   'stat/getStat',
   async (param, thunkAPI) => {
     const response = await statAPI.getStat(thunkAPI.extra);
-    // if (response.status === 200) {
-    //   const data = await response.json();
-    //   const stat = getOptionalStat();
-
-    //   stat.optional = JSON.parse(JSON.stringify(data.optional));
-
-    //   if (stat.optional.learnedWords[today]) {
-    //     stat.optional.learnedWords[today] += learnedWordsCount;
-    //   } else {
-    //     stat.optional.learnedWords[today] = 1;
-    //   }
-
-    //   await statAPI.updateStat(stat, thunkAPI.extra);
-    // }
-
     if (response.status === 404) {
       const stat = getOptionalStat();
       const r = await statAPI.updateStat(stat, thunkAPI.extra);
