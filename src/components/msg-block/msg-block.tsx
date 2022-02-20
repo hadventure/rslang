@@ -1,7 +1,7 @@
 import cls from './msg-block.module.scss';
 
 type MsgBlockProps = {
-  text: string,
+  text: string | JSX.Element,
 };
 
 export default function MsgBlock({ text }: MsgBlockProps) {

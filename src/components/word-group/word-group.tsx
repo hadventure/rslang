@@ -11,14 +11,16 @@ export default function WordGroup({ group }: WordGroupProps) {
   const dispatch = useDispatch();
 
   const onChangeGroup = () => {
-    dispatch(setGroup(group.id));
-    dispatch(setPageWords(0));
-    dispatch(resetCurrentWord({}));
+    if (group.id !== 'difficult') {
+      dispatch(setGroup(group.id));
+      dispatch(setPageWords(0));
+      dispatch(resetCurrentWord({}));
+    }
   };
 
   return (
     <NavLink
-      to={`/dictionary/${group.id}`}
+      to={group.id === 'difficult' ? `/${group.id}` : `/dictionary/${group.id}`}
       className={`${cls.wordGroupItem} ${cls[group.clsName]}`}
       onClick={onChangeGroup}
       state={{ dictionary: group.id }}

@@ -1,0 +1,31 @@
+@import 'src/app.scss';
+
+.difficult-wrap {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1rem;
+
+  @include laptop {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include tablet {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.difficult-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem;
+  border: 2px solid #eee;
+  border-radius: 4px;
+  font-size: 1.4rem;
+}
+
+.btn {
+  @include setButtonPrimary {
+    padding: 0.5rem 2rem;
+  }
+}

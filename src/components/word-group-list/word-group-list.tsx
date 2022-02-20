@@ -29,7 +29,7 @@ export default function WordGroupList() {
 
       <div className={cls.wordGroupState}>
         <WordGroup group={{
-          id: '6',
+          id: 'difficult',
           name: <>
             <div><AiFillFire color="#ff9800" size="1.5em" /></div>
             {'  Difficult'}
@@ -47,7 +47,7 @@ export default function WordGroupList() {
           clsName: 'p8',
         }}
         /> */}
-        <WordGroup group={{
+        {/* <WordGroup group={{
           id: '8',
           name: <>
             <div>
@@ -60,7 +60,7 @@ export default function WordGroupList() {
                 </>,
           clsName: 'p9',
         }}
-        />
+        /> */}
       </div>
 
     </>

@@ -2,7 +2,7 @@
 
 .container {
   display: flex;
-  min-height: calc(100% - 40.8px - 52.4px);
+  min-height: calc(100% - 40.8px - 63px);
 
   // @include laptop {
   //   height: min-content;
@@ -21,7 +21,20 @@
 }
 
 .footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 1.6rem 1rem;
   border-top: 2px solid #eee;
   font-size: 1.4rem;
+}
+
+.rslogo {
+  width: 100%;
+  height: 2.5rem;
+}
+
+.logo-wrap {
+  display: flex;
+  column-gap: 2rem;
 }

@@ -9,13 +9,17 @@ import {
   Route,
   useNavigate,
   useLocation,
+  NavLink,
 } from 'react-router-dom';
+import rslogo from '@/assets/rs_school_js.svg';
+import githublogo from '@/assets/github-logo.svg';
 import Auth from '../../components/auth/auth';
 import WordGroupList from '../../components/word-group-list/word-group-list';
 import WordList from '../../components/word-list/word-list';
 import userSelector from '../../features/user/user-selector';
 import { checkUserData, resetStatus } from '../../features/user/user-slice';
 import Audiocall from '../audiocall/audiocall';
+import Difficult from '../difficult/difficult';
 import Main from '../main/main';
 import Sprint from '../sprint/sprint';
 import Stat from '../stat/stat';
@@ -63,6 +67,7 @@ function App() {
                   user.isAuth && stat.stat
                     ? (
                       <>
+                        {/* <Route path="difficult" element={<Difficult />} /> */}
                         <Route path=":tutorial" element={<WordList pages={stat.stat.optional!.pages!} />} />
                         <Route path=":tutorial/audiocall" element={<Audiocall user={user} pages={stat.stat.optional!.pages!} />} />
 
@@ -80,6 +85,10 @@ function App() {
 
               </Route>
 
+              <Route path="difficult">
+                <Route index element={<Difficult />} />
+              </Route>
+
               <Route path="games">
                 {/* <Route index element={<div>games</div>} /> */}
                 <Route path="audiocall" element={<Levels />} />
@@ -95,11 +104,22 @@ function App() {
           </Routes>
 
         </div>
-        {/* https://rs.school/js/ */}
         {
           isGame
             ? null
-            : <footer className={cls.footer}>foo</footer>
+            : (
+              <footer className={cls.footer}>
+                <div>2022</div>
+                <div className={cls.logoWrap}>
+                  <NavLink target="_blank" to="https://rs.school/js/">
+                    <img className={cls.rslogo} src={rslogo} alt="" />
+                  </NavLink>
+                  <NavLink target="_blank" to="https://github.com/lan3945663">
+                    <img className={cls.githublogo} src={githublogo} alt="" />
+                  </NavLink>
+                </div>
+              </footer>
+            )
           }
       </>
     );

@@ -8,7 +8,7 @@ import {
   Difficulty,
   TParam, TResult, TWord,
 } from './types';
-import { getUserWord, getWords } from './words-thunks';
+import { getUserWord, getUserWordsDifficult, getWords } from './words-thunks';
 import { getStatData } from '../stat/stat-thunks';
 
 // Define a type for the slice state
@@ -89,6 +89,26 @@ const wordsSlice = createSlice({
       const local = state;
       local.status = 'failed';
     });
+
+    builder.addCase(getUserWordsDifficult.pending, (state) => {
+      const local = state;
+      local.status = 'loading';
+    });
+    builder.addCase(getUserWordsDifficult.fulfilled, (state, action) => {
+      console.log(action.payload)
+      const local = state;
+      local.status = 'success';
+      // @ts-ignore
+      local.list = action.payload[0].paginatedResults;
+      // @ts-ignore
+      local.count = Number(action.payload[0].totalCount[0]) || 600;
+      // @ts-ignore
+      // local.page = action.payload[0].paginatedResults[0].page;
+    });
+    builder.addCase(getUserWordsDifficult.rejected, (state) => {
+      const local = state;
+      local.status = 'failed';
+    });
   },
   reducers: {
     setGroup(state, action) {
@@ -140,7 +160,6 @@ const wordsSlice = createSlice({
       local.status = action.payload;
     },
     toggleUpdate(state, action) {
-      console.log(action.payload);
       const local = state;
       local.statusgetword = action.payload;
     },
@@ -175,20 +194,14 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
 }>(
   'words/getUserWords',
   async (param, thunkAPI) => {
-    console.log('+++++++++++++', thunkAPI.getState().words.statusgetword);
-    let resp;
-    resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(param).toString()}`, {
+    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(param).toString()}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${thunkAPI.extra.token}`,
       },
     });
 
-
-
     const data = await resp.json();
-
-
     const statResponse = await statAPI.getStat(thunkAPI.extra);
     const stat = await statResponse.json();
 
@@ -215,8 +228,6 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
 
         const indexPage = optional.optional.pages[group].indexOf(page);
 
-        console.log('+++++');
-
         thunkAPI.dispatch(wordsSlice.actions.toggleIsLearned(true));
 
         if (indexPage === -1) {
@@ -230,8 +241,6 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
       if (data[0].paginatedResults.length !== learnedCount.length) {
         const optional = getOptionalStat();
         optional.optional = JSON.parse(JSON.stringify(stat.optional));
-
-        console.log('----');
 
         thunkAPI.dispatch(wordsSlice.actions.toggleIsLearned(false));
 

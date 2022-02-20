@@ -54,8 +54,6 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
     const resp = await wordsAPI.getUserWord(param, thunkAPI.extra);
     const optional = getOptional();
 
-    console.log(param)
-
     if (resp.status === 404) {
       optional.difficulty = Difficulty.studied;
       optional.optional[param.game as keyof TGames] = {
@@ -70,7 +68,6 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
     }
 
     if (resp.status === 200) {
-      console.log('sdfsdfsdf')
       thunkAPI.dispatch(toggleUpdate(UpdateWord.updating));
 
       const data = await resp.json();
@@ -126,19 +123,8 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
       if (optional.difficulty === Difficulty.learned && data.difficulty === Difficulty.studied) {
         thunkAPI.dispatch(setLearnedWords(1));
       }
-      console.log(optional.difficulty, data.difficulty);
-      // if(optional.difficulty === Difficulty.learned && data.difficulty === Difficulty.learned) {
-        
-      //   console.log(optional.difficulty === Difficulty.difficult && data.difficulty === Difficulty.difficult)
-        
-      // } else {
 
-      // }
-
-      console.log(1)
       const x = await wordsAPI.updateUserWord(param, optional, thunkAPI.extra);
-      console.log(x)
-      console.log(2)
       thunkAPI.dispatch(toggleUpdate(UpdateWord.updated));
       thunkAPI.dispatch(setResult({ ...param, isNewWord: false, state: optional.difficulty }));
     }
@@ -156,5 +142,34 @@ export const getWords = createAsyncThunk<TWord[], Pick<TParam, 'group' | 'page' 
     const resp = await wordsAPI.getWordList(param);
 
     return resp.json();
+  },
+);
+
+export const getUserWordsDifficult = createAsyncThunk<
+TWord[],
+Pick<TParam, 'filter' | 'wordsPerPage'>, {
+  extra: TAuth
+  state: RootState
+}>(
+  'words/getUserWordsDifficult',
+  async (param, thunkAPI) => {
+    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(param).toString()}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${thunkAPI.extra.token}`,
+      },
+    });
+
+    const data = await resp.json();
+
+    if (resp.status === 200) {
+      thunkAPI.dispatch(toggleRefresh({}));
+    }
+
+    if (resp.status === 401) {
+      thunkAPI.dispatch(set401(401));
+    }
+
+    return data;
   },
 );
