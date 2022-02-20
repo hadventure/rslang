@@ -24,7 +24,6 @@ const statSlice = createSlice({
   name: 'stat',
   initialState: userState,
   extraReducers: (builder) => {
-    // console.log('-----', builder, getWords);
     builder.addCase(getStat.pending, (state, action) => {
       const local = state;
       local.status = 'loading';

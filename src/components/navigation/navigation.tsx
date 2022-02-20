@@ -35,8 +35,6 @@ export default function Navigation() {
   }, [location]);
 
   const isNavActive = (navData: { isActive: boolean }, extra: string) => {
-    // console.log(navData)
-
     if (navData.isActive) {
       return `${cls.navLink} ${cls.navLinkActive} ${extra}`;
     }

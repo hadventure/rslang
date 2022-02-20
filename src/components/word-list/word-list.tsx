@@ -33,13 +33,8 @@ export default function WordList({ pages }: WordListProps) {
     isLearned = pages[words.list[0].group].includes(words.list[0].page)
   }
 
-
-  console.log(pages, words)
-
   useEffect(() => {
     if (user.isAuth === true && words.group) {
-      console.log(words.page);
-
       dispatch(getUserWords({
         filter: JSON.stringify({
           $and: [{
@@ -94,7 +89,11 @@ export default function WordList({ pages }: WordListProps) {
     }
   }, []);
 
-  if (words.list.length === 0 && words.status === 'success') {
+  if (words.list.length === 0 && words.status === 'loading') {
+    return <div>Loading</div>;
+  }
+
+  if (words.list.length === 0 && words.status === '') {
     return <div>No Items</div>;
   }
 

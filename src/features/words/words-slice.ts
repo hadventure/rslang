@@ -28,8 +28,10 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
 
     const data = await resp.json();
 
+    const statResponse = await statAPI.getStat(thunkAPI.extra);
+    const stat = await statResponse.json();
+
     if (resp.status === 200 && thunkAPI.extra.userId) {
-      const { stat } = thunkAPI.getState();
       const learnedCount = data[0].paginatedResults
         .filter((el: TWord) => el.userWord && el.userWord.difficulty === Difficulty.learned).length;
 
@@ -37,7 +39,7 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
 
       if (learnedCount === 20) {
         const optional = getOptionalStat();
-        optional.optional = JSON.parse(JSON.stringify(stat.stat?.optional));
+        optional.optional = JSON.parse(JSON.stringify(stat.optional));
 
         const indexPage = optional.optional.pages[group].indexOf(page);
         if (indexPage === -1) {
@@ -50,8 +52,7 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
 
       if (learnedCount < 20) {
         const optional = getOptionalStat();
-        optional.optional = JSON.parse(JSON.stringify(stat.stat?.optional));
-        console.log(page, group, optional.optional.pages)
+        optional.optional = JSON.parse(JSON.stringify(stat.optional));
 
         const indexPage = optional.optional.pages[group].indexOf(page);
         if (indexPage !== -1) {
@@ -110,9 +111,7 @@ const wordsSlice = createSlice({
   name: 'words',
   initialState: wordsState,
   extraReducers: (builder) => {
-    // console.log('-----', builder, getWords);
     builder.addCase(getWords.pending, (state) => {
-      // console.log(state, action)
       const local = state;
       local.status = 'loading';
     });
@@ -127,13 +126,11 @@ const wordsSlice = createSlice({
       local.status = 'failed';
     });
     builder.addCase(getUserWords.pending, (state) => {
-      // console.log(state, action)
       const local = state;
       local.status = 'loading';
     });
     builder.addCase(getUserWords.fulfilled, (state, action) => {
       const local = state;
-      console.log('----------')
       local.status = 'success';
       // @ts-ignore
       local.list = action.payload[0].paginatedResults;

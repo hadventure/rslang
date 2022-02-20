@@ -48,7 +48,6 @@ function App() {
   }, [user.isAuth]);
 
   if (user.isAuth !== null) {
-    // console.log(stat.stat)
     return (
       <>
         <Header isAuthenticated={user.isAuth} />

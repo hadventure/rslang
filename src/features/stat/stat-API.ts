@@ -9,7 +9,6 @@ export const getStat = (extra: TAuth) => {
 };
 
 export const updateStat = (param: TStat, extra: TAuth) => {
-  console.log('----')
   const url = `/users/${extra.userId}/statistics`;
   return http.put(url, param, extra.token);
 };

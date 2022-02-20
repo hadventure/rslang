@@ -38,8 +38,6 @@ export default function SprintPreload({
 
     let newPage;
 
-    console.log(possiblePages, learned, page);
-
     const index = possiblePages.indexOf(page);
 
     if (index !== possiblePages.length - 1) {
@@ -54,8 +52,6 @@ export default function SprintPreload({
   };
 
   function getWords1(page?: number) {
-    console.log(words.page, page)
-
     let param;
     let newPage;
 
@@ -65,8 +61,6 @@ export default function SprintPreload({
     } else {
       dispatch(setPageWords(Number(searchParams.get('page')!)));
     }
-
-    console.log(newPage);
 
     if (location.pathname.indexOf('games') > -1) {
       dispatch(setGroup(location.pathname.split('/')[3]));
@@ -137,7 +131,6 @@ export default function SprintPreload({
   }
 
   function setStrategyGame(page?: number) {
-
     if (isAuth) {
       getWords1(page);
     }

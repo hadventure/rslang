@@ -8,6 +8,34 @@ import { TAuth, TStat, TStatGame } from './types';
 import * as statAPI from './stat-API';
 import { clearResult } from '../words/words-slice';
 
+export const getStatData = createAsyncThunk<
+// Return type of the payload creator
+TStat,
+// First argument to the payload creator
+unknown,
+{
+  // Optional fields for defining thunkAPI field types
+  extra: TAuth,
+  state: RootState
+}
+>(
+  'stat/getStat',
+  async (param, thunkAPI) => {
+    const response = await statAPI.getStat(thunkAPI.extra);
+    if (response.status === 404) {
+      const stat = getOptionalStat();
+      const r = await statAPI.updateStat(stat, thunkAPI.extra);
+      return r.json();
+    }
+
+    if (response.status === 401) {
+      thunkAPI.dispatch(set401(401));
+    }
+
+    return response.json();
+  },
+);
+
 export const getStat = createAsyncThunk<
 // Return type of the payload creator
 null,
@@ -26,8 +54,6 @@ number,
     const { result, sprintRightChain } = thunkAPI.getState().words;
     const today = `${getFormattedDate()}`;
     const { game } = result[0];
-
-    console.log(sprintRightChain);
 
     const stat = getOptionalStat();
 
@@ -144,30 +170,3 @@ number,
   },
 );
 
-export const getStatData = createAsyncThunk<
-// Return type of the payload creator
-TStat,
-// First argument to the payload creator
-unknown,
-{
-  // Optional fields for defining thunkAPI field types
-  extra: TAuth,
-  state: RootState
-}
->(
-  'stat/getStat',
-  async (param, thunkAPI) => {
-    const response = await statAPI.getStat(thunkAPI.extra);
-    if (response.status === 404) {
-      const stat = getOptionalStat();
-      const r = await statAPI.updateStat(stat, thunkAPI.extra);
-      return r.json();
-    }
-
-    if (response.status === 401) {
-      thunkAPI.dispatch(set401(401));
-    }
-
-    return response.json();
-  },
-);

@@ -57,7 +57,6 @@ const userSlice = createSlice({
   name: 'user',
   initialState: userState,
   extraReducers: (builder) => {
-    // console.log('-----', builder, getWords);
     builder.addCase(createUser.pending, (state, action) => {
       const local = state;
       local.status = 'loading';

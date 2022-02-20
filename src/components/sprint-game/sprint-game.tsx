@@ -30,8 +30,6 @@ export default function SprintGame({
   const [isShowAnswer, setIsShowAnswer] = useState(false);
   const wrap = useRef<HTMLDivElement>(null);
 
-  console.log(page)
-
   const yes = new Audio(right);
   const no = new Audio(wrong);
 
@@ -43,13 +41,8 @@ export default function SprintGame({
 
     document.addEventListener('click', setFocusOnPage);
 
-
-
     if (copy.length === 0) {
-     console.log(page)
       setStrategyGame(page);
-
-    
     }
 
     if (copy.length === 1) {
@@ -67,10 +60,7 @@ export default function SprintGame({
   }, []);
 
   useEffect(() => {
-
     if (variant === -1) {
-      console.log(page)
-
       setStrategyGame(page);
     }
   }, [current]);

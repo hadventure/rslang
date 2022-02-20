@@ -15,11 +15,9 @@ type StatProps = {
 
 export default function Stat({ stat }: StatProps) {
   const dispatch = useDispatch();
-  console.log('111', stat);
   const today = getFormattedDate();
 
   useEffect(() => {
-    // console.log('111', stat);
     dispatch(getStatData({}));
   }, []);
 

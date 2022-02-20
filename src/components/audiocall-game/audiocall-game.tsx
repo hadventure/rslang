@@ -33,7 +33,6 @@ export default function AudiocallGame({
   const yes = new Audio(right);
   const no = new Audio(wrong);
 
-  console.log(pages, list);
   if (pages && pages[list[0].group].includes(list[0].page)) {
     return <div>Learned</div>;
   }
@@ -56,7 +55,7 @@ export default function AudiocallGame({
           }
 
           if (el.userWord) {
-            return el.userWord.difficulty;
+            return el.userWord.difficulty !== Difficulty.learned;
           }
           return el;
         });
@@ -79,8 +78,6 @@ export default function AudiocallGame({
             .map((j) => copy[j as number])),
         }));
     }
-
-    console.log(questions);
 
     setShuffled(questions);
 

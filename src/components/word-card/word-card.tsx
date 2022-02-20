@@ -41,6 +41,15 @@ export default function WordCard({ words, isAuthenticated }: WordCardProps) {
   };
 
   const onAddToDifficult = (type1: string) => {
+    if (type1 === Difficulty.learned) {
+      dispatch(setLearnedWords(1));
+    }
+
+    if (type1 === Difficulty.difficult
+      && words.currentWord?.userWord?.difficulty === Difficulty.learned) {
+      dispatch(setLearnedWords(-1));
+    }
+
     if (words.currentWord?.userWord) {
       dispatch(addToDifficult({
         id: words.currentWord!._id,
@@ -53,10 +62,6 @@ export default function WordCard({ words, isAuthenticated }: WordCardProps) {
         userWord: undefined,
         type: type1,
       }));
-    }
-
-    if (type1 === Difficulty.learned) {
-      dispatch(setLearnedWords(1));
     }
   };
 
