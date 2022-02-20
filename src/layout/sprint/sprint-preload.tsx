@@ -101,7 +101,7 @@ export default function SprintPreload({
         wordsPerPage: '20',
       };
 
-      if (stat.stat?.optional?.pages[0].length === 30) {
+      if (stat.stat?.optional?.pages[0].length === 30 && location.pathname.indexOf('games') === -1) {
         setIsFinish();
       }
     }
@@ -150,14 +150,6 @@ export default function SprintPreload({
     }
   }
 
-  // useEffect(() => {
-  //   console.log(words.statusgetword)
-  //   if(words.statusgetword === UpdateWord.updated) {
-  //     setStrategyGame();
-  //   }
-
-  // }, [words.statusgetword]);
-
   useEffect(() => {
     if (words.status === 'success') {
       onStart();
@@ -170,12 +162,12 @@ export default function SprintPreload({
   };
 
   useEffect(() => {
-    if (stat.stat?.optional?.pages[0].length === 30) {
+    if (stat.stat?.optional?.pages[0].length === 30 && location.pathname.indexOf('games') === -1) {
       setIsFinish();
     }
   }, [stat.stat]);
 
-  if (isFinish) {
+  if (isFinish && location.pathname.indexOf('games') === -1) {
     return <MsgBlock text="Слова для игры закончились" />;
   }
 

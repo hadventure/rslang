@@ -63,9 +63,7 @@ export default function SprintGame({
   }, []);
 
   useEffect(() => {
-    console.log(words.statusgetword);
     if (variant === -1 && words.statusgetword === UpdateWord.updated) {
-      // console.log(variant, words.statusgetword);
       setStrategyGame(page);
     }
   }, [current, words.statusgetword]);
