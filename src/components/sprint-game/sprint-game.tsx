@@ -1,5 +1,5 @@
 import { getRandomInt, shuffle } from '@/common/helper';
-import { Difficulty, TWord } from '@/features/words/types';
+import { Difficulty, TWord, UpdateWord } from '@/features/words/types';
 import React, {
   useEffect, useRef, useState,
 } from 'react';
@@ -7,7 +7,9 @@ import { useDispatch } from 'react-redux';
 import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 import { getUserWord } from '@/features/words/words-thunks';
 import { TEMP_PAGINATION_LENGTH } from '@/common/constants';
-import { setResult, setRightChainArr, setRightChainCount } from '@/features/words/words-slice';
+import {
+  setResult, setRightChainArr, setRightChainCount, WordsState,
+} from '@/features/words/words-slice';
 import cls from './sprint-game.module.scss';
 import right from '../../assets/yes.mp3';
 import wrong from '../../assets/now.mp3';
@@ -17,11 +19,12 @@ type SprintGameProps = {
   count: number,
   setStrategyGame: (page?: number) => void,
   page: number,
-  isAuth: boolean | null
+  isAuth: boolean | null,
+  words: WordsState,
 };
 
 export default function SprintGame({
-  list, count, setStrategyGame, page, isAuth,
+  list, count, setStrategyGame, page, isAuth, words,
 }: SprintGameProps) {
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(0);
@@ -51,6 +54,8 @@ export default function SprintGame({
 
     const game = shuffle<TWord>(copy);
 
+    console.log(game);
+
     setShuffled(game);
     setVariant(count - 1);
 
@@ -60,10 +65,12 @@ export default function SprintGame({
   }, []);
 
   useEffect(() => {
-    if (variant === -1) {
+    // console.log(words.statusgetword);
+    if (variant === -1 && words.statusgetword === UpdateWord.updated) {
+      // console.log(variant, words.statusgetword);
       setStrategyGame(page);
     }
-  }, [current]);
+  }, [current, words.statusgetword]);
 
   const onApprove = () => {
     const common = {

@@ -18,6 +18,8 @@ export default function Sprint() {
   const [timer, setTimer] = useState(false);
   const [modal, setModal] = useState(false);
 
+  const [isFinish, setFinish] = useState(false);
+
   const words = useSelector(wordsSelector);
   const user = useSelector(userSelector);
 
@@ -29,8 +31,10 @@ export default function Sprint() {
     setTimer(false);
     setModal(true);
 
-    dispatch(setRightChainArr({}));
-    dispatch(getStat(words.sprintRightChain));
+    if (user.isAuth) {
+      dispatch(setRightChainArr({}));
+      dispatch(getStat(words.sprintRightChain));
+    }
   };
 
   const onPlayAgain = () => {
@@ -43,6 +47,13 @@ export default function Sprint() {
     dispatch(resetRightChainCount({}));
   };
 
+  const finishGame = () => {
+    setFinish(true);
+    if (words.result.length !== 0) {
+      onFinishTimer();
+    }
+  };
+
   return (
     <>
       <div className={cls.initView}>
@@ -52,6 +63,7 @@ export default function Sprint() {
         timer={timer}
         onFinishTimer={onFinishTimer}
         showModal={() => setModal(true)}
+        isFinish={isFinish}
       />
       )
       }
@@ -61,14 +73,19 @@ export default function Sprint() {
           timer={timer}
           words={words}
           isAuth={user.isAuth}
+          setIsFinish={finishGame}
+          isFinish={isFinish}
         />
       </div>
+
+      {/* <button type="button" className={cls.btn} onClick={onFinishTimer}>Показать результаты</button> */}
 
       <Modal
         title="Result"
         onClose={onCloseModal}
         show={modal}
         onPlayAgain={onPlayAgain}
+        isFinish={isFinish}
       >
         <GameResult result={words.result} />
       </Modal>

@@ -6,12 +6,14 @@ type SprintTimerProps = {
   timer: boolean,
   onFinishTimer: () => void,
   showModal: () => void,
+  isFinish: boolean,
 };
 
 export default function SprintTimer({
   timer,
   onFinishTimer,
   showModal,
+  isFinish,
 }: SprintTimerProps) {
   const [time, setTime] = useState(sprintTime);
 
@@ -24,8 +26,13 @@ export default function SprintTimer({
       }, 1000);
     }
 
+    if (isFinish) {
+      //@ts-ignore
+      clearTimeout(timerID);
+    }
+
     return () => clearTimeout(timerID);
-  }, [time]);
+  }, [time, isFinish]);
 
   useEffect(() => {
     if (time === 0) {

@@ -8,69 +8,8 @@ import {
   Difficulty,
   TParam, TResult, TWord,
 } from './types';
-import { getWords } from './words-thunks';
+import { getUserWord, getWords } from './words-thunks';
 import { getStatData } from '../stat/stat-thunks';
-
-export const getUserWords = createAsyncThunk<
-number,
-Pick<TParam, 'filter' | 'wordsPerPage'>, {
-  extra: TAuth
-  state: RootState
-}>(
-  'words/getUserWords',
-  async (param, thunkAPI) => {
-    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(param).toString()}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${thunkAPI.extra.token}`,
-      },
-    });
-
-    const data = await resp.json();
-
-    const statResponse = await statAPI.getStat(thunkAPI.extra);
-    const stat = await statResponse.json();
-
-    if (resp.status === 200 && thunkAPI.extra.userId) {
-      const learnedCount = data[0].paginatedResults
-        .filter((el: TWord) => el.userWord && el.userWord.difficulty === Difficulty.learned).length;
-
-      const { page, group } = data[0].paginatedResults[0];
-
-      if (learnedCount === 20) {
-        const optional = getOptionalStat();
-        optional.optional = JSON.parse(JSON.stringify(stat.optional));
-
-        const indexPage = optional.optional.pages[group].indexOf(page);
-        if (indexPage === -1) {
-          optional.optional.pages[group].push(page);
-
-          await statAPI.updateStat(optional, thunkAPI.extra);
-          thunkAPI.dispatch(getStatData({}));
-        }
-      }
-
-      if (learnedCount < 20) {
-        const optional = getOptionalStat();
-        optional.optional = JSON.parse(JSON.stringify(stat.optional));
-
-        const indexPage = optional.optional.pages[group].indexOf(page);
-        if (indexPage !== -1) {
-          optional.optional.pages[group].splice(indexPage, 1);
-
-          await statAPI.updateStat(optional, thunkAPI.extra);
-          thunkAPI.dispatch(getStatData({}));
-        }
-      }
-    }
-
-    if (resp.status === 401) {
-      thunkAPI.dispatch(set401(401));
-    }
-
-    return data;
-  },
-);
 
 // Define a type for the slice state
 export interface WordsState {
@@ -81,6 +20,7 @@ export interface WordsState {
   count: number,
 
   status: string | null,
+  statusgetword: string,
   currentWord: TWord | null,
   result: TResult[],
 
@@ -88,6 +28,8 @@ export interface WordsState {
 
   sprintRightChainCount: number,
   sprintRightChain: number,
+
+  isLearned: boolean,
 }
 
 // Define the initial state using that type
@@ -98,6 +40,7 @@ const wordsState: WordsState = {
   limit: '20',
   count: 0,
   status: null,
+  statusgetword: '',
   currentWord: null,
   result: [],
 
@@ -105,6 +48,8 @@ const wordsState: WordsState = {
 
   sprintRightChainCount: 0,
   sprintRightChain: 0,
+
+  isLearned: false,
 };
 
 const wordsSlice = createSlice({
@@ -131,6 +76,7 @@ const wordsSlice = createSlice({
     });
     builder.addCase(getUserWords.fulfilled, (state, action) => {
       const local = state;
+      console.log(action.payload);
       local.status = 'success';
       // @ts-ignore
       local.list = action.payload[0].paginatedResults;
@@ -193,6 +139,14 @@ const wordsSlice = createSlice({
       const local = state;
       local.status = action.payload;
     },
+    toggleUpdate(state, action) {
+      const local = state;
+      local.statusgetword = action.payload;
+    },
+    toggleIsLearned(state, action) {
+      const local = state;
+      local.isLearned = action.payload;
+    },
   },
 });
 
@@ -208,6 +162,95 @@ export const {
   setRightChainCount,
   resetRightChainCount,
   resetStatus,
+  toggleUpdate,
+  toggleIsLearned,
 } = wordsSlice.actions;
+
+
+export const getUserWords = createAsyncThunk<
+number,
+Pick<TParam, 'filter' | 'wordsPerPage'>, {
+  extra: TAuth
+  state: RootState
+}>(
+  'words/getUserWords',
+  async (param, thunkAPI) => {
+    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(param).toString()}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${thunkAPI.extra.token}`,
+      },
+    });
+
+    const data = await resp.json();
+
+    const statResponse = await statAPI.getStat(thunkAPI.extra);
+    const stat = await statResponse.json();
+
+    if (resp.status === 200 && thunkAPI.extra.userId) {
+      const learnedCount = data[0].paginatedResults
+        .filter((el: TWord) => el.userWord && el.userWord.difficulty === Difficulty.learned);
+
+      // console.log(data[0].paginatedResults.length, learnedCount.length);
+
+      let page;
+      let group;
+
+      if (data[0].paginatedResults.length === 0) {
+        group = JSON.parse(param.filter).$and[2].group;
+        page = JSON.parse(param.filter).$and[1].page;
+      } else {
+        page = data[0].paginatedResults[0].page;
+        group = data[0].paginatedResults[0].group;
+      }
+
+      // console.log(data[0].paginatedResults.length, learnedCount.length);
+
+      if (data[0].paginatedResults.length === learnedCount.length) {
+        const optional = getOptionalStat();
+        optional.optional = JSON.parse(JSON.stringify(stat.optional));
+
+        const indexPage = optional.optional.pages[group].indexOf(page);
+        
+        console.log('+++++')
+
+        thunkAPI.dispatch(wordsSlice.actions.toggleIsLearned(true));
+
+        if (indexPage === -1) {
+          optional.optional.pages[group].push(page);
+
+
+          await statAPI.updateStat(optional, thunkAPI.extra);
+          thunkAPI.dispatch(getStatData({}));
+        }
+      }
+
+      if (data[0].paginatedResults.length !== learnedCount.length) {
+        const optional = getOptionalStat();
+        optional.optional = JSON.parse(JSON.stringify(stat.optional));
+
+        console.log('----')
+
+
+        thunkAPI.dispatch(wordsSlice.actions.toggleIsLearned(false));
+
+        const indexPage = optional.optional.pages[group].indexOf(page);
+        if (indexPage !== -1) {
+          optional.optional.pages[group].splice(indexPage, 1);
+
+
+          await statAPI.updateStat(optional, thunkAPI.extra);
+          thunkAPI.dispatch(getStatData({}));
+        }
+      }
+    }
+
+    if (resp.status === 401) {
+      thunkAPI.dispatch(set401(401));
+    }
+
+    return data;
+  },
+);
 
 export default wordsSlice.reducer;

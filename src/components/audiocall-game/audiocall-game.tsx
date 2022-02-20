@@ -16,15 +16,17 @@ type AudiocallGameProps = {
   count: number,
   isAuth: boolean | null,
   pages: { [key: string]: number[] } | undefined,
+  setFinishGame: () => void,
 };
 
 export default function AudiocallGame({
-  list, onFinishGame, count, isAuth, pages,
+  list, onFinishGame, count, isAuth, pages, setFinishGame,
 }: AudiocallGameProps) {
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(0);
   const [shuffled, setShuffled] = useState<TWordSprint[]>([]);
   const [isAnswered, setIsAnswered] = useState(false);
+
   const wrap = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
@@ -33,16 +35,18 @@ export default function AudiocallGame({
   const yes = new Audio(right);
   const no = new Audio(wrong);
 
-  if (pages && pages[list[0].group].includes(list[0].page)) {
-    return <div>Learned</div>;
-  }
+  // if (pages && pages[list[0].group].includes(list[0].page)) {
+  //   return <div>Learned</div>;
+  // }
 
-  const setFocusOnPage = () => wrap.current?.focus();
+  // const setFocusOnPage = () => wrap.current?.focus();
 
   useEffect(() => {
-    setFocusOnPage();
+    wrap.current?.focus();
 
-    document.addEventListener('click', setFocusOnPage);
+    document.addEventListener('click', () => {
+      wrap.current?.focus();
+    });
 
     const copy = list.slice(0);
     let questions;
@@ -70,6 +74,10 @@ export default function AudiocallGame({
           variants: shuffle(getRandomIntArr(0, count - 1, 5, [copy.findIndex((el) => el.word === word1.word.word) as number])
             .map((j) => copy[j as number])),
         }));
+
+      if (questions.length === 0) {
+        setFinishGame();
+      }
     } else {
       questions = getRandomIntArr(0, count - 1, count)
         .map((el) => ({
@@ -81,13 +89,21 @@ export default function AudiocallGame({
 
     setShuffled(questions);
 
-    audio.src = `${process.env.API_URL}/${questions[current]?.word?.audio}`;
-    audio.play();
+    if (questions.length !== 0) {
+      audio.src = `${process.env.API_URL}/${questions[current]?.word?.audio}`;
+      audio.play();
+    }
 
     return () => {
-      document.removeEventListener('click', setFocusOnPage);
+      document.removeEventListener('click', () => {
+        wrap.current?.focus();
+      });
     };
   }, []);
+
+  // if (finish) {
+  //   return <div>Слов больше нет</div>;
+  // }
 
   useEffect(() => {
     if (shuffled.length > 0) {
@@ -177,6 +193,9 @@ export default function AudiocallGame({
       }
     }
   };
+
+  console.log(shuffled);
+
 
   return (
     <>

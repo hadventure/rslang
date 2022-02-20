@@ -27,11 +27,6 @@ export default function WordList({ pages }: WordListProps) {
   const user = useSelector(userSelector);
   const levels = useSelector(levelsSelector);
   const location = useLocation();
-  let isLearned;
-
-  if (words.status === 'success' && pages) {
-    isLearned = pages[words.list[0].group].includes(words.list[0].page)
-  }
 
   useEffect(() => {
     if (user.isAuth === true && words.group) {
@@ -45,7 +40,7 @@ export default function WordList({ pages }: WordListProps) {
               { userWord: null }],
           },
           { page: words.page },
-          { group: Number(words.group) },
+          { group: Number(location.pathname.split('/')[2]) },
           ],
         }),
         wordsPerPage: '20',
@@ -60,34 +55,6 @@ export default function WordList({ pages }: WordListProps) {
       }));
     }
   }, [words.group, words.page, words.refresh]);
-
-  useEffect(() => {
-    if (user.isAuth === true && words.group) {
-      dispatch(getUserWords({
-        filter: JSON.stringify({
-          $and: [{
-            $or: [
-              { 'userWord.difficulty': Difficulty.studied },
-              { 'userWord.difficulty': Difficulty.difficult },
-              { 'userWord.difficulty': Difficulty.learned },
-              { userWord: null }],
-          },
-          { page: 0 },
-          { group: Number(words.group) },
-          ],
-        }),
-        wordsPerPage: '20',
-      }));
-    }
-
-    if (user.isAuth === false && words.group) {
-      dispatch(getWords({
-        page: 0,
-        group: words.group,
-        wordsPerPage: '20',
-      }));
-    }
-  }, []);
 
   if (words.list.length === 0 && words.status === 'loading') {
     return <div>Loading</div>;
@@ -105,7 +72,7 @@ export default function WordList({ pages }: WordListProps) {
   return (
     <>
       {
-      isLearned
+      words.isLearned
       && <MsgBlock text="Learned" />
       }
 
@@ -144,28 +111,28 @@ export default function WordList({ pages }: WordListProps) {
 
           <div className={cls.navGames}>
             {
-              isLearned
-                ? <img className={isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={audiocall} alt="" />
+              words.isLearned
+                ? <img className={words.isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={audiocall} alt="" />
                 : (
                   <NavLink
                     to={`${location.pathname}/audiocall?page=${Number(words.page)}`}
                     onClick={() => dispatch(resetStatus(''))}
                   >
-                    <img className={isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={audiocall} alt="" />
+                    <img className={words.isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={audiocall} alt="" />
                   </NavLink>
                 )
             }
 
             {
-              isLearned
-                ? <img className={isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={sprint} alt="" />
+              words.isLearned
+                ? <img className={words.isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={sprint} alt="" />
 
                 : (
                   <NavLink
                     to={`${location.pathname}/sprint?page=${Number(words.page)}`}
                     onClick={() => dispatch(resetStatus(''))}
                   >
-                    <img className={isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={sprint} alt="" />
+                    <img className={words.isLearned ? `${cls.gameImg} ${cls.gameImgLearned}` : cls.gameImg} src={sprint} alt="" />
                   </NavLink>
                 )
             }

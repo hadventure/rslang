@@ -53,7 +53,7 @@ function App() {
         <Header isAuthenticated={user.isAuth} />
         <div className={isGame ? cls.containerNoFooter : cls.container}>
           <Routes>
-            <Route path="/" element={<Home />}>
+            <Route path="/" element={<Home isAuthenticated={user.isAuth} />}>
               <Route path="/home" element={<Main />} />
 
               <Route path="dictionary">

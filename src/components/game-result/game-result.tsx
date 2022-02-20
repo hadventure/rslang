@@ -16,8 +16,8 @@ export default function GameResult({ result }: GameResultProps) {
       {right.length}
 
       {
-      right.map((el) => (
-        <GameItem key={el.id} item={el} />
+      right.map((el, i) => (
+        <GameItem key={`${el.id}${i}`} item={el} />
       ))
     }
       <br />
@@ -26,8 +26,8 @@ export default function GameResult({ result }: GameResultProps) {
       <span className={`${cls.count} ${cls.wrong}`} />
       {wrong.length}
       {
-      wrong.map((el) => (
-        <GameItem key={el.id} item={el} />
+      wrong.map((el, i) => (
+        <GameItem key={`${el.id}${i}`} item={el} />
       ))
     }
     </>

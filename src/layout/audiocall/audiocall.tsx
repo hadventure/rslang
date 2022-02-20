@@ -25,6 +25,9 @@ export default function Audiocall({ user, pages }: AudiocallProps) {
   const dispatch = useDispatch();
   const [isStart, setStart] = useState(false);
   const [modal, setModal] = useState(false);
+  const [finish, setFinish] = useState(false);
+
+
   const [searchParams] = useSearchParams();
 
   const location = useLocation();
@@ -136,6 +139,10 @@ export default function Audiocall({ user, pages }: AudiocallProps) {
     return <div>loading</div>;
   }
 
+  if (finish) {
+    return <div>Слова для игры закончились</div>;
+  }
+
   return (
     <div className={cls.initView}>
       {
@@ -147,6 +154,7 @@ export default function Audiocall({ user, pages }: AudiocallProps) {
             count={words.list.length}
             pages={pages}
             isAuth={user.isAuth}
+            setFinishGame={() => setFinish(true)}
           />
         )
         : (

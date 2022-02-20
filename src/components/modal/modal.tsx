@@ -9,10 +9,11 @@ type ModalProps = {
   onClose: () => void,
   onPlayAgain: () => void,
   children: React.ReactNode,
+  isFinish?: boolean,
 };
 
 export default function Modal({
-  show, title, onClose, onPlayAgain, children,
+  show, title, onClose, onPlayAgain, children, isFinish,
 }: ModalProps) {
   const root = document.getElementById('root');
 
@@ -24,7 +25,16 @@ export default function Modal({
             <div className={cls.modalHeader}>
               <h4 className={cls.modalTitle}>{title}</h4>
             </div>
-            <div className={cls.modalBody}>{children}</div>
+            <div className={cls.modalBody}>
+              {isFinish && (
+              <div>
+                <b>Слова для игры закончились</b>
+                <br />
+                <br />
+              </div>
+              )}
+              {children}
+            </div>
             <div className={cls.modalFooter}>
               <button className={cls.btnClose} type="button" onClick={onClose}>
                 Close

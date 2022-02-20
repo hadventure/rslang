@@ -18,7 +18,11 @@ interface DictionaryState {
   dictionary: string;
 }
 
-export default function Navigation() {
+type HomeProps = {
+  isAuthenticated: boolean
+};
+
+export default function Navigation({ isAuthenticated }: HomeProps) {
   const [collapsed, setCollapsed] = useState(true);
 
   const dispatch = useDispatch();
@@ -126,12 +130,14 @@ export default function Navigation() {
         <span className={cls.navLabel}>Audiocall</span>
       </NavLink>
 
+      {isAuthenticated && (
       <NavLink to="/statistics" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
         <div className={cls.navIconContainer}>
           <AiOutlineLineChart size="1.3em" />
         </div>
         <span className={cls.navLabel}>Statictics</span>
       </NavLink>
+      )}
     </nav>
 
   );

@@ -6,7 +6,7 @@ import {
   getUserWords, setGroup, setPageWords, WordsState,
 } from '@/features/words/words-slice';
 import { getWords } from '@/features/words/words-thunks';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   useLocation, useSearchParams,
@@ -18,10 +18,12 @@ type SprintPreloadProps = {
   timer: boolean,
   words: WordsState,
   isAuth: boolean | null,
+  setIsFinish: () => void,
+  isFinish: boolean,
 };
 
 export default function SprintPreload({
-  onStart, timer, words, isAuth,
+  onStart, timer, words, isAuth, setIsFinish, isFinish,
 }: SprintPreloadProps) {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
@@ -30,7 +32,8 @@ export default function SprintPreload({
   const location = useLocation();
 
   const calculateP = (page: number) => {
-    const learned = stat.stat!.optional!.pages[words.list[0].group];
+    console.log(words.group);
+    const learned = isAuth ? stat.stat!.optional!.pages[words.list[0]?.group || words.group] : [];
     const possiblePages = new Array(TEMP_PAGINATION_LENGTH + 1)
       .fill(1)
       .map((el, i) => i)
@@ -106,7 +109,7 @@ export default function SprintPreload({
 
     if (typeof page === 'number') {
       newPage = calculateP(page);
-      dispatch(setPageWords(page));
+      dispatch(setPageWords(newPage));
     } else {
       dispatch(setPageWords(Number(searchParams.get('page')!)));
     }
@@ -150,9 +153,26 @@ export default function SprintPreload({
     setStrategyGame();
   };
 
-  if (words.list.length === 0 && words.status === 'success') {
-    return <div>Эта страница изучена</div>;
+  console.log(words.list);
+
+  useEffect(() => {
+    console.log('-------', words.group, stat.stat?.optional?.pages);
+    if (stat.stat?.optional?.pages[0].length === 30) {
+      setIsFinish();
+    }
+  }, [stat.stat]);
+
+  if (isFinish) {
+    return <div>Слова для игры закончились</div>;
   }
+
+  // if (words.list.length === 0 && words.status === 'success' && stat.stat.optional?.pages[0] === 29) {
+  //   return <div>Эта страница изучена2</div>;
+  // }
+
+  // if (words.list.length === 0 && words.status === 'success') {
+  //   return <div>Эта страница изучена1</div>;
+  // }
 
   if (words.status === 'loading') {
     return <div>loading</div>;
@@ -170,6 +190,7 @@ export default function SprintPreload({
             setStrategyGame={setStrategyGame}
             page={words.page}
             isAuth={isAuth}
+            words={words}
           />
         )
         : <button className={cls.btn} type="button" onClick={onStartGame}>Start game!</button>

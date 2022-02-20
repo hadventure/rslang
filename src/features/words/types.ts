@@ -28,6 +28,11 @@ export enum Difficulty {
   difficult = 'difficult',
 }
 
+export enum UpdateWord {
+  updating = 'updating',
+  updated = 'updated',
+}
+
 export type TParam = {
   page: number,
   group: string,

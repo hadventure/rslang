@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable import/prefer-default-export */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getOptional } from '@/common/optional-entity';
@@ -5,9 +6,9 @@ import { RootState } from '@/store/types';
 import { TAuth } from '../user/types';
 import { set401 } from '../user/user-slice';
 import {
-  TOptional, Difficulty, TUserAnswer, TGames, TParam, TWord,
+  TOptional, Difficulty, TUserAnswer, TGames, TParam, TWord, UpdateWord,
 } from './types';
-import { setResult, toggleRefresh } from './words-slice';
+import { setResult, toggleRefresh, toggleUpdate } from './words-slice';
 import * as wordsAPI from './words-API';
 import { getStat, setLearnedWords } from '../stat/stat-thunks';
 
@@ -28,6 +29,7 @@ export const addToDifficult = createAsyncThunk<number, {
     } else {
       p.difficulty = param.type;
 
+      // console.log(param)
       resp = await wordsAPI.createUserWord(param, p, thunkAPI.extra);
     }
 
@@ -60,26 +62,56 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
         chain: param.right ? 1 : 0,
       };
 
-      await wordsAPI.createUserWord(param, optional, thunkAPI.extra);
+      const x = await wordsAPI.createUserWord(param, optional, thunkAPI.extra);
+
       thunkAPI.dispatch(setResult({ ...param, isNewWord: true, state: optional.difficulty }));
     }
 
     if (resp.status === 200) {
+      thunkAPI.dispatch(toggleUpdate({}));
+
       const data = await resp.json();
-      const { right, wrong, chain } = data.optional[param.game];
 
       optional.difficulty = data.difficulty;
-      optional.optional[param.game as keyof TGames] = {
-        right: param.right ? right + 1 : right,
-        wrong: param.right ? wrong : wrong + 1,
-        chain: param.right ? chain + 1 : 0,
-      };
+      if (param.game === 'audiocall') {
+        optional.optional[param.game] = {
+          right: param.right ? data.optional[param.game].right + 1 : data.optional[param.game].right,
+          wrong: param.right ? data.optional[param.game].wrong : data.optional[param.game].wrong + 1,
+          chain: param.right ? data.optional[param.game].chain + 1 : 0,
+        };
 
-      if (param.right && chain >= 2 && optional.difficulty === Difficulty.studied) {
+        optional.optional.sprint = {
+          right: data.optional.sprint.right,
+          wrong: data.optional.sprint.wrong,
+          chain: data.optional.sprint.chain,
+        };
+      }
+
+      if (param.game === 'sprint') {
+        optional.optional[param.game] = {
+          right: param.right ? data.optional[param.game].right + 1 : data.optional[param.game].right,
+          wrong: param.right ? data.optional[param.game].wrong : data.optional[param.game].wrong + 1,
+          chain: param.right ? data.optional[param.game].chain + 1 : 0,
+        };
+
+        optional.optional.audiocall = {
+          right: data.optional.audiocall.right,
+          wrong: data.optional.audiocall.wrong,
+          chain: data.optional.audiocall.chain,
+        };
+      }
+
+      if (param.right
+          && (data.optional.audiocall.chain >= 2 || data.optional.sprint.chain >= 2)
+          && optional.difficulty === Difficulty.studied
+      ) {
         optional.difficulty = Difficulty.learned;
       }
 
-      if (param.right && chain >= 4 && optional.difficulty === Difficulty.difficult) {
+      if (param.right
+        && (data.optional.audiocall.chain >= 4 || data.optional.sprint.chain >= 4)
+        && optional.difficulty === Difficulty.difficult
+      ) {
         optional.difficulty = Difficulty.learned;
       }
 
@@ -91,8 +123,10 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
       if (optional.difficulty === Difficulty.learned && data.difficulty === Difficulty.studied) {
         thunkAPI.dispatch(setLearnedWords(1));
       }
-      await wordsAPI.updateUserWord(param, optional, thunkAPI.extra);
+      // console.log(optional.difficulty, chain);
+      const x = await wordsAPI.updateUserWord(param, optional, thunkAPI.extra);
 
+      thunkAPI.dispatch(toggleUpdate(UpdateWord.updated));
       thunkAPI.dispatch(setResult({ ...param, isNewWord: false, state: optional.difficulty }));
     }
 
