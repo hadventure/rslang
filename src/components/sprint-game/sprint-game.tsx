@@ -8,7 +8,7 @@ import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 import { getUserWord } from '@/features/words/words-thunks';
 import { TEMP_PAGINATION_LENGTH } from '@/common/constants';
 import {
-  setResult, setRightChainArr, setRightChainCount, WordsState,
+  setResult, setRightChainArr, setRightChainCount, toggleUpdate, WordsState,
 } from '@/features/words/words-slice';
 import cls from './sprint-game.module.scss';
 import right from '../../assets/yes.mp3';
@@ -44,7 +44,7 @@ export default function SprintGame({
 
     document.addEventListener('click', setFocusOnPage);
 
-    if (copy.length === 0) {
+    if (copy.length === 0 && words.statusgetword === UpdateWord.updated) {
       setStrategyGame(page);
     }
 
@@ -53,8 +53,6 @@ export default function SprintGame({
     }
 
     const game = shuffle<TWord>(copy);
-
-    console.log(game);
 
     setShuffled(game);
     setVariant(count - 1);
@@ -65,7 +63,7 @@ export default function SprintGame({
   }, []);
 
   useEffect(() => {
-    // console.log(words.statusgetword);
+    console.log(words.statusgetword);
     if (variant === -1 && words.statusgetword === UpdateWord.updated) {
       // console.log(variant, words.statusgetword);
       setStrategyGame(page);
@@ -73,6 +71,8 @@ export default function SprintGame({
   }, [current, words.statusgetword]);
 
   const onApprove = () => {
+    dispatch(toggleUpdate(''));
+
     const common = {
       id: shuffled[current]._id || shuffled[current].id,
       word: shuffled[current].word,
@@ -118,6 +118,7 @@ export default function SprintGame({
   };
 
   const onAbort = () => {
+    dispatch(toggleUpdate(''));
     const common = {
       id: shuffled[current]._id || shuffled[current].id,
       word: shuffled[current].word,
@@ -175,16 +176,23 @@ export default function SprintGame({
 
   return (
     <>
-      <div className={cls.question}>
-        {shuffled[current]?.word}
-        {' - '}
-        {
+
+      {
+      words.statusgetword === UpdateWord.updated
+&& (
+<div className={cls.question}>
+  {shuffled[current]?.word}
+  {' - '}
+  {
         isShowAnswer
           ? `${shuffled[current]?.wordTranslate}?`
           : `${shuffled[variant]?.wordTranslate}?`
         }
 
-      </div>
+</div>
+)
+    }
+
       <div className={cls.actions} ref={wrap} tabIndex={0} onKeyDown={onKeyDown}>
         <button className={`${cls.btn} ${cls.yes}`} type="button" onClick={onApprove}>
           <AiFillLike style={{ verticalAlign: 'middle' }} color="#eee" size="1.6em" />

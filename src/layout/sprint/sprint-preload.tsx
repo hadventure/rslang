@@ -1,9 +1,10 @@
 import { TEMP_PAGINATION_LENGTH } from '@/common/constants';
+import MsgBlock from '@/components/msg-block/msg-block';
 import SprintGame from '@/components/sprint-game/sprint-game';
 import statSelector from '@/features/stat/stat-selector';
-import { Difficulty } from '@/features/words/types';
+import { Difficulty, UpdateWord } from '@/features/words/types';
 import {
-  getUserWords, setGroup, setPageWords, WordsState,
+  getUserWords, setGroup, setPageWords, toggleUpdate, WordsState,
 } from '@/features/words/words-slice';
 import { getWords } from '@/features/words/words-thunks';
 import { useEffect } from 'react';
@@ -32,7 +33,6 @@ export default function SprintPreload({
   const location = useLocation();
 
   const calculateP = (page: number) => {
-    console.log(words.group);
     const learned = isAuth ? stat.stat!.optional!.pages[words.list[0]?.group || words.group] : [];
     const possiblePages = new Array(TEMP_PAGINATION_LENGTH + 1)
       .fill(1)
@@ -42,7 +42,7 @@ export default function SprintPreload({
     let newPage;
 
     const index = possiblePages.indexOf(page);
-
+    console.log(possiblePages)
     if (index !== possiblePages.length - 1) {
       possiblePages.splice(index, 1);
 
@@ -55,6 +55,8 @@ export default function SprintPreload({
   };
 
   function getWords1(page?: number) {
+    // console.log(words.statusgetword)
+
     let param;
     let newPage;
 
@@ -98,6 +100,10 @@ export default function SprintPreload({
         }),
         wordsPerPage: '20',
       };
+
+      if (stat.stat?.optional?.pages[0].length === 30) {
+        setIsFinish();
+      }
     }
 
     dispatch(getUserWords(param));
@@ -134,6 +140,7 @@ export default function SprintPreload({
   }
 
   function setStrategyGame(page?: number) {
+    // console.log(words.statusgetword)
     if (isAuth) {
       getWords1(page);
     }
@@ -143,6 +150,14 @@ export default function SprintPreload({
     }
   }
 
+  // useEffect(() => {
+  //   console.log(words.statusgetword)
+  //   if(words.statusgetword === UpdateWord.updated) {
+  //     setStrategyGame();
+  //   }
+
+  // }, [words.statusgetword]);
+
   useEffect(() => {
     if (words.status === 'success') {
       onStart();
@@ -150,29 +165,19 @@ export default function SprintPreload({
   }, [words.status]);
 
   const onStartGame = () => {
+    dispatch(toggleUpdate(UpdateWord.updated));
     setStrategyGame();
   };
 
-  console.log(words.list);
-
   useEffect(() => {
-    console.log('-------', words.group, stat.stat?.optional?.pages);
     if (stat.stat?.optional?.pages[0].length === 30) {
       setIsFinish();
     }
   }, [stat.stat]);
 
   if (isFinish) {
-    return <div>Слова для игры закончились</div>;
+    return <MsgBlock text="Слова для игры закончились" />;
   }
-
-  // if (words.list.length === 0 && words.status === 'success' && stat.stat.optional?.pages[0] === 29) {
-  //   return <div>Эта страница изучена2</div>;
-  // }
-
-  // if (words.list.length === 0 && words.status === 'success') {
-  //   return <div>Эта страница изучена1</div>;
-  // }
 
   if (words.status === 'loading') {
     return <div>loading</div>;

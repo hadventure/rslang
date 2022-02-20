@@ -4,6 +4,8 @@ import { setUserData, set401, setUserIsAuth } from './user/user-slice';
 const authMiddleware: Middleware = (store) => (next) => (action) => {
   const result = next(action);
 
+  // console.log(action.type)
+
   if (action.type?.startsWith('user/setToken')) {
     window.location.replace('/home');
   }

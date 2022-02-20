@@ -1,6 +1,7 @@
 // https://medium.com/tinyso/how-to-create-a-modal-component-in-react-from-basic-to-advanced-a3357a2a716a
 import React from 'react';
 import ReactDOM from 'react-dom';
+import MsgBlock from '../msg-block/msg-block';
 import cls from './modal.module.scss';
 
 type ModalProps = {
@@ -28,7 +29,7 @@ export default function Modal({
             <div className={cls.modalBody}>
               {isFinish && (
               <div>
-                <b>Слова для игры закончились</b>
+                <MsgBlock text="Слова для игры закончились" />
                 <br />
                 <br />
               </div>

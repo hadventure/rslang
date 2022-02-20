@@ -1,6 +1,7 @@
 import AudiocallGame from '@/components/audiocall-game/audiocall-game';
 import GameResult from '@/components/game-result/game-result';
 import Modal from '@/components/modal/modal';
+import MsgBlock from '@/components/msg-block/msg-block';
 import { getStat } from '@/features/stat/stat-thunks';
 import { UserState } from '@/features/user/user-slice';
 import { Difficulty } from '@/features/words/types';
@@ -140,7 +141,7 @@ export default function Audiocall({ user, pages }: AudiocallProps) {
   }
 
   if (finish) {
-    return <div>Слова для игры закончились</div>;
+    return <MsgBlock text="Слова для игры закончились" />;
   }
 
   return (

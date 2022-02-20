@@ -140,6 +140,7 @@ const wordsSlice = createSlice({
       local.status = action.payload;
     },
     toggleUpdate(state, action) {
+      console.log(action.payload);
       const local = state;
       local.statusgetword = action.payload;
     },
@@ -166,7 +167,6 @@ export const {
   toggleIsLearned,
 } = wordsSlice.actions;
 
-
 export const getUserWords = createAsyncThunk<
 number,
 Pick<TParam, 'filter' | 'wordsPerPage'>, {
@@ -175,14 +175,19 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
 }>(
   'words/getUserWords',
   async (param, thunkAPI) => {
-    const resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(param).toString()}`, {
+    console.log('+++++++++++++', thunkAPI.getState().words.statusgetword);
+    let resp;
+    resp = await fetch(`${process.env.API_URL}/users/${thunkAPI.extra.userId}/aggregatedWords?${new URLSearchParams(param).toString()}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${thunkAPI.extra.token}`,
       },
     });
 
+
+
     const data = await resp.json();
+
 
     const statResponse = await statAPI.getStat(thunkAPI.extra);
     const stat = await statResponse.json();
@@ -190,8 +195,6 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
     if (resp.status === 200 && thunkAPI.extra.userId) {
       const learnedCount = data[0].paginatedResults
         .filter((el: TWord) => el.userWord && el.userWord.difficulty === Difficulty.learned);
-
-      // console.log(data[0].paginatedResults.length, learnedCount.length);
 
       let page;
       let group;
@@ -211,14 +214,13 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
         optional.optional = JSON.parse(JSON.stringify(stat.optional));
 
         const indexPage = optional.optional.pages[group].indexOf(page);
-        
-        console.log('+++++')
+
+        console.log('+++++');
 
         thunkAPI.dispatch(wordsSlice.actions.toggleIsLearned(true));
 
         if (indexPage === -1) {
           optional.optional.pages[group].push(page);
-
 
           await statAPI.updateStat(optional, thunkAPI.extra);
           thunkAPI.dispatch(getStatData({}));
@@ -229,15 +231,13 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
         const optional = getOptionalStat();
         optional.optional = JSON.parse(JSON.stringify(stat.optional));
 
-        console.log('----')
-
+        console.log('----');
 
         thunkAPI.dispatch(wordsSlice.actions.toggleIsLearned(false));
 
         const indexPage = optional.optional.pages[group].indexOf(page);
         if (indexPage !== -1) {
           optional.optional.pages[group].splice(indexPage, 1);
-
 
           await statAPI.updateStat(optional, thunkAPI.extra);
           thunkAPI.dispatch(getStatData({}));

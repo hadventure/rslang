@@ -6,7 +6,8 @@ import { getFormattedDate, getOptionalStat } from '@/common/optional-entity';
 import { set401 } from '../user/user-slice';
 import { TAuth, TStat, TStatGame } from './types';
 import * as statAPI from './stat-API';
-import { clearResult } from '../words/words-slice';
+import { clearResult, toggleUpdate } from '../words/words-slice';
+import { UpdateWord } from '../words/types';
 
 export const getStatData = createAsyncThunk<
 // Return type of the payload creator
@@ -93,7 +94,11 @@ number,
         stat.optional.games[today][game].gamerightchain = sprintRightChain;
       }
 
+
+      
       await statAPI.updateStat(stat, thunkAPI.extra);
+
+      thunkAPI.dispatch(toggleUpdate(UpdateWord.updated));
     }
 
     if (response.status === 404) {
@@ -114,6 +119,7 @@ number,
       }
 
       await statAPI.updateStat(stat, thunkAPI.extra);
+      thunkAPI.dispatch(toggleUpdate(UpdateWord.updated));
       thunkAPI.dispatch(clearResult([]));
     }
 
@@ -154,6 +160,7 @@ number,
       }
 
       await statAPI.updateStat(stat, thunkAPI.extra);
+      thunkAPI.dispatch(toggleUpdate(UpdateWord.updated));
     }
 
     if (response.status === 404) {
