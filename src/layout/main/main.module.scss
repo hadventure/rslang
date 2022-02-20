@@ -5,6 +5,10 @@
   grid-template-columns: repeat(3, 1fr);
   column-gap: 1rem;
   margin-bottom: 2rem;
+
+  @include tablet {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 .main-img {
@@ -35,5 +39,23 @@
     background-color: transparent;
     border: 2px solid $color-grey;
     color: $color-black;
+    margin-bottom: 3rem;
+  }
+
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #eee;
+  }
+}
+
+.about {
+  text-decoration: none;
+  font-size: medium;
+  color: $color-black;
+  cursor: pointer;
+
+  &:hover {
+    border-bottom: 1px dashed $color-black;
   }
 }

@@ -26,6 +26,7 @@ export default function Header({ isAuthenticated }: HeaderProps) {
           to="auth"
           className={!isAuthenticated ? `${cls.authItem}` : `${cls.authItem} ${cls.hidden}`}
         >
+          {/* Sign in */}
           <AiOutlineLogin style={{ verticalAlign: 'middle', fontSize: '1.3em' }} />
         </NavLink>
         <div
@@ -33,6 +34,7 @@ export default function Header({ isAuthenticated }: HeaderProps) {
           // to="auth"
           className={isAuthenticated ? `${cls.authItem}` : `${cls.authItem} ${cls.hidden}`}
         >
+          {/* Log out */}
           <AiOutlineLogout style={{ verticalAlign: 'middle', fontSize: '1.3em' }} />
         </div>
       </div>

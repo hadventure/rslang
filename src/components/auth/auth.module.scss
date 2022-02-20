@@ -84,6 +84,11 @@
 .toggle-signin {
   font-weight: bold;
   cursor: pointer;
+  // transition: all 0.3s;
+
+  &:hover {
+    border-bottom: 1px dashed $color-grey;
+  }
 }
 
 // .error::before {

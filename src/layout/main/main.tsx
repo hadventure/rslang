@@ -6,7 +6,7 @@ import {
 import study from '@/assets/study.svg';
 import play from '@/assets/play.svg';
 import grow from '@/assets/grow.svg';
-
+import avatar from '@/assets/avatar.png';
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import MsgBlock from '@/components/msg-block/msg-block';
 import cls from './main.module.scss';
@@ -72,14 +72,8 @@ export default function Main() {
         </div>
 
       </div>
-      <MsgBlock text={(
-        <>
-          <div>sdfsdfdsf</div>
-          <br />
-          <div>sdfsdfdsf</div>
-        </>
-      )}
-      />
+
+      <NavLink to="/about" className={cls.about}>Подробнее об игре</NavLink>
 
     </>
 

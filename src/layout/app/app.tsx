@@ -25,6 +25,7 @@ import Sprint from '../sprint/sprint';
 import Stat from '../stat/stat';
 import cls from './app.module.scss';
 import Home from './home';
+import About from '../about/about';
 
 function App() {
   const dispatch = useDispatch();
@@ -58,7 +59,9 @@ function App() {
         <div className={isGame ? cls.containerNoFooter : cls.container}>
           <Routes>
             <Route path="/" element={<Home isAuthenticated={user.isAuth} />}>
+              <Route path="/" element={<Main />} />
               <Route path="/home" element={<Main />} />
+              <Route path="/about" element={<About />} />
 
               <Route path="dictionary">
                 <Route index element={<WordGroupList />} />
