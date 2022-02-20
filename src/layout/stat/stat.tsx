@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { getFormattedDate } from '@/common/optional-entity';
 import { getStat, getStatData } from '@/features/stat/stat-thunks';
 import { TStat } from '@/features/stat/types';
@@ -24,8 +25,17 @@ export default function Stat({ stat }: StatProps) {
   if (stat === null) {
     return <div>Loading</div>;
   }
+  // console.log(stat.optional.games[today])
 
-  const { sprint, audiocall } = stat.optional!.games[today];
+  let sprint;
+  let audiocall;
+  if (stat.optional?.games[today]?.sprint) {
+    sprint = stat.optional?.games[today].sprint;
+  }
+
+  if (stat.optional?.games[today]?.audiocall) {
+    audiocall = stat.optional?.games[today].audiocall;
+  }
 
   return (
     <div className={cls.statPage}>
@@ -42,38 +52,38 @@ export default function Stat({ stat }: StatProps) {
         <div className={cls.gameStatItem}>
           <div className={cls.gameChunk}>
 
-            <div className={cls.note}>new</div>
+            <div className={cls.note}>Количество новых слов за день</div>
             {' '}
-            <div className={cls.count}>{sprint.newWordCount}</div>
+            <div className={cls.count}>{sprint?.newWordCount || 0}</div>
           </div>
           <div className={cls.gameChunk}>
-            <div className={cls.note}>right answers</div>
+            <div className={cls.note}>Процент правильных ответов</div>
             {' '}
-            <div className={cls.count}>{Math.round((sprint.right * 100) / (sprint.right + sprint.wrong)) || 0}</div>
+            <div className={cls.count}>{Math.round((sprint?.right || 0 * 100) / ((sprint?.right || 0) + (sprint?.wrong || 0))) || 0}</div>
           </div>
           <div className={cls.gameChunk}>
-            <div className={cls.note}>right chain</div>
+            <div className={cls.note}>Самая длинная серия правильных ответов</div>
             {' '}
-            <div className={cls.count}>{sprint.gamerightchain}</div>
+            <div className={cls.count}>{sprint?.gamerightchain || 0}</div>
           </div>
         </div>
 
         <div className={cls.gameStatItem}>
           <div>
             <div className={cls.gameChunk}>
-              <div className={cls.note}>new</div>
+              <div className={cls.note}>Количество новых слов за день</div>
               {' '}
-              <div className={cls.count}>{audiocall.newWordCount}</div>
+              <div className={cls.count}>{audiocall?.newWordCount || 0}</div>
             </div>
             <div className={cls.gameChunk}>
-              <div className={cls.note}>right answers</div>
+              <div className={cls.note}>Процент правильных ответов</div>
               {' '}
-              <div className={cls.count}>{Math.round((audiocall.right * 100) / (audiocall.right + audiocall.wrong)) || 0}</div>
+              <div className={cls.count}>{Math.round(((audiocall?.right || 0) * 100) / ((audiocall?.right || 0) + (audiocall?.wrong || 0))) || 0}</div>
             </div>
             <div className={cls.gameChunk}>
-              <div className={cls.note}>right chain</div>
+              <div className={cls.note}>Самая длинная серия правильных ответов</div>
               {' '}
-              <div className={cls.count}>{audiocall.gamerightchain}</div>
+              <div className={cls.count}>{audiocall?.gamerightchain || 0}</div>
             </div>
           </div>
         </div>
@@ -81,21 +91,23 @@ export default function Stat({ stat }: StatProps) {
         <div className={cls.gameStatItem}>
           <div>
             <div className={cls.gameChunk}>
-              <div className={cls.note}>new</div>
+              <div className={cls.note}>Количество новых слов за день</div>
               {' '}
-              <div className={cls.count}>{sprint.newWordCount + audiocall.newWordCount}</div>
+              <div className={cls.count}>
+                {(sprint?.newWordCount || 0) + (audiocall?.newWordCount || 0)}
+              </div>
             </div>
 
             <div className={cls.gameChunk}>
-              <div className={cls.note}>new</div>
+              <div className={cls.note}>Количество изученных слов за день</div>
               {' '}
-              <div className={cls.count}>{stat.optional?.learnedWords[today]}</div>
+              <div className={cls.count}>{stat.optional?.learnedWords[today] || 0}</div>
             </div>
 
             <div className={cls.gameChunk}>
-              <div className={cls.note}>common percent</div>
+              <div className={cls.note}>Процент правильных ответов за день</div>
               {' '}
-              <div className={cls.count}>{Math.round(((audiocall.right + sprint.right) * 100) / (audiocall.right + audiocall.wrong + sprint.right + sprint.wrong)) || 0}</div>
+              <div className={cls.count}>{Math.round((((audiocall?.right || 0) + (sprint?.right || 0)) * 100) / (audiocall?.right || 0 + (audiocall?.wrong || 0) + (sprint?.right || 0) + (sprint?.wrong || 0))) || 0}</div>
             </div>
 
           </div>

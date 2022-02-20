@@ -59,12 +59,12 @@ function App() {
         <div className={isGame ? cls.containerNoFooter : cls.container}>
           <Routes>
             <Route path="/" element={<Home isAuthenticated={user.isAuth} />}>
-              <Route path="/" element={<Main />} />
-              <Route path="/home" element={<Main />} />
+              <Route path="/" element={<Main user={user} />} />
+              <Route path="/home" element={<Main user={user} />} />
               <Route path="/about" element={<About />} />
 
               <Route path="dictionary">
-                <Route index element={<WordGroupList />} />
+                <Route index element={<WordGroupList isAuth={user.isAuth} />} />
 
                 {
                   user.isAuth && stat.stat
