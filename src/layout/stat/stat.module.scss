@@ -18,6 +18,11 @@
   margin-bottom: 2rem;
   font-size: medium;
 
+  @include tablet {
+    grid-template-columns: repeat(1, 1fr);
+
+  }
+
 }
 
 .game-stat-item {
@@ -38,7 +43,6 @@
 }
 
 .img {
-  height: 80%;
 }
 
 .img-wrap {

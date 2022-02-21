@@ -78,7 +78,7 @@ export default function Main({ user }: MainProps) {
 
       <NavLink to="/about">
         <button type="button" className={cls.goToPart}>
-          More
+          Read the rules
           <AiOutlineArrowRight
             style={{
               verticalAlign: 'middle', fontSize: '1.3em', marginLeft: '1.5rem',

@@ -41,75 +41,75 @@ export default function Stat({ stat }: StatProps) {
       <div className={cls.gameStatItemWrap}>
         <div className={cls.imgWrap}>
           <img src={sprinticon} alt="" className={cls.img} />
-        </div>
-        <div className={cls.imgWrap}>
-          <img src={audiocallicon} className={cls.img} alt="" />
-        </div>
-        <div className={cls.imgWrap}>
-          <img src={common} className={cls.img} alt="" />
-        </div>
-        <div className={cls.gameStatItem}>
-          <div className={cls.gameChunk}>
-
-            <div className={cls.note}>Количество новых слов за день</div>
-            {' '}
-            <div className={cls.count}>{sprint?.newWordCount || 0}</div>
-          </div>
-          <div className={cls.gameChunk}>
-            <div className={cls.note}>Процент правильных ответов</div>
-            {' '}
-            <div className={cls.count}>{Math.round((sprint?.right || 0 * 100) / ((sprint?.right || 0) + (sprint?.wrong || 0))) || 0}</div>
-          </div>
-          <div className={cls.gameChunk}>
-            <div className={cls.note}>Самая длинная серия правильных ответов</div>
-            {' '}
-            <div className={cls.count}>{sprint?.gamerightchain || 0}</div>
-          </div>
-        </div>
-
-        <div className={cls.gameStatItem}>
-          <div>
+          <div className={cls.gameStatItem}>
             <div className={cls.gameChunk}>
+
               <div className={cls.note}>Количество новых слов за день</div>
               {' '}
-              <div className={cls.count}>{audiocall?.newWordCount || 0}</div>
+              <div className={cls.count}>{sprint?.newWordCount || 0}</div>
             </div>
             <div className={cls.gameChunk}>
               <div className={cls.note}>Процент правильных ответов</div>
               {' '}
-              <div className={cls.count}>{Math.round(((audiocall?.right || 0) * 100) / ((audiocall?.right || 0) + (audiocall?.wrong || 0))) || 0}</div>
+              <div className={cls.count}>{Math.round((sprint?.right || 0 * 100) / ((sprint?.right || 0) + (sprint?.wrong || 0))) || 0}</div>
             </div>
             <div className={cls.gameChunk}>
               <div className={cls.note}>Самая длинная серия правильных ответов</div>
               {' '}
-              <div className={cls.count}>{audiocall?.gamerightchain || 0}</div>
+              <div className={cls.count}>{sprint?.gamerightchain || 0}</div>
             </div>
           </div>
         </div>
+        <div className={cls.imgWrap}>
+          <img src={audiocallicon} className={cls.img} alt="" />
 
-        <div className={cls.gameStatItem}>
-          <div>
-            <div className={cls.gameChunk}>
-              <div className={cls.note}>Количество новых слов за день</div>
-              {' '}
-              <div className={cls.count}>
-                {(sprint?.newWordCount || 0) + (audiocall?.newWordCount || 0)}
+          <div className={cls.gameStatItem}>
+            <div>
+              <div className={cls.gameChunk}>
+                <div className={cls.note}>Количество новых слов за день</div>
+                {' '}
+                <div className={cls.count}>{audiocall?.newWordCount || 0}</div>
+              </div>
+              <div className={cls.gameChunk}>
+                <div className={cls.note}>Процент правильных ответов</div>
+                {' '}
+                <div className={cls.count}>{Math.round(((audiocall?.right || 0) * 100) / ((audiocall?.right || 0) + (audiocall?.wrong || 0))) || 0}</div>
+              </div>
+              <div className={cls.gameChunk}>
+                <div className={cls.note}>Самая длинная серия правильных ответов</div>
+                {' '}
+                <div className={cls.count}>{audiocall?.gamerightchain || 0}</div>
               </div>
             </div>
-
-            <div className={cls.gameChunk}>
-              <div className={cls.note}>Количество изученных слов за день</div>
-              {' '}
-              <div className={cls.count}>{stat.optional?.learnedWords[today] || 0}</div>
-            </div>
-
-            <div className={cls.gameChunk}>
-              <div className={cls.note}>Процент правильных ответов за день</div>
-              {' '}
-              <div className={cls.count}>{Math.round((((audiocall?.right || 0) + (sprint?.right || 0)) * 100) / ((audiocall?.right || 0) + (audiocall?.wrong || 0) + (sprint?.right || 0) + (sprint?.wrong || 0))) || 0}</div>
-            </div>
-
           </div>
+        </div>
+        <div className={cls.imgWrap}>
+          <img src={common} className={cls.img} alt="" />
+          <div className={cls.gameStatItem}>
+            <div>
+              <div className={cls.gameChunk}>
+                <div className={cls.note}>Количество новых слов за день</div>
+                {' '}
+                <div className={cls.count}>
+                  {(sprint?.newWordCount || 0) + (audiocall?.newWordCount || 0)}
+                </div>
+              </div>
+
+              <div className={cls.gameChunk}>
+                <div className={cls.note}>Количество изученных слов за день</div>
+                {' '}
+                <div className={cls.count}>{stat.optional?.learnedWords[today] || 0}</div>
+              </div>
+
+              <div className={cls.gameChunk}>
+                <div className={cls.note}>Процент правильных ответов за день</div>
+                {' '}
+                <div className={cls.count}>{Math.round((((audiocall?.right || 0) + (sprint?.right || 0)) * 100) / ((audiocall?.right || 0) + (audiocall?.wrong || 0) + (sprint?.right || 0) + (sprint?.wrong || 0))) || 0}</div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
 
       </div>

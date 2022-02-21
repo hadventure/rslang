@@ -89,7 +89,7 @@ export default function WordList({ pages }: WordListProps) {
           <Pagination
             page={+words.page}
             pageCount={Math.floor(words.count / +words.limit)}
-            size={5}
+            size={7}
             onChangePage={onChangePage}
             pages={pages}
             group={words.group}
