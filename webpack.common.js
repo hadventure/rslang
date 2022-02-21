@@ -69,15 +69,14 @@ module.exports = {
       filename: 'index.html',
       favicon: './src/assets/favicon.ico',
       inject: 'body',
-      base: { href: '/' }
-    }),
-    new Dotenv({
-      safe: true,
     }),
     new CopyWebpackPlugin({
       patterns: [
         { from: 'src/assets', to: 'src/assets' },
       ],
+    }),
+    new Dotenv({
+      safe: true,
     }),
   ],
 };
