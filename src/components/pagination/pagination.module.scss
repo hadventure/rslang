@@ -18,8 +18,12 @@
 }
 
 .active {
-  background-color: $color-primary;
-  color: $color-grey;
+  border: 2px solid $color-primary;
+  // color: $color-grey;
+}
+
+.learned {
+  background-color: #fffbe6;
 }
 
 .pages {

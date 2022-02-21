@@ -1,15 +1,22 @@
 import MsgBlock from '@/components/msg-block/msg-block';
+import WordCard from '@/components/word-card/word-card';
+import Word from '@/components/word/word';
+import levelsSelector from '@/features/levels/levels-selector';
+import userSelector from '@/features/user/user-selector';
 import { Difficulty } from '@/features/words/types';
 import wordsSelector from '@/features/words/words-selector';
+import { resetCurrentWord } from '@/features/words/words-slice';
 import { getUserWordsDifficult } from '@/features/words/words-thunks';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import DifficultItem from './difficult-item';
 import cls from './difficult.module.scss';
 
 export default function Difficult() {
   const dispatch = useDispatch();
+
   const words = useSelector(wordsSelector);
+  const user = useSelector(userSelector);
+  const levels = useSelector(levelsSelector);
 
   function getList() {
     const param = {
@@ -22,7 +29,7 @@ export default function Difficult() {
         { page: 0 },
         ],
       }),
-      wordsPerPage: '20',
+      wordsPerPage: '50',
     };
 
     dispatch(getUserWordsDifficult(param));
@@ -34,6 +41,7 @@ export default function Difficult() {
 
   useEffect(() => {
     if (words.refresh) {
+      dispatch(resetCurrentWord(null));
       getList();
     }
   }, [words.refresh]);
@@ -47,15 +55,34 @@ export default function Difficult() {
   }
 
   return (
-    <div className={cls.difficultWrap}>
-      {
-        words.list.map((el) => (
-          <DifficultItem
-            key={el._id}
-            item={el}
+    <div className={cls.wordsContainer}>
+      <div className={cls.wordCardContainer}>
+
+        <WordCard
+          words={words}
+          isAuthenticated={user.isAuth}
+        />
+      </div>
+
+      <div className={cls.wordListContainer}>
+        <div className={cls.wordListContainer1}>
+          {
+        words.list.map((item, i) => (
+          <Word
+            key={item.id || item._id}
+            index={i}
+            item={item}
+            color={levels.list[item.group].clsName}
+            currentWordID={words.currentWord?._id || words.currentWord?.id}
+            isAuthenticated={user.isAuth}
           />
         ))
       }
+
+        </div>
+
+      </div>
+
     </div>
   );
 }

@@ -61,6 +61,12 @@
     outline: none;
     font-size: initial;
     cursor: pointer;
+
+    &.disabled {
+      background-color: #eee;
+      color: $color-black;
+      cursor: not-allowed;
+    }
   }
 }
 

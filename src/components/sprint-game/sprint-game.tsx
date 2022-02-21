@@ -58,8 +58,6 @@ export default function SprintGame({
 
     const game = shuffle<TWord>(copy);
 
-    console.log(game);
-
     setShuffled(game);
     setVariant(count - 1);
 
@@ -70,7 +68,6 @@ export default function SprintGame({
 
   useEffect(() => {
     if (variant === -1 && words.statusgetword === UpdateWord.updated) {
-      console.log('---------------', page)
       setStrategyGame(page);
     }
 

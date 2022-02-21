@@ -29,3 +29,30 @@
     padding: 0.5rem 2rem;
   }
 }
+
+.word-list-container {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.words-container {
+  display: grid;
+  grid-template-columns: 45% calc(55% - 2rem);
+  grid-gap: 2rem;
+
+  @include tablet {
+    grid-template-columns: unset;
+  }
+}
+
+.word-list-container1 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1rem;
+  margin-bottom: 2rem;
+
+  @include laptop {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

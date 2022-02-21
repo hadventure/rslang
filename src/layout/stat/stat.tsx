@@ -25,7 +25,6 @@ export default function Stat({ stat }: StatProps) {
   if (stat === null) {
     return <div>Loading</div>;
   }
-  // console.log(stat.optional.games[today])
 
   let sprint;
   let audiocall;
@@ -107,7 +106,7 @@ export default function Stat({ stat }: StatProps) {
             <div className={cls.gameChunk}>
               <div className={cls.note}>Процент правильных ответов за день</div>
               {' '}
-              <div className={cls.count}>{Math.round((((audiocall?.right || 0) + (sprint?.right || 0)) * 100) / (audiocall?.right || 0 + (audiocall?.wrong || 0) + (sprint?.right || 0) + (sprint?.wrong || 0))) || 0}</div>
+              <div className={cls.count}>{Math.round((((audiocall?.right || 0) + (sprint?.right || 0)) * 100) / ((audiocall?.right || 0) + (audiocall?.wrong || 0) + (sprint?.right || 0) + (sprint?.wrong || 0))) || 0}</div>
             </div>
 
           </div>
