@@ -27,6 +27,12 @@
   @include setButtonPrimary {
     padding: 4px 12px;
     font-size: 1.6rem;
+  
+    &.is-answered {
+      cursor: none;
+      background-color: lightgray;
+      color: $color-black;
+  }
   }
 }
 
@@ -52,6 +58,7 @@
 
 .answer {
   flex-basis: 40%;
+  outline: none;
   text-align: center;
 }
 

@@ -1,8 +1,11 @@
+import { TEMP_PAGINATION_LENGTH } from '@/common/constants';
+import { getRandomInt } from '@/common/helper';
 import AudiocallGame from '@/components/audiocall-game/audiocall-game';
 import GameResult from '@/components/game-result/game-result';
 import Modal from '@/components/modal/modal';
 import MsgBlock from '@/components/msg-block/msg-block';
 import { getStat } from '@/features/stat/stat-thunks';
+import { TStatGame, TStatGameItem } from '@/features/stat/types';
 import { UserState } from '@/features/user/user-slice';
 import { Difficulty } from '@/features/words/types';
 import wordsSelector from '@/features/words/words-selector';
@@ -20,14 +23,14 @@ import cls from './audiocall.module.scss';
 type AudiocallProps = {
   user: UserState,
   pages?: { [key: string]: number[] },
+  chain?: { [key: string]: TStatGameItem },
 };
 
-export default function Audiocall({ user, pages }: AudiocallProps) {
+export default function Audiocall({ user, pages, chain }: AudiocallProps) {
   const dispatch = useDispatch();
   const [isStart, setStart] = useState(false);
   const [modal, setModal] = useState(false);
   const [finish, setFinish] = useState(false);
-
 
   const [searchParams] = useSearchParams();
 
@@ -39,6 +42,7 @@ export default function Audiocall({ user, pages }: AudiocallProps) {
 
     if (location.pathname.indexOf('games') > -1) {
       dispatch(setGroup(location.pathname.split('/')[3]));
+
       param = {
         filter: JSON.stringify({
           $and: [{
@@ -48,7 +52,7 @@ export default function Audiocall({ user, pages }: AudiocallProps) {
               { 'userWord.difficulty': Difficulty.learned },
               { userWord: null }],
           },
-          { page: page || Number(searchParams.get('page')!) },
+          { page: page || getRandomInt(0, 29) },
           { group: Number(location.pathname.split('/')[3]) },
           ],
         }),
@@ -81,10 +85,13 @@ export default function Audiocall({ user, pages }: AudiocallProps) {
 
     if (location.pathname.indexOf('games') > -1) {
       dispatch(setGroup(location.pathname.split('/')[3]));
-      dispatch(setPageWords(words.page));
+
+      const randomPage = getRandomInt(0, TEMP_PAGINATION_LENGTH);
+
+      dispatch(setPageWords(randomPage));
 
       param = {
-        page: words.page,
+        page: randomPage,
         wordsPerPage: '20',
         group: location.pathname.split('/')[3],
       };
@@ -147,6 +154,15 @@ export default function Audiocall({ user, pages }: AudiocallProps) {
   return (
     <div className={cls.initView}>
       {
+      isStart && user.isAuth && (
+      <>
+        Series length
+        {' '}
+        {words.sprintRightChainCount}
+      </>
+      )
+      }
+      {
       isStart
         ? (
           <AudiocallGame
@@ -184,4 +200,5 @@ export default function Audiocall({ user, pages }: AudiocallProps) {
 
 Audiocall.defaultProps = {
   pages: null,
+  chain: null,
 };
