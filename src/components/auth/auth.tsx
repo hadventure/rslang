@@ -1,15 +1,16 @@
-import { TAuth } from '@/features/user/types';
 import { getUser, createUser, UserState } from '@/features/user/user-slice';
-import { TWord } from '@/features/words/types';
 import {
   ChangeEvent, FormEvent, useEffect, useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
+import MsgBlock from '../msg-block/msg-block';
 import cls from './auth.module.scss';
 
 type AuthProps = {
   user: UserState;
 };
+
+// TODO: сделать хук для обработки полей
 
 export default function Auth({ user }: AuthProps) {
   const [signin, setSignin] = useState(true);
@@ -34,6 +35,10 @@ export default function Auth({ user }: AuthProps) {
     setPassword(event.target.value);
   };
 
+  const handleNameInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+  };
+
   const onRegisterUser = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // TODO: via useEffect
@@ -42,7 +47,7 @@ export default function Auth({ user }: AuthProps) {
     }
 
     if (!signin) {
-      dispatch(createUser({ name: 'admin', email, password }));
+      dispatch(createUser({ name, email, password }));
     }
 
     setEmail('');
@@ -80,8 +85,8 @@ export default function Auth({ user }: AuthProps) {
         }
 
         </p>
+        {user.msg !== '' && <MsgBlock text={user.msg} />}
 
-        {user.msg}
         <br />
         <br />
         <form className={cls.form} onSubmit={onRegisterUser}>
@@ -91,7 +96,7 @@ export default function Auth({ user }: AuthProps) {
               && (
               <div className={cls.formItem}>
                 <label htmlFor="firstname">Firstname</label>
-                <input type="text" name="firstname" id="firstname" />
+                <input type="text" name="firstname" id="firstname" onChange={handleNameInput} />
               </div>
               )
             }

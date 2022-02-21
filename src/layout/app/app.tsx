@@ -25,6 +25,8 @@ import Sprint from '../sprint/sprint';
 import Stat from '../stat/stat';
 import cls from './app.module.scss';
 import Home from './home';
+import About from '../about/about';
+import { getFormattedDate } from '@/common/optional-entity';
 
 function App() {
   const dispatch = useDispatch();
@@ -58,10 +60,12 @@ function App() {
         <div className={isGame ? cls.containerNoFooter : cls.container}>
           <Routes>
             <Route path="/" element={<Home isAuthenticated={user.isAuth} />}>
-              <Route path="/home" element={<Main />} />
+              <Route path="/" element={<Main user={user} />} />
+              <Route path="/home" element={<Main user={user} />} />
+              <Route path="/about" element={<About />} />
 
               <Route path="dictionary">
-                <Route index element={<WordGroupList />} />
+                <Route index element={<WordGroupList isAuth={user.isAuth} />} />
 
                 {
                   user.isAuth && stat.stat
@@ -93,6 +97,7 @@ function App() {
                 {/* <Route index element={<div>games</div>} /> */}
                 <Route path="audiocall" element={<Levels />} />
                 <Route path="audiocall/:tutorial" element={<Audiocall user={user} />} />
+                
                 <Route path="sprint" element={<Levels />} />
                 <Route path="sprint/:tutorial" element={<Sprint />} />
               </Route>

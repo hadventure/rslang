@@ -1,19 +1,22 @@
-import { useDispatch } from 'react-redux';
 import {
   NavLink,
-  useNavigate,
 } from 'react-router-dom';
 import study from '@/assets/study.svg';
 import play from '@/assets/play.svg';
 import grow from '@/assets/grow.svg';
-
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import MsgBlock from '@/components/msg-block/msg-block';
+import { UserState } from '@/features/user/user-slice';
 import cls from './main.module.scss';
 
-export default function Main() {
+type MainProps = {
+  user: UserState,
+};
+
+export default function Main({ user }: MainProps) {
   return (
     <>
+      <MsgBlock text={user.isAuth ? `Hello, ${user.auth.name}!` : 'Hello, friend!'} />
       <div className={cls.images}>
         <div>
 
@@ -72,14 +75,17 @@ export default function Main() {
         </div>
 
       </div>
-      <MsgBlock text={(
-        <>
-          <div>sdfsdfdsf</div>
-          <br />
-          <div>sdfsdfdsf</div>
-        </>
-      )}
-      />
+
+      <NavLink to="/about">
+        <button type="button" className={cls.goToPart}>
+          More
+          <AiOutlineArrowRight
+            style={{
+              verticalAlign: 'middle', fontSize: '1.3em', marginLeft: '1.5rem',
+            }}
+          />
+        </button>
+      </NavLink>
 
     </>
 

@@ -101,10 +101,6 @@ export default function AudiocallGame({
     };
   }, []);
 
-  // if (finish) {
-  //   return <div>Слов больше нет</div>;
-  // }
-
   useEffect(() => {
     if (shuffled.length > 0) {
       if (current === shuffled.length) {
@@ -194,12 +190,9 @@ export default function AudiocallGame({
     }
   };
 
-  console.log(shuffled);
-
-
   return (
     <>
-      <b>{shuffled[current]?.word.word}</b>
+      {/* <b>{shuffled[current]?.word.word}</b> */}
       <div className={cls.answer} ref={wrap} tabIndex={0} onKeyDown={onKeyDown}>
         {
         isAnswered && (
@@ -209,6 +202,8 @@ export default function AudiocallGame({
             <b>{shuffled[current]?.word.word}</b>
             {' '}
             {shuffled[current]?.word.transcription}
+            <br />
+            {shuffled[current]?.word.wordTranslate}
           </div>
         </>
         )
@@ -230,7 +225,7 @@ export default function AudiocallGame({
         {
         shuffled[current]?.variants.map((el, i) => (
           <button
-            className={cls.variant}
+            className={!isAnswered ? cls.variant : `${cls.variant} ${cls.isAnswered}`}
             key={el._id || el.id}
             type="button"
             onClick={() => onAnswer(el._id || el.id)}

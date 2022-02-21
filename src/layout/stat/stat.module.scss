@@ -1,7 +1,7 @@
 @import '../../app.scss';
 
 .stat-page {
-  text-transform: capitalize;
+  // text-transform: capitalize;
 }
 
 .title {
@@ -12,8 +12,8 @@
 
 .game-stat-item-wrap {
   display: grid;
-  grid-template-columns: repeat(3, auto);
-  grid-template-rows: repeat(3, auto);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   column-gap: 1rem;
   margin-bottom: 2rem;
   font-size: medium;
@@ -64,6 +64,6 @@
 }
 
 .note {
-  font-size: medium;
+  font-size: small;
   width: 70%;
 }

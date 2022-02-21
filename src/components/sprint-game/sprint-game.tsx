@@ -48,6 +48,10 @@ export default function SprintGame({
       setStrategyGame(page);
     }
 
+    if (copy.length === 0 && isAuth === false) {
+      setStrategyGame(page);
+    }
+
     if (copy.length === 1) {
       setIsShowAnswer(true);
     }
@@ -64,6 +68,10 @@ export default function SprintGame({
 
   useEffect(() => {
     if (variant === -1 && words.statusgetword === UpdateWord.updated) {
+      setStrategyGame(page);
+    }
+
+    if (variant === -1 && isAuth === false) {
       setStrategyGame(page);
     }
   }, [current, words.statusgetword]);
@@ -176,19 +184,35 @@ export default function SprintGame({
     <>
 
       {
-      words.statusgetword === UpdateWord.updated
-&& (
-<div className={cls.question}>
-  {shuffled[current]?.word}
-  {' - '}
-  {
-        isShowAnswer
-          ? `${shuffled[current]?.wordTranslate}?`
-          : `${shuffled[variant]?.wordTranslate}?`
-        }
+      words.statusgetword === UpdateWord.updated && isAuth === true
+      && (
+      <div className={cls.question}>
+        {shuffled[current]?.word}
+        {' - '}
+        {
+              isShowAnswer
+                ? `${shuffled[current]?.wordTranslate}?`
+                : `${shuffled[variant]?.wordTranslate}?`
+              }
 
-</div>
-)
+      </div>
+      )
+    }
+
+      {
+      isAuth === false
+      && (
+      <div className={cls.question}>
+        {shuffled[current]?.word}
+        {' - '}
+        {
+              isShowAnswer
+                ? `${shuffled[current]?.wordTranslate}?`
+                : `${shuffled[variant]?.wordTranslate}?`
+              }
+
+      </div>
+      )
     }
 
       <div className={cls.actions} ref={wrap} tabIndex={0} onKeyDown={onKeyDown}>

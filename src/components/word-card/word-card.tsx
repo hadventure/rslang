@@ -8,6 +8,7 @@ import {
 import { addToDifficult } from '@/features/words/words-thunks';
 import { Difficulty } from '@/features/words/types';
 import { setLearnedWords } from '@/features/stat/stat-thunks';
+import { useLocation } from 'react-router';
 import cls from './word-card.module.scss';
 
 type WordCardProps = {
@@ -18,6 +19,8 @@ type WordCardProps = {
 export default function WordCard({ words, isAuthenticated }: WordCardProps) {
   const dispatch = useDispatch();
   const audio = new Audio();
+  const location = useLocation();
+  const isDifficultPage = location.pathname.indexOf('difficult') > -1;
 
   const onPlayAudio = () => {
     const audioList = [
@@ -40,8 +43,16 @@ export default function WordCard({ words, isAuthenticated }: WordCardProps) {
     };
   };
 
+  const removeFromDifficult = () => {
+    dispatch(addToDifficult({
+      id: words!.currentWord!._id,
+      userWord: words!.currentWord!.userWord || undefined,
+      type: Difficulty.studied,
+    }));
+  };
+
   const onAddToDifficult = (type1: string) => {
-    const w = words.list.filter((el) => el._id === words.currentWord?._id)[0].userWord;
+    const w = words.list.filter((el) => el._id === words.currentWord?._id)[0]?.userWord;
 
     if (type1 === Difficulty.learned) {
       dispatch(setLearnedWords(1));
@@ -74,6 +85,8 @@ export default function WordCard({ words, isAuthenticated }: WordCardProps) {
       </div>
     );
   }
+
+  const w = words.list.filter((el) => el._id === words.currentWord?._id)[0]?.userWord;
 
   return (
     <div className={cls.wordCardContainer}>
@@ -131,17 +144,46 @@ export default function WordCard({ words, isAuthenticated }: WordCardProps) {
           <>
             <br />
             <div className={cls.actions}>
+              {
+                isDifficultPage
+                && (
+                <button
+                  type="button"
+                  className={cls[`p${words.currentWord?.group + 1}`]}
+                  onClick={removeFromDifficult}
+                >
+                  Remove
+                </button>
+                )
+              }
+
+              {
+                !isDifficultPage
+                && (
+                <button
+                  type="button"
+                  className={
+                  w?.difficulty !== Difficulty.difficult
+                    ? cls[`p${words.currentWord?.group + 1}`]
+                    : `${cls[`p${words.currentWord?.group + 1}`]} ${cls.disabled}`
+                }
+                  onClick={() => onAddToDifficult(Difficulty.difficult)}
+                  disabled={w?.difficulty === Difficulty.difficult}
+                >
+                  Add to difficult
+                </button>
+                )
+              }
               <button
                 type="button"
-                className={cls[`p${words.currentWord?.group + 1}`]}
-                onClick={() => onAddToDifficult(Difficulty.difficult)}
-              >
-                Add to difficult
-              </button>
-              <button
-                type="button"
-                className={cls[`p${words.currentWord?.group + 1}`]}
+                className={
+                  w?.difficulty !== Difficulty.learned
+                    ? cls[`p${words.currentWord?.group + 1}`]
+                    : `${cls[`p${words.currentWord?.group + 1}`]} ${cls.disabled}`
+                }
                 onClick={() => onAddToDifficult(Difficulty.learned)}
+                disabled={w?.difficulty === Difficulty.learned}
+
               >
                 Add to learned
               </button>

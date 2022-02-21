@@ -58,6 +58,16 @@ export default function Sprint() {
     <>
       <div className={cls.initView}>
         {
+      timer && user.isAuth && (
+      <>
+        Series length
+        {' '}
+        {words.sprintRightChainCount}
+      </>
+      )
+      }
+
+        {
       timer && (
       <SprintTimer
         timer={timer}

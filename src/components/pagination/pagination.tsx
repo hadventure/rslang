@@ -8,6 +8,8 @@ type PaginationProps = {
   size: number,
   page: number,
   pageCount: number,
+  pages: { [key: string]: number[] } | undefined,
+  group: string,
 };
 
 export default function Pagination({
@@ -15,6 +17,8 @@ export default function Pagination({
   size,
   page,
   pageCount,
+  pages,
+  group,
 }: PaginationProps) {
   const setPage = (e: MouseEvent) => {
     const newPage = e.currentTarget.getAttribute('page-key');
@@ -75,6 +79,12 @@ export default function Pagination({
     return current - half;
   };
 
+  const checkIsLearned = (num: number) => {
+    if (group !== '' && pages && pages[group]?.includes(num - 1)) {
+      return cls.learned;
+    }
+  };
+
   const renderPages = (pageVal: number, pageCountVal: number) => {
     const current = pageVal;
     const length = getLength(current, pageCountVal);
@@ -89,7 +99,7 @@ export default function Pagination({
           key={i}
           page-key={i}
           onClick={setPage}
-          className={pageVal === i ? `${cls.pageItem} ${cls.active}` : `${cls.pageItem}`}
+          className={pageVal === i ? `${cls.pageItem} ${cls.active} ${checkIsLearned(i)}` : `${cls.pageItem} ${checkIsLearned(i)}`}
         >
           <div page-key={i}>{ i }</div>
         </button>,

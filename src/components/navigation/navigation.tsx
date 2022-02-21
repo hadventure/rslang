@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import {
   AiFillCustomerService, AiOutlineFieldTime,
-  AiOutlineBook, AiOutlineHome, AiOutlineLineChart,
+  AiOutlineBook, AiOutlineHome, AiOutlineLineChart, AiOutlineInfoCircle,
   AiOutlineMenu,
 } from 'react-icons/ai';
 
@@ -138,6 +138,14 @@ export default function Navigation({ isAuthenticated }: HomeProps) {
         <span className={cls.navLabel}>Statictics</span>
       </NavLink>
       )}
+
+      <NavLink to="/about" className={(navData) => isNavActive(navData, cls.navLinkBase)}>
+        <div className={cls.navIconContainer}>
+          <AiOutlineInfoCircle size="1.3em" />
+
+        </div>
+        <span className={cls.navLabel}>About</span>
+      </NavLink>
     </nav>
 
   );

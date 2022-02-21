@@ -2,7 +2,11 @@ import { AiFillFire, AiOutlinePaperClip, AiOutlineCheck } from 'react-icons/ai';
 import WordGroup from '../word-group/word-group';
 import cls from './word-group-list.module.scss';
 
-export default function WordGroupList() {
+type WordGroupListProps = {
+  isAuth: boolean,
+};
+
+export default function WordGroupList({ isAuth }: WordGroupListProps) {
   const groups = [
     { id: '0', name: 'I', clsName: 'p1' },
     { id: '1', name: 'II', clsName: 'p2' },
@@ -27,41 +31,22 @@ export default function WordGroupList() {
 
       </div>
 
-      <div className={cls.wordGroupState}>
-        <WordGroup group={{
-          id: 'difficult',
-          name: <>
-            <div><AiFillFire color="#ff9800" size="1.5em" /></div>
-            {'  Difficult'}
-          </>,
-          clsName: 'p7',
-        }}
-        />
-        {/* <WordGroup group={{
-          id: '7',
-          name: <>
-            <AiOutlinePaperClip color="#607d8b" size="1.5em" />
-            {'  '}
-            New
-          </>,
-          clsName: 'p8',
-        }}
-        /> */}
-        {/* <WordGroup group={{
-          id: '8',
-          name: <>
-            <div>
-              {' '}
-              <AiOutlineCheck color="#7cb305" size="1.5em" />
-            </div>
-            {'  '}
-            <div>Learned</div>
+      {
+        isAuth && (
+        <div className={cls.wordGroupState}>
+          <WordGroup group={{
+            id: 'difficult',
+            name: <>
+              <div><AiFillFire color="#ff9800" size="1.5em" /></div>
+              {'  Difficult'}
+            </>,
+            clsName: 'p7',
+          }}
+          />
 
-                </>,
-          clsName: 'p9',
-        }}
-        /> */}
-      </div>
+        </div>
+        )
+      }
 
     </>
 

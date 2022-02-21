@@ -76,7 +76,6 @@ const wordsSlice = createSlice({
     });
     builder.addCase(getUserWords.fulfilled, (state, action) => {
       const local = state;
-      console.log(action.payload);
       local.status = 'success';
       // @ts-ignore
       local.list = action.payload[0].paginatedResults;
@@ -95,7 +94,6 @@ const wordsSlice = createSlice({
       local.status = 'loading';
     });
     builder.addCase(getUserWordsDifficult.fulfilled, (state, action) => {
-      console.log(action.payload)
       const local = state;
       local.status = 'success';
       // @ts-ignore
@@ -201,6 +199,10 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
       },
     });
 
+    if (resp.status === 401) {
+      thunkAPI.dispatch(set401(401));
+    }
+
     const data = await resp.json();
     const statResponse = await statAPI.getStat(thunkAPI.extra);
     const stat = await statResponse.json();
@@ -219,8 +221,6 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
         page = data[0].paginatedResults[0].page;
         group = data[0].paginatedResults[0].group;
       }
-
-      // console.log(data[0].paginatedResults.length, learnedCount.length);
 
       if (data[0].paginatedResults.length === learnedCount.length) {
         const optional = getOptionalStat();
@@ -252,10 +252,6 @@ Pick<TParam, 'filter' | 'wordsPerPage'>, {
           thunkAPI.dispatch(getStatData({}));
         }
       }
-    }
-
-    if (resp.status === 401) {
-      thunkAPI.dispatch(set401(401));
     }
 
     return data;

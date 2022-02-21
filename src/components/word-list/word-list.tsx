@@ -91,6 +91,8 @@ export default function WordList({ pages }: WordListProps) {
             pageCount={Math.floor(words.count / +words.limit)}
             size={5}
             onChangePage={onChangePage}
+            pages={pages}
+            group={words.group}
           />
 
           <div className={cls.wordListContainer1}>

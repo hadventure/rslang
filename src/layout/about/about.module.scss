@@ -1,0 +1,12 @@
+.avatar {
+  border-radius: 4px;
+  width: 20%;
+  border: 2px solid #eee;
+}
+
+.self {
+  display: flex;
+  align-items: center;
+  column-gap: 2rem;
+  font-size: medium;
+}
