@@ -73,11 +73,11 @@ module.exports = {
     }),
     new Dotenv({
       safe: true,
-    })
-    // new CopyWebpackPlugin({
-    //   patterns: [
-    //     { from: 'src/assets', to: 'src/assets' },
-    //   ],
-    // }),
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'src/assets', to: 'src/assets' },
+      ],
+    }),
   ],
 };

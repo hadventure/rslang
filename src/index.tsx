@@ -6,9 +6,11 @@ import store from './store/store';
 import './app.scss';
 import './global.scss';
 
+console.log('start');
+
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter basename="/">
+    <BrowserRouter basename="/lan3945663/rslang">
       <App />
     </BrowserRouter>
   </Provider>,
