@@ -10,7 +10,7 @@ console.log('start');
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter basename="/lan3945663/rslang">
+    <BrowserRouter basename="/lan3945663-JSFE2021Q3/rslang">
       <App />
     </BrowserRouter>
   </Provider>,
