@@ -20,7 +20,7 @@ export const getOptional = (): TOptional => ({
 
 export const getFormattedDate = () => {
   const today = new Date();
-  return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+  return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate() + 5}`;
 };
 
 export const getOptionalStat = (): TStat => ({

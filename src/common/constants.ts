@@ -1,4 +1,4 @@
-export const sprintTime = 40;
+export const sprintTime = 60;
 
 export const SPRINT_LEGTH = 19;
 

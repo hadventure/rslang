@@ -1,4 +1,6 @@
+/* eslint-disable no-lonely-if */
 import { TEMP_PAGINATION_LENGTH } from '@/common/constants';
+import { getRandomInt } from '@/common/helper';
 import MsgBlock from '@/components/msg-block/msg-block';
 import SprintGame from '@/components/sprint-game/sprint-game';
 import statSelector from '@/features/stat/stat-selector';
@@ -33,38 +35,59 @@ export default function SprintPreload({
   const location = useLocation();
 
   const calculateP = (page: number) => {
-    const learned = isAuth ? stat.stat!.optional!.pages[words.list[0]?.group || words.group] : [];
-    const possiblePages = new Array(TEMP_PAGINATION_LENGTH + 1)
-      .fill(1)
-      .map((el, i) => i)
-      .filter((el) => learned.indexOf(el) === -1);
+    let learned: number[];
+    let possiblePages;
+
+    if (location.pathname.indexOf('games') === -1) {
+      learned = isAuth ? stat.stat!.optional!.pages[words.list[0]?.group || words.group] : [];
+    } else {
+      learned = [];
+    }
+
+    if (location.pathname.indexOf('games') === -1) {
+      possiblePages = new Array(TEMP_PAGINATION_LENGTH + 1)
+        .fill(1)
+        .map((el, i) => i)
+        .filter((el) => learned.indexOf(el) === -1);
+    } else {
+      possiblePages = new Array(TEMP_PAGINATION_LENGTH + 1).fill(1).map((a, i) => i);
+    }
 
     let newPage;
 
     const index = possiblePages.indexOf(page);
-    console.log(possiblePages)
-    if (index !== possiblePages.length - 1) {
+    if (index !== possiblePages.length - 1 && location.pathname.indexOf('games') === -1) {
       possiblePages.splice(index, 1);
 
       newPage = possiblePages[index];
     } else {
-      newPage = possiblePages[0];
+      if (page === TEMP_PAGINATION_LENGTH) {
+        newPage = 0;
+      } else {
+        newPage = page + 1;
+      }
     }
 
     return newPage;
   };
 
   function getWords1(page?: number) {
-    // console.log(words.statusgetword)
-
     let param;
     let newPage;
+
+    // for init page
+    let temp;
 
     if (page !== undefined) {
       newPage = calculateP(page);
       dispatch(setPageWords(newPage));
     } else {
-      dispatch(setPageWords(Number(searchParams.get('page')!)));
+      temp = getRandomInt(0, TEMP_PAGINATION_LENGTH);
+      if (location.pathname.indexOf('games') > -1) {
+        dispatch(setPageWords(temp));
+      } else {
+        dispatch(setPageWords(Number(searchParams.get('page')!)));
+      }
     }
 
     if (location.pathname.indexOf('games') > -1) {
@@ -78,7 +101,7 @@ export default function SprintPreload({
               { 'userWord.difficulty': Difficulty.learned },
               { userWord: null }],
           },
-          { page: newPage !== undefined ? newPage : Number(searchParams.get('page')!) },
+          { page: newPage !== undefined ? newPage : temp },
           { group: Number(location.pathname.split('/')[3]) },
           ],
         }),
@@ -113,17 +136,26 @@ export default function SprintPreload({
     let param;
     let newPage;
 
+    // for init page
+    let temp: number;
+
     if (typeof page === 'number') {
       newPage = calculateP(page);
       dispatch(setPageWords(newPage));
     } else {
-      dispatch(setPageWords(Number(searchParams.get('page')!)));
+      temp = getRandomInt(0, TEMP_PAGINATION_LENGTH);
+      if (location.pathname.indexOf('games') > -1) {
+        dispatch(setPageWords(temp));
+      } else {
+        dispatch(setPageWords(Number(searchParams.get('page')!)));
+      }
     }
 
     if (location.pathname.indexOf('games') > -1) {
       dispatch(setGroup(location.pathname.split('/')[3]));
       param = {
-        page: newPage !== undefined ? newPage : Number(searchParams.get('page')!),
+        // @ts-ignore
+        page: newPage !== undefined ? newPage : temp,
         wordsPerPage: '20',
         group: location.pathname.split('/')[3],
       };
@@ -140,7 +172,6 @@ export default function SprintPreload({
   }
 
   function setStrategyGame(page?: number) {
-    // console.log(words.statusgetword)
     if (isAuth) {
       getWords1(page);
     }

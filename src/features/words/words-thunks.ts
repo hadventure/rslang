@@ -63,7 +63,7 @@ export const getUserWord = createAsyncThunk<string, TUserAnswer, {
       };
 
       const x = await wordsAPI.createUserWord(param, optional, thunkAPI.extra);
-
+      thunkAPI.dispatch(toggleUpdate(UpdateWord.updated));
       thunkAPI.dispatch(setResult({ ...param, isNewWord: true, state: optional.difficulty }));
     }
 
